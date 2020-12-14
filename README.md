@@ -1,4 +1,4 @@
-# Joern Default Scripts
+# Joern Default Script Bundle
 
 Default code scanners and utilities for the Joern code analyzer.
 You can fork this project to build your own custom scripts or send a PR
