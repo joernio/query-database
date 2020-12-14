@@ -1,4 +1,4 @@
-# Joern Default Batteries
+# Joern Default Query Sets
 
 ## Installation
 
@@ -79,3 +79,26 @@ class CScanner(options: CScannerOptions) extends LayerCreator {
   }
 ```
 
+## Adding Tests
+
+Please add tests for your queries to ensure that they continue functioning.
+Tests also serve as a specification for what your queries should and should not do.
+
+A template for an automated query set test can be found [here](https://github.com/joernio/batteries/blob/main/src/test/scala/io/joern/batteries/c/vulnscan/SampleQuerySetTests.scala)
+
+```
+package io.joern.batteries.c.vulnscan
+
+class SampleQuerySetTests extends Suite {
+
+  override val code: String =
+    """
+       void place_your_code_here() {}
+    """
+
+  "find ..." in {
+    // test code goes here
+  }
+
+}
+```
