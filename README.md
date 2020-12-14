@@ -10,9 +10,9 @@ Make sure Joern is installed, then run
 
 This will install the following scripts:
 
-* cscanner - a Vulnerability scanner for C code
+* cscanner - a vulnerability scanner for C code
 
-## Running Scripts
+## Running scripts
 
 You can run a script as follows:
 
@@ -99,6 +99,5 @@ class SampleQuerySetTests extends Suite {
   "find ..." in {
     // test code goes here
   }
-
 }
 ```
