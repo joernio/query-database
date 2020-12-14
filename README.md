@@ -1,5 +1,9 @@
 # Joern Default Scripts
 
+Default code scanners and utilities for the Joern code analyzer.
+You can fork this project to build your own custom scripts or send a PR
+to have your script included in the default distribution.
+
 ## Installation
 
 Make sure Joern is installed, then run
