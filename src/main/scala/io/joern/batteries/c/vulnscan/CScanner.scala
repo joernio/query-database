@@ -1,6 +1,10 @@
 package io.joern.batteries.c.vulnscan
 
-import io.shiftleft.semanticcpg.layers.{LayerCreator, LayerCreatorContext, LayerCreatorOptions}
+import io.shiftleft.semanticcpg.layers.{
+  LayerCreator,
+  LayerCreatorContext,
+  LayerCreatorOptions
+}
 
 object CScanner {
   val overlayName = "c-vuln-scan"

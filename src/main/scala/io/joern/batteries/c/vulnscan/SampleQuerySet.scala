@@ -6,11 +6,11 @@ import io.shiftleft.passes.{CpgPass, DiffGraph}
 
 object SampleQuerySet {
 
-  def myQuery1(cpg : Cpg) : List[nodes.NewFinding] = {
+  def myQuery1(cpg: Cpg): List[nodes.NewFinding] = {
     ???
   }
 
-  def myQuery2(cpg : Cpg) : List[nodes.NewFinding] = {
+  def myQuery2(cpg: Cpg): List[nodes.NewFinding] = {
     ???
   }
   // ...
@@ -29,5 +29,3 @@ class SampleQuertSet(cpg: Cpg) extends CpgPass(cpg) {
   }
 
 }
-
-
