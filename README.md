@@ -30,4 +30,52 @@ runs the C scanner on the code at `path/to/code`.
 
 ## Adding queries to existing scanners
 
+You can add queries to an existing scanner by creating a new query set
+in the scanners package. For example, query sets for the C scanner can
+be placed here:
+
+https://github.com/joernio/batteries/blob/main/src/main/scala/io/joern/batteries/c/vulnscan/
+
+The file [`SampleQuerySet.scala`](https://github.com/joernio/batteries/blob/main/src/main/scala/io/joern/batteries/c/vulnscan/SampleQuerySet.scala) serves as a template.
+
+```
+object SampleQuerySet {
+
+  def myQuery1(cpg: Cpg): List[nodes.NewFinding] = {
+    // Add your query here
+  }
+
+  def myQuery2(cpg: Cpg): List[nodes.NewFinding] = {
+    // Add another query here
+  }
+  // ...
+}
+
+class SampleQuertSet(cpg: Cpg) extends CpgPass(cpg) {
+  import SampleQuerySet._
+
+  override def run(): Iterator[DiffGraph] = {
+    val diffGraph = DiffGraph.newBuilder
+    // Execute queries
+    myQuery1(cpg).foreach(diffGraph.addNode)
+    myQuery2(cpg).foreach(diffGraph.addNode)
+
+    Iterator(diffGraph.build)
+  }
+```
+
+Finally, add
+a `runPass` line to the scanner [here](https://github.com/joernio/batteries/blob/main/src/main/scala/io/joern/batteries/c/vulnscan/CScanner.scala#L23):
+
+```
+class CScanner(options: CScannerOptions) extends LayerCreator {
+  override val overlayName: String = CScanner.overlayName
+  override val description: String = CScanner.description
+
+  override def create(context: LayerCreatorContext,
+                      storeUndoInfo: Boolean): Unit = {
+    runPass(new IntegerTruncations(context.cpg), context, storeUndoInfo)
+    // add more `runPass` calls to execute query sets by default
+  }
+```
 
