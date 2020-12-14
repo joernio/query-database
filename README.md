@@ -1,4 +1,4 @@
-# Joern Default Query Sets
+# Joern Default Scripts
 
 ## Installation
 
@@ -8,13 +8,13 @@ Make sure Joern is installed, then run
 ./install.sh
 ```
 
-This will install the following script bundles:
+This will install the following scripts:
 
 * cscanner - a Vulnerability scanner for C code
 
-## Running Scanners
+## Running Scripts
 
-You can run a script bundle as follows:
+You can run a script as follows:
 
 ```
 joern --src path/to/code --run <bundlename> --param k1=v1,...
@@ -28,10 +28,10 @@ joern --src path/to/code --run cscanner
 
 runs the C scanner on the code at `path/to/code`.
 
-## Adding queries to existing scanners
+## Adding queries to existing scripts
 
-You can add queries to an existing scanner by creating a new query set
-in the scanners package. For example, query sets for the C scanner can
+You can add queries to an existing bundles by creating a new query set
+in the script package. For example, query sets for the C scanner can
 be placed here:
 
 https://github.com/joernio/batteries/blob/main/src/main/scala/io/joern/batteries/c/vulnscan/
@@ -65,7 +65,7 @@ class SampleQuertSet(cpg: Cpg) extends CpgPass(cpg) {
 ```
 
 Finally, add
-a `runPass` line to the scanner [here](https://github.com/joernio/batteries/blob/main/src/main/scala/io/joern/batteries/c/vulnscan/CScanner.scala#L23):
+a `runPass` line to the script [here](https://github.com/joernio/batteries/blob/main/src/main/scala/io/joern/batteries/c/vulnscan/CScanner.scala#L23):
 
 ```
 class CScanner(options: CScannerOptions) extends LayerCreator {
