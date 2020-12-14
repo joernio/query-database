@@ -18,6 +18,11 @@ fi
 echo "Compiling (sbt stage)..."
 sbt stage
 
+if compgen -G "${JAR_INSTALL_DIR}/io.joern.batteries*.jar" > /dev/null; then
+    echo "Already installed. Uninstalling first."
+    rm ${JAR_INSTALL_DIR}/io.joern.batteries*.jar
+fi
+
 echo "Installing jars into: ${JAR_INSTALL_DIR}"
 cp target/universal/stage/lib/io.joern.batteries*.jar ${JAR_INSTALL_DIR}
 
