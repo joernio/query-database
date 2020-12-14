@@ -28,3 +28,6 @@ joern --src path/to/code --run cscanner
 
 runs the C scanner on the code at `path/to/code`.
 
+## Adding queries to existing scanners
+
+
