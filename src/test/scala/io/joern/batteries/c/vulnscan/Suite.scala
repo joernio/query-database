@@ -1,6 +1,6 @@
 package io.joern.batteries.c.vulnscan
 
-import io.shiftleft.dataflowengineoss.language.DataFlowCodeToCpgSuite
+import io.shiftleft.fuzzyc2cpg.testfixtures.DataFlowCodeToCpgSuite
 
 class Suite extends DataFlowCodeToCpgSuite {
 
