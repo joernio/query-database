@@ -10,9 +10,11 @@ import io.shiftleft.dataflowengineoss.queryengine.EngineContext
 object HeapBasedOverflow {
 
   /**
-    * Identify calls to malloc with arithmetic operations in the first argument where
-    * the returned buffer is subsequently used in a memcpy operation and the third
-    * argument of memcpy does not contain the same expression as used in the allocation.
+    * Find calls to malloc where the first argument contains an arithmetic expression,
+    * the allocated buffer flows into memcpy as the first argument, and the third
+    * argument of that memcpy is unequal to the first argument of malloc. This is
+    * an adaption of the old-joern query first shown at 31C3 that found a
+    * buffer overflow in VLC's MP4 demuxer (CVE-2014-9626).
     * */
   def mallocMemcpyIntOverflow(cpg: Cpg)(
       implicit context: EngineContext): List[nodes.NewFinding] = {
