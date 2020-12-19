@@ -35,7 +35,8 @@ class CScannerPass(cpg: Cpg)(implicit engineContext: EngineContext)
     IntegerTruncations
       .strlenAssignmentTruncations(cpg)
       .foreach(diffGraph.addNode)
-    HeapBasedOverflow.mallocMemcpyIntOverflow(cpg)
+    HeapBasedOverflow.mallocMemcpyIntOverflow(cpg).foreach(diffGraph.addNode)
+    CopyLoops.isCopyLoop(cpg).foreach(diffGraph.addNode)
     Iterator(diffGraph.build)
   }
 }
