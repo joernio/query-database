@@ -1,6 +1,7 @@
 package io.joern.batteries.c.vulnscan
 
 import io.shiftleft.codepropertygraph.Cpg
+import io.shiftleft.dataflowengineoss.queryengine.EngineContext
 import io.shiftleft.passes.{CpgPass, DiffGraph}
 import io.shiftleft.semanticcpg.layers.{
   LayerCreator,
@@ -16,7 +17,8 @@ object CScanner {
 
 class CScannerOptions() extends LayerCreatorOptions {}
 
-class CScanner(options: CScannerOptions) extends LayerCreator {
+class CScanner(options: CScannerOptions)(implicit engineContext: EngineContext)
+    extends LayerCreator {
   override val overlayName: String = CScanner.overlayName
   override val description: String = CScanner.description
 
@@ -26,11 +28,14 @@ class CScanner(options: CScannerOptions) extends LayerCreator {
   }
 }
 
-class CScannerPass(cpg: Cpg) extends CpgPass(cpg) {
-  import IntegerTruncations._
+class CScannerPass(cpg: Cpg)(implicit engineContext: EngineContext)
+    extends CpgPass(cpg) {
   override def run(): Iterator[DiffGraph] = {
     val diffGraph = DiffGraph.newBuilder
-    strlenAssignmentTruncations(cpg).foreach(diffGraph.addNode)
+    IntegerTruncations
+      .strlenAssignmentTruncations(cpg)
+      .foreach(diffGraph.addNode)
+    HeapBasedOverflow.mallocMemcpyIntOverflow(cpg)
     Iterator(diffGraph.build)
   }
 }
