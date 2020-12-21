@@ -25,6 +25,17 @@ for inclusion in the default distribution.
 
 ## Database overview
 
+* Scanners are located in `src/main/scala/io/joern/scanners`
+* Corresponding tests are in `src/test/scala/io/joern/scanners`
+* `install.sh` allows installing the database as a joern extension
+* schema may contain adaptions to the graph schema (unused for now)
+
+A few notes on boilerplate: Scanners are implemented as  child classes
+of `LayerCreator` and are picked up dynamically when Joern is
+started. `LayerCreators` invoke passes, and these simply run scanners
+to produce new `Finding` nodes, ultimately making available a lit of
+findings via `cpg.finding`.
+
 ## Building/Testing the database
 
 We use the Scala Build Tool (sbt). Please make sure you have sbt
