@@ -25,16 +25,97 @@ for inclusion in the default distribution.
 
 ## Database overview
 
-* Scanners are located in `src/main/scala/io/joern/scanners`
-* Corresponding tests are in `src/test/scala/io/joern/scanners`
-* `install.sh` allows installing the database as a joern extension
-* schema may contain adaptions to the graph schema (unused for now)
+Each scanner is hosted in a sub package of `io.joern.scanners`, that
+is, it is located in a directory in
+`src/main/scala/io/joern/scanners`. As an example, let us look into
+the `CodeQualityScanner` at `src/main/scala/io/joern/scanners`. The
+file `Metrics.scala` contains its queries:
 
-A few notes on boilerplate: Scanners are implemented as  child classes
-of `LayerCreator` and are picked up dynamically when Joern is
-started. `LayerCreators` invoke passes, and these simply run scanners
-to produce new `Finding` nodes, ultimately making available a lit of
-findings via `cpg.finding`.
+
+```
+object Metrics {
+
+  /**
+    * Identify functions that have more than `n` parameters
+    * */
+  def tooManyParameters(cpg: Cpg, n: Int = 4): List[nodes.NewFinding] = {
+    cpg.method
+      .filter(_.parameter.size > n)
+      .map(
+        finding(_,
+                title = s"Number of parameters larger than $n",
+                description = "-",
+                score = 2))
+      .l
+  }
+
+  /**
+    * Identify functions that have a cyclomatic complexity higher than `n`
+    * */
+  def tooHighComplexity(cpg: Cpg, n: Int = 4): List[nodes.NewFinding] = {
+    cpg.method
+      .filter(_.controlStructure.size > n)
+      .map(
+        finding(_,
+                title = s"Cyclomatic complexity higher than $n",
+                description = "-",
+                score = 2))
+      .l
+  }
+  ...
+}
+```
+
+As you can see, each query is implemented in a function that receives
+a code property graph (type `Cpg`) and returns a list of findings
+(type `List[nodes.NewFinding]`).
+
+These queries are invoked in sequence in `CodeQualityPass` in the file
+`CodeQualityScanner.scala`:
+
+```
+...
+class CodeQualityPass(cpg: Cpg) extends CpgPass(cpg) {
+  import Metrics._
+  override def run(): Iterator[DiffGraph] = {
+    val diffGraph = DiffGraph.newBuilder
+    (tooManyParameters(cpg) ++ tooManyLoops(cpg) ++ tooNested(cpg) ++
+      tooLong(cpg) ++ tooHighComplexity(cpg) ++ multipleReturns(cpg))
+      .foreach(diffGraph.addNode)
+    Iterator(diffGraph.build)
+  }
+...
+```
+Apart from these query invocations, `CodeQualityScanner.scala` merely
+contains boilerplate code that turns the scanner into a Joern extension.
+
+Corresponding tests for queries are located in
+`src/test/scala/io/joern/scanners`. For example, tests for the metrics
+queries are located in
+`src/test/scala/io/joern/scanners/c/codequality/MetricsTests.scala`:
+
+```
+class MetricsTests extends Suite {
+
+  override val code = """
+    int too_many_params(int a, int b, int c, int d, int e) {
+    }
+	...
+	"""
+
+  "find functions with too many parameters" in {
+    Metrics.tooManyParameters(cpg, 4).map(_.evidence) match {
+      case List(List(method: nodes.Method)) =>
+        method.name shouldBe "too_many_params"
+      case _ => fail
+    }
+  }
+  ...
+}
+```
+
+These tests can be run individually from the IntelliJ IDE during query
+development.
 
 ## Building/Testing the database
 
@@ -47,6 +128,13 @@ follows:
 
 ```
 sbt test
+```
+
+Automatic code formatting can be performed as follows:
+
+```
+sbt scalafmt
+sbt test:scalafmt
 ```
 
 ## Installation as a Joern Extension
