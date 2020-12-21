@@ -1,4 +1,4 @@
-package io.joern.batteries.c.codequality
+package io.joern.scanners.c.codequality
 
 import io.shiftleft.codepropertygraph.Cpg
 import io.shiftleft.passes.{CpgPass, DiffGraph}

@@ -1,4 +1,4 @@
-package io.joern.batteries.c.vulnscan
+package io.joern.scanners.c.vulnscan
 
 class SampleQuerySetTests extends Suite {
 
