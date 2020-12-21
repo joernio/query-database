@@ -1,6 +1,6 @@
-package io.joern.batteries.c.codequality
+package io.joern.scanners.c.codequality
 
-import io.joern.batteries.lib.finding
+import io.joern.scanners.lib.finding
 import io.shiftleft.codepropertygraph.Cpg
 import io.shiftleft.codepropertygraph.generated.nodes
 import io.shiftleft.semanticcpg.language._

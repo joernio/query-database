@@ -1,4 +1,4 @@
-package io.joern.batteries
+package io.joern.scanners
 
 import io.shiftleft.codepropertygraph.generated.nodes
 

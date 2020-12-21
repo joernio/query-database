@@ -1,6 +1,6 @@
-package io.joern.batteries.c.codequality
+package io.joern.scanners.c.codequality
 
-import io.joern.batteries.c.vulnscan.Suite
+import io.joern.scanners.c.vulnscan.Suite
 import io.shiftleft.codepropertygraph.generated.nodes
 
 class MetricsTests extends Suite {

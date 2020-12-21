@@ -1,4 +1,4 @@
-package io.joern.batteries.c.vulnscan
+package io.joern.scanners.c.vulnscan
 
 import io.shiftleft.codepropertygraph.Cpg
 import io.shiftleft.dataflowengineoss.queryengine.EngineContext

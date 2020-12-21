@@ -1,9 +1,9 @@
-package io.joern.batteries.c.vulnscan
+package io.joern.scanners.c.vulnscan
 
 import io.shiftleft.codepropertygraph.Cpg
 import io.shiftleft.codepropertygraph.generated.nodes
 import io.shiftleft.semanticcpg.language._
-import io.joern.batteries.lib._
+import io.joern.scanners.lib._
 
 object IntegerTruncations {
 
