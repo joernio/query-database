@@ -1,11 +1,10 @@
 # Joern Query Database
 
-This repository functions as a central query database for the
-open-source code analysis platform
-[Joern](https://github.com/ShiftLeftSecurity/joern). Its purpose is
-two-fold: one the one hand, these queries are the batteries required
-to turn Joern into a ready-to-run code scanning tool that does not
-require prior knowledge in static analysis for successful
+This is the central query database for the open-source code analysis
+platform [Joern](https://github.com/ShiftLeftSecurity/joern). It has
+two purposes: one the one hand, these queries are the batteries
+required to turn Joern into a ready-to-run code scanning tool that
+does not require prior knowledge in static analysis for successful
 operation. On the other hand, the queries serve as examples that may
 be useful for those looking to write their own queries.
 
