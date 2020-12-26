@@ -18,8 +18,7 @@ jobs:
             ~/.coursier
           key: ${{ runner.os }}-sbt-${{ hashfiles('**/build.sbt') }}
       - run: sbt scalafmtCheck test stage
-      - run: ./tests/scripts-test.sh
-      - run: sbt createDistribution
+      - run: sbt ciReleaseTagNextVersion createDistribution
       - run: sha512sum ./query-database.tgz > ./query-database.tgz.sha512
       - name: Export ENV vars
         run:
@@ -34,30 +33,21 @@ jobs:
           release_name: ${{ env.LATEST_TAG }}
           draft: false
           prerelease: false
-      - name: Upload joern-install.sh
+      - name: Upload query-database.tgz
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./joern-install.sh
-          asset_name: joern-install.sh
-          asset_content_type: text/plain
-      - name: Upload joern-cli.zip
+          asset_path: ./query-database.tgz
+          asset_name: quer-database.tgz
+          asset_content_type: application/tgz
+      - name: Upload query-database.tgs.sha512
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./joern-cli.zip
-          asset_name: joern-cli.zip
-          asset_content_type: application/zip
-      - name: Upload joern-cli.zip.sha512
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./joern-cli.zip.sha512
-          asset_name: joern-cli.zip.sha512
+          asset_path: ./query-database.tgz.sha512
+          asset_name: query-database.tgz.sha512
           asset_content_type: text/plain
