@@ -20,6 +20,24 @@ libraryDependencies ++= Seq(
 )
 excludeDependencies += ExclusionRule("io.shiftleft", "codepropertygraph-domain-classes_2.13")
 
+// Since this is a plugin, we do not need to include the scala runtime
+// as Joern already has it installed. We could probably exclude many more
+// files here to further reduce the file size.
+universalArchiveOptions in (Universal, packageZipTarball) :=
+  (Seq("--exclude", "**/org.scala*") ++ (universalArchiveOptions in (Universal, packageZipTarball)).value)
+
+lazy val createDistribution = taskKey[Unit]("Create binary distribution of extension")
+createDistribution := {
+  (Universal/packageZipTarball).value
+  val pkgBin = (Universal/packageZipTarball).value
+  val dstArchive = "./query-database.tgz"
+  IO.copy(
+    List((pkgBin, file(dstArchive))),
+    CopyOptions(overwrite = true, preserveLastModified = true, preserveExecutable = true)
+  )
+  println(s"created distribution - resulting files: $dstArchive")
+}
+
 ThisBuild/Compile/scalacOptions ++= Seq(
   "-Xfatal-warnings",
   "-feature",
