@@ -1,4 +1,4 @@
-package io.joern.scanners.c.vulnscan
+package io.joern.scanners.c
 
 import io.shiftleft.fuzzyc2cpg.testfixtures.DataFlowCodeToCpgSuite
 

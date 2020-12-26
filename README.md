@@ -2,16 +2,15 @@
 
 This is the central query database for the open-source code analysis
 platform [Joern](https://github.com/ShiftLeftSecurity/joern). It has
-two purposes: one the one hand, these queries are the batteries
-required to turn Joern into a ready-to-run code scanning tool that
-does not require prior knowledge in static analysis for successful
-operation. On the other hand, the queries serve as examples that may
-be useful for those looking to write their own queries.
+two purposes:
+
+* It provides the batteries required to turn Joern into a ready-to-run code scanning tool.
+* Its queries serve as examples useful for those looking to write their own queries.
 
 The query database is distributed as a standalone library that
 includes Joern as a dependency. This means that it is not necessary to
 install Joern to make use of the scanners in the database. Instead,
-scanners can be invoked from any JVM-based program as the automatic
+scanners can be invoked from any JVM-based program - as the automatic
 tests included in the database demonstrate.
 
 At the same time, the database is a Joern extension, that is, when

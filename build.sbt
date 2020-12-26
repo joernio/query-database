@@ -13,7 +13,7 @@ libraryDependencies ++= Seq(
   "org.apache.logging.log4j" % "log4j-slf4j-impl" % "2.13.3" % Runtime,
   "io.shiftleft" %% "semanticcpg" % Versions.cpg,
   "io.shiftleft" %% "dataflowengineoss" % Versions.cpg,
-    "io.shiftleft" %% "fuzzyc2cpg-tests" % Versions.cpg % Test classifier "tests",
+  "io.shiftleft" %% "fuzzyc2cpg-tests" % Versions.cpg % Test classifier "tests",
   "io.shiftleft" %% "semanticcpg-tests" % Versions.cpg % Test classifier "tests",
   "io.shiftleft" %% "fuzzyc2cpg" % Versions.cpg % Test,
   "org.scalatest" %% "scalatest" % "3.1.1" % Test

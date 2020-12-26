@@ -1,4 +1,5 @@
 package io.joern.scanners.c.vulnscan
+import io.joern.scanners.c.Suite
 import io.shiftleft.codepropertygraph.generated.nodes
 import io.shiftleft.semanticcpg.language._
 
