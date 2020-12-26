@@ -3,6 +3,7 @@ ThisBuild/organization := "io.joern"
 ThisBuild/scalaVersion := "2.13.0"
 
 enablePlugins(JavaAppPackaging)
+enablePlugins(GitVersioning)
 
 lazy val schema = project.in(file("schema"))
 dependsOn(schema)
