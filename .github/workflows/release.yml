@@ -40,9 +40,9 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./query-database.tgz
-          asset_name: quer-database.tgz
+          asset_name: query-database.tgz
           asset_content_type: application/tgz
-      - name: Upload query-database.tgs.sha512
+      - name: Upload query-database.tgz.sha512
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
