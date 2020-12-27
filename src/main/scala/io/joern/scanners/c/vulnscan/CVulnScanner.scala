@@ -1,10 +1,14 @@
 package io.joern.scanners.c.vulnscan
 
-import io.joern.scanners.lib.outputFindings
+import io.joern.scanners.language._
 import io.shiftleft.codepropertygraph.Cpg
 import io.shiftleft.dataflowengineoss.queryengine.EngineContext
 import io.shiftleft.passes.{CpgPass, DiffGraph}
-import io.shiftleft.semanticcpg.layers.{LayerCreator, LayerCreatorContext, LayerCreatorOptions}
+import io.shiftleft.semanticcpg.layers.{
+  LayerCreator,
+  LayerCreatorContext,
+  LayerCreatorOptions
+}
 
 object CScanner {
   val overlayName = "c-vuln-scan"

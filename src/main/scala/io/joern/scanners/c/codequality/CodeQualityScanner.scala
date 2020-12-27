@@ -1,10 +1,13 @@
 package io.joern.scanners.c.codequality
 
-import io.joern.scanners.lib.outputFindings
+import io.joern.scanners.language._
 import io.shiftleft.codepropertygraph.Cpg
 import io.shiftleft.passes.{CpgPass, DiffGraph}
-import io.shiftleft.semanticcpg.layers.{LayerCreator, LayerCreatorContext, LayerCreatorOptions}
-
+import io.shiftleft.semanticcpg.layers.{
+  LayerCreator,
+  LayerCreatorContext,
+  LayerCreatorOptions
+}
 
 /**
   * Joern requires each extension to provide a class derived from `LayerCreator`
