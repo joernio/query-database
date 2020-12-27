@@ -21,11 +21,14 @@ libraryDependencies ++= Seq(
 )
 excludeDependencies += ExclusionRule("io.shiftleft", "codepropertygraph-domain-classes_2.13")
 
-// Since this is a plugin, we do not need to include the scala runtime
-// as Joern already has it installed. We could probably exclude many more
-// files here to further reduce the file size.
+// We exclude a few jars that the main joern distribution already includes
 universalArchiveOptions in (Universal, packageZipTarball) :=
-  (Seq("--exclude", "**/org.scala*") ++ (universalArchiveOptions in (Universal, packageZipTarball)).value)
+  (Seq("--exclude", "**/org.scala*") ++
+    Seq("--exclude", "**/net.sf.trove4*") ++
+    Seq("--exclude", "**/com.google.guava*") ++
+    Seq("--exclude", "**/org.apache.logging*") ++
+    Seq("--exclude", "**/com.google.protobuf*") ++
+    (universalArchiveOptions in (Universal, packageZipTarball)).value)
 
 lazy val createDistribution = taskKey[Unit]("Create binary distribution of extension")
 createDistribution := {
