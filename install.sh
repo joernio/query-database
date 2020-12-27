@@ -53,8 +53,8 @@ if [ ! -d "${JOERN_INSTALL}" ]; then
       unzip "joern-cli.zip"
     popd
     pushd $SCRIPT_ABS_DIR
-      ln -s joern-inst/joern-cli/joern .
-      ln -s joern-inst/joern-cli/lib .
+      ln -s joern-inst/joern-cli/joern . || true
+      ln -s joern-inst/joern-cli/lib . || true
     popd
 fi
 
@@ -63,7 +63,7 @@ sbt createDistribution
 
 pushd $SCRIPT_ABS_DIR
   ./joern --remove-plugin querydb
-  ./joern --add-plugin ../querydb.zip
+  ./joern --add-plugin ./querydb.zip
 popd
 
 echo "Adapting CPG schema"
