@@ -13,6 +13,3 @@ jobs:
       run: |
         sbt test scalafmtCheck
         ./install.sh
-        mkdir /tmp/foo
-        echo "int foo(int a, int b, int c, int d, int e, int f) {}" > /tmp/foo/foo.c
-        ./joern --src /tmp/foo --run codequalityscanner
