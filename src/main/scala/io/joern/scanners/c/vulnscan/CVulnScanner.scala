@@ -1,13 +1,10 @@
 package io.joern.scanners.c.vulnscan
 
+import io.joern.scanners.lib.outputFindings
 import io.shiftleft.codepropertygraph.Cpg
 import io.shiftleft.dataflowengineoss.queryengine.EngineContext
 import io.shiftleft.passes.{CpgPass, DiffGraph}
-import io.shiftleft.semanticcpg.layers.{
-  LayerCreator,
-  LayerCreatorContext,
-  LayerCreatorOptions
-}
+import io.shiftleft.semanticcpg.layers.{LayerCreator, LayerCreatorContext, LayerCreatorOptions}
 
 object CScanner {
   val overlayName = "c-vuln-scan"
@@ -25,6 +22,7 @@ class CScanner(options: CScannerOptions)(implicit engineContext: EngineContext)
   override def create(context: LayerCreatorContext,
                       storeUndoInfo: Boolean): Unit = {
     runPass(new CScannerPass(context.cpg), context, storeUndoInfo)
+    outputFindings(context.cpg)
   }
 }
 

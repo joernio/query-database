@@ -1,6 +1,8 @@
 package io.joern.scanners
 
-import io.shiftleft.codepropertygraph.generated.nodes
+import io.shiftleft.codepropertygraph.Cpg
+import io.shiftleft.codepropertygraph.generated.{NodeTypes, nodes}
+import overflowdb.traversal._
 
 package object lib {
 
@@ -22,6 +24,10 @@ package object lib {
         nodes.NewKeyValuePair(FindingKeys.score, score.toString)
       )
     )
+  }
+
+  def outputFindings(cpg : Cpg) : Unit = {
+    cpg.graph.nodes(NodeTypes.FINDING).cast[nodes.Finding].foreach(println)
   }
 
 }

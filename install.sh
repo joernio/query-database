@@ -4,7 +4,7 @@ set -o pipefail
 set -o nounset
 set -eu
 
-readonly JOERN_VERSION="v1.1.62"
+readonly JOERN_VERSION="v1.1.63"
 
 if [ "$(uname)" = 'Darwin' ]; then
   # get script location
@@ -53,17 +53,23 @@ if [ ! -d "${JOERN_INSTALL}" ]; then
       unzip "joern-cli.zip"
     popd
     pushd $SCRIPT_ABS_DIR
-      ln -s joern-inst/joern-cli/joern . || true
-      ln -s joern-inst/joern-cli/lib . || true
+    ln -s joern-inst/joern-cli/joern . || true
+    ln -s joern-inst/joern-cli/joern-parse . || true
+    ln -s joern-inst/joern-cli/fuzzyc2cpg.sh . || true
     popd
 fi
 
 echo "Compiling (sbt createDistribution)..."
+pushd $SCRIPT_ABS_DIR
+rm lib || true
 sbt createDistribution
+popd
 
 pushd $SCRIPT_ABS_DIR
+  ln -s joern-inst/joern-cli/lib . || true
   ./joern --remove-plugin querydb
   ./joern --add-plugin ./querydb.zip
+  rm lib
 popd
 
 echo "Adapting CPG schema"

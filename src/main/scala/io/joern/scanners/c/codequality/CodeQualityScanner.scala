@@ -1,12 +1,10 @@
 package io.joern.scanners.c.codequality
 
+import io.joern.scanners.lib.outputFindings
 import io.shiftleft.codepropertygraph.Cpg
 import io.shiftleft.passes.{CpgPass, DiffGraph}
-import io.shiftleft.semanticcpg.layers.{
-  LayerCreator,
-  LayerCreatorContext,
-  LayerCreatorOptions
-}
+import io.shiftleft.semanticcpg.layers.{LayerCreator, LayerCreatorContext, LayerCreatorOptions}
+
 
 /**
   * Joern requires each extension to provide a class derived from `LayerCreator`
@@ -32,6 +30,7 @@ class CodeQualityScanner(options: CodeQualityScannerOptions)
   override def create(context: LayerCreatorContext,
                       storeUndoInfo: Boolean): Unit = {
     runPass(new CodeQualityPass(context.cpg), context, storeUndoInfo)
+    outputFindings(context.cpg)
   }
 }
 

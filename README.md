@@ -21,6 +21,36 @@ You can fork this project to build your own custom queries and
 scanners or kindly send a PR to to this repo to have them considered
 for inclusion in the default distribution.
 
+## Installing and running
+
+The installation scripts downloads joern and installs it in a sub-directory.
+The query database is installed as an extension.
+
+```
+./install.sh
+```
+
+The query database currently makes available the following scanners:
+
+* codequalityscanner - a code quality scanner for C code
+* cvulnscanner - a vulnerability scanner for C code
+
+You can run scanners as follows:
+
+```
+./joern --src path/to/code --run <scannername> --param k1=v1,...
+```
+
+For example,
+
+```
+mkdir foo
+echo "int foo(int a, int b, int c, int d, int e, int f) {}" > foo/foo.c
+./joern --src foo --run codequalityscanner
+```
+
+runs the code quality scanner and determines that the function `foo` has too many parameters.
+
 ## Database overview
 
 Each scanner is hosted in a sub package of `io.joern.scanners`, that
@@ -134,35 +164,6 @@ Automatic code formatting can be performed as follows:
 sbt scalafmt
 sbt test:scalafmt
 ```
-
-## Installation as a Joern Extension
-
-Make sure Joern is installed, then run
-
-```
-./install.sh
-```
-
-This will install the following scanners:
-
-* cvulnscanner - a vulnerability scanner for C code
-* codequalityscanner - a code quality scanner for C code
-
-## Running scanners
-
-You can run scanners as follows:
-
-```
-joern --src path/to/code --run <scannername> --param k1=v1,...
-```
-
-For example,
-
-```
-joern --src path/to/code --run cvulnscanner
-```
-
-runs the C vulnerability scanner on the code at `path/to/code`.
 
 ## Adding queries to existing scripts
 
