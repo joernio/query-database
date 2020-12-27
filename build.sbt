@@ -22,19 +22,19 @@ libraryDependencies ++= Seq(
 excludeDependencies += ExclusionRule("io.shiftleft", "codepropertygraph-domain-classes_2.13")
 
 // We exclude a few jars that the main joern distribution already includes
-universalArchiveOptions in (Universal, packageZipTarball) :=
-  (Seq("--exclude", "**/org.scala*") ++
-    Seq("--exclude", "**/net.sf.trove4*") ++
-    Seq("--exclude", "**/com.google.guava*") ++
-    Seq("--exclude", "**/org.apache.logging*") ++
-    Seq("--exclude", "**/com.google.protobuf*") ++
-    (universalArchiveOptions in (Universal, packageZipTarball)).value)
+Universal / mappings := (Universal / mappings).value.filterNot {
+   case (_, path) => path.contains("org.scala") ||
+    path.contains("net.sf.trove4") ||
+    path.contains("com.google.guava") ||
+    path.contains("org.apache.logging") ||
+    path.contains("com.google.protobuf")
+}
 
 lazy val createDistribution = taskKey[Unit]("Create binary distribution of extension")
 createDistribution := {
   (Universal/packageZipTarball).value
-  val pkgBin = (Universal/packageZipTarball).value
-  val dstArchive = "./query-database.tgz"
+  val pkgBin = (Universal/packageBin).value
+  val dstArchive = "./query-database.zip"
   IO.copy(
     List((pkgBin, file(dstArchive))),
     CopyOptions(overwrite = true, preserveLastModified = true, preserveExecutable = true)
