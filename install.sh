@@ -77,3 +77,4 @@ cp ${SCHEMA_SRC_DIR}/*.json ${JOERN_INSTALL}/schema-extender/schemas/
 pushd $JOERN_INSTALL
   ./schema-extender.sh
 popd
+exit 0
