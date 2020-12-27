@@ -19,7 +19,7 @@ jobs:
           key: ${{ runner.os }}-sbt-${{ hashfiles('**/build.sbt') }}
       - run: sbt scalafmtCheck test stage
       - run: sbt ciReleaseTagNextVersion createDistribution
-      - run: sha512sum ./query-database.zip > ./query-database.zip.sha512
+      - run: sha512sum ./querydb.zip > ./querydb.zip.sha512
       - name: Export ENV vars
         run:
           echo "LATEST_TAG=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
@@ -33,21 +33,21 @@ jobs:
           release_name: ${{ env.LATEST_TAG }}
           draft: false
           prerelease: false
-      - name: Upload query-database.zip
+      - name: Upload querydb.zip
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./query-database.zip
-          asset_name: query-database.zip
+          asset_path: ./querydb.zip
+          asset_name: querydb.zip
           asset_content_type: application/zip
-      - name: Upload query-database.zip.sha512
+      - name: Upload querydb.zip.sha512
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./query-database.zip.sha512
-          asset_name: query-database.zip.sha512
+          asset_path: ./querydb.zip.sha512
+          asset_name: querydb.zip.sha512
           asset_content_type: text/plain

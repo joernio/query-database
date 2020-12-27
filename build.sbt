@@ -34,7 +34,7 @@ lazy val createDistribution = taskKey[Unit]("Create binary distribution of exten
 createDistribution := {
   (Universal/packageZipTarball).value
   val pkgBin = (Universal/packageBin).value
-  val dstArchive = "./query-database.zip"
+  val dstArchive = "./querydb.zip"
   IO.copy(
     List((pkgBin, file(dstArchive))),
     CopyOptions(overwrite = true, preserveLastModified = true, preserveExecutable = true)

@@ -2,32 +2,72 @@
 set -o errexit
 set -o pipefail
 set -o nounset
+set -eu
 
-readonly JOERN_INSTALL=~/bin/joern/joern-cli
-readonly JAR_INSTALL_DIR=${JOERN_INSTALL}/lib/
+readonly JOERN_VERSION="v1.1.62"
+
+if [ "$(uname)" = 'Darwin' ]; then
+  # get script location
+  # https://unix.stackexchange.com/a/96238
+  if [ "${BASH_SOURCE:-x}" != 'x' ]; then
+    this_script=$BASH_SOURCE
+  elif [ "${ZSH_VERSION:-x}" != 'x' ]; then
+    setopt function_argzero
+    this_script=$0
+  elif eval '[[ -n ${.sh.file} ]]' 2>/dev/null; then
+    eval 'this_script=${.sh.file}'
+  else
+    echo 1>&2 "Unsupported shell. Please use bash, ksh93 or zsh."
+    exit 2
+  fi
+  relative_directory=$(dirname "$this_script")
+  SCRIPT_ABS_DIR=$(cd "$relative_directory" && pwd)
+else
+  SCRIPT_ABS_PATH=$(readlink -f "$0")
+  SCRIPT_ABS_DIR=$(dirname "$SCRIPT_ABS_PATH")
+fi
+
+# Check required tools are installed.
+check_installed() {
+  if ! type "$1" > /dev/null; then
+    echo "Please ensure you have $1 installed."
+    exit 1
+  fi
+}
+
+readonly JOERN_INSTALL=$SCRIPT_ABS_DIR/joern-inst/joern-cli
+readonly PLUGIN_DIR=${JOERN_INSTALL}/lib/
 readonly SCHEMA_SRC_DIR=schema/src/main/resources/schema/
 
 echo "Examining Joern installation..."
 
 if [ ! -d "${JOERN_INSTALL}" ]; then
     echo "Cannot find Joern installation at ${JOERN_INSTALL}"
-    echo "Please install Joern first"
-    exit
+    echo "Installing..."
+    check_installed "curl"
+    echo "https://github.com/ShiftLeftSecurity/joern/releases/download/$JOERN_VERSION/joern-cli.zip"
+    curl -L "https://github.com/ShiftLeftSecurity/joern/releases/download/$JOERN_VERSION/joern-cli.zip" -o "$SCRIPT_ABS_DIR/joern-cli.zip"
+    mkdir $SCRIPT_ABS_DIR/"joern-inst"
+    mv "joern-cli.zip" $SCRIPT_ABS_DIR/"joern-inst/"
+    pushd $SCRIPT_ABS_DIR/"joern-inst/"
+      unzip "joern-cli.zip"
+    popd
+    pushd $SCRIPT_ABS_DIR
+      ln -s joern-inst/joern-cli/joern .
+      ln -s joern-inst/joern-cli/lib .
+    popd
 fi
 
-echo "Compiling (sbt stage)..."
-sbt stage
+echo "Compiling (sbt createDistribution)..."
+sbt createDistribution
 
-if compgen -G "${JAR_INSTALL_DIR}/io.joern.batteries*.jar" > /dev/null; then
-    echo "Already installed. Uninstalling first."
-    rm ${JAR_INSTALL_DIR}/io.joern.batteries*.jar
-fi
-
-echo "Installing jars into: ${JAR_INSTALL_DIR}"
-cp target/universal/stage/lib/io.joern.batteries*.jar ${JAR_INSTALL_DIR}
+pushd $SCRIPT_ABS_DIR
+  ./joern --remove-plugin querydb
+  ./joern --add-plugin ../querydb.zip
+popd
 
 echo "Adapting CPG schema"
 cp ${SCHEMA_SRC_DIR}/*.json ${JOERN_INSTALL}/schema-extender/schemas/
 pushd $JOERN_INSTALL
-./schema-extender.sh
+  ./schema-extender.sh
 popd
