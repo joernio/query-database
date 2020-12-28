@@ -56,8 +56,6 @@ package object language {
   }
 
   def outputFindings(cpg: Cpg): Unit = {
-    println("reached")
-    println(cpg.finding.size)
     cpg.finding.sortBy(_.score.toInt).foreach { finding =>
       val evidence = finding.evidence.headOption
         .map { e =>
