@@ -63,33 +63,23 @@ file `Metrics.scala` contains its queries:
 ```
 object Metrics {
 
-  /**
-    * Identify functions that have more than `n` parameters
-    * */
-  def tooManyParameters(cpg: Cpg, n: Int = 4): List[nodes.NewFinding] = {
-    cpg.method
-      .filter(_.parameter.size > n)
-      .map(
-        finding(_,
-                title = s"Number of parameters larger than $n",
-                description = "-",
-                score = 2))
-      .l
-  }
+  def tooManyParameters(n: Int = 4): Query = Query(
+    title = s"Number of parameters larger than $n",
+    description =
+      s"This query identifies functions with more than $n formal parameters",
+    score = 2.0, { cpg =>
+      cpg.method.filter(_.parameter.size > n)
+    }
+  )
 
-  /**
-    * Identify functions that have a cyclomatic complexity higher than `n`
-    * */
-  def tooHighComplexity(cpg: Cpg, n: Int = 4): List[nodes.NewFinding] = {
-    cpg.method
-      .filter(_.controlStructure.size > n)
-      .map(
-        finding(_,
-                title = s"Cyclomatic complexity higher than $n",
-                description = "-",
-                score = 2))
-      .l
-  }
+  def tooHighComplexity(n: Int = 4): Query = Query(
+    title = s"Cyclomatic complexity higher than $n",
+    description =
+      s"This query identifies functions with a cyclomatic complexity higher than $n",
+    score = 2.0, { cpg =>
+      cpg.method.filter(_.controlStructure.size > n)
+    }
+  )
   ...
 }
 ```
@@ -105,13 +95,18 @@ These queries are invoked in sequence in `CodeQualityPass` in the file
 ...
 class CodeQualityPass(cpg: Cpg) extends CpgPass(cpg) {
   import Metrics._
+  /**
+    * All we do here is call all queries and add a node to
+    * the graph for each result.
+    * */
   override def run(): Iterator[DiffGraph] = {
     val diffGraph = DiffGraph.newBuilder
-    (tooManyParameters(cpg) ++ tooManyLoops(cpg) ++ tooNested(cpg) ++
-      tooLong(cpg) ++ tooHighComplexity(cpg) ++ multipleReturns(cpg))
+    (tooManyParameters()(cpg) ++ tooManyLoops()(cpg) ++ tooNested()(cpg) ++
+      tooLong()(cpg) ++ tooHighComplexity()(cpg) ++ multipleReturns()(cpg))
       .foreach(diffGraph.addNode)
     Iterator(diffGraph.build)
   }
+}
 ...
 ```
 Apart from these query invocations, `CodeQualityScanner.scala` merely
@@ -132,7 +127,7 @@ class MetricsTests extends Suite {
 	"""
 
   "find functions with too many parameters" in {
-    Metrics.tooManyParameters(cpg, 4).map(_.evidence) match {
+    Metrics.tooManyParameters(4)(cpg).map(_.evidence) match {
       case List(List(method: nodes.Method)) =>
         method.name shouldBe "too_many_params"
       case _ => fail
