@@ -1,8 +1,6 @@
 package io.joern.scanners.c.vulnscan
 
 import io.joern.scanners.language._
-import io.shiftleft.codepropertygraph.Cpg
-import io.shiftleft.codepropertygraph.generated.nodes
 import io.shiftleft.semanticcpg.language._
 import io.shiftleft.dataflowengineoss.language._
 import io.shiftleft.dataflowengineoss.queryengine.EngineContext
@@ -16,25 +14,21 @@ object HeapBasedOverflow {
     * an adaption of the old-joern query first shown at 31C3 that found a
     * buffer overflow in VLC's MP4 demuxer (CVE-2014-9626).
     * */
-  def mallocMemcpyIntOverflow(cpg: Cpg)(
-      implicit context: EngineContext): List[nodes.NewFinding] = {
-    val src = cpg.call("malloc").where(_.argument(1).arithmetics)
-    cpg
-      .call("memcpy")
-      .filter { call =>
-        call
-          .argument(1)
-          .reachableBy(src)
-          .not(_.argument(1).codeExact(call.argument(3).code))
-          .hasNext
-      }
-      .map(
-        finding(_,
-                title = "Dangerous copy-operation into heap-allocated buffer",
-                description = "-",
-                score = 4)
-      )
-      .l
-  }
+  def mallocMemcpyIntOverflow()(implicit context: EngineContext): Query = Query(
+    title = "Dangerous copy-operation into heap-allocated buffer",
+    description = "-",
+    score = 4, { cpg =>
+      val src = cpg.call("malloc").where(_.argument(1).arithmetics)
+      cpg
+        .call("memcpy")
+        .filter { call =>
+          call
+            .argument(1)
+            .reachableBy(src)
+            .not(_.argument(1).codeExact(call.argument(3).code))
+            .hasNext
+        }
+    }
+  )
 
 }

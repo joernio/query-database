@@ -26,7 +26,7 @@ class CopyLoopTests extends Suite {
     """
 
   "find indexed buffer assignment targets in loops where index is incremented" in {
-    CopyLoops.isCopyLoop(cpg: Cpg).map(_.evidence) match {
+    CopyLoops.isCopyLoop()(cpg).map(_.evidence) match {
       case List(List(expr: nodes.Expression)) =>
         expr.method.name shouldBe "index_into_dst_array"
       case _ => fail

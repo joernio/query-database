@@ -20,7 +20,8 @@ class HeapBasedOverflowTests extends Suite {
     """
 
   "find calls to malloc/memcpy system with different expressions in arguments" in {
-    HeapBasedOverflow.mallocMemcpyIntOverflow(cpg).map(_.evidence) match {
+    val x = HeapBasedOverflow.mallocMemcpyIntOverflow()
+    x(cpg).map(_.evidence) match {
       case List(List(expr: nodes.Expression)) =>
         expr.code shouldBe "memcpy(dst, src, len + 7)"
       case _ => fail
