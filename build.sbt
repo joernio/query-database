@@ -27,14 +27,15 @@ Universal / mappings := (Universal / mappings).value.filterNot {
     path.contains("net.sf.trove4") ||
     path.contains("com.google.guava") ||
     path.contains("org.apache.logging") ||
-    path.contains("com.google.protobuf")
+    path.contains("com.google.protobuf") ||
+    path.contains("com.lihaoyi.u")
 }
 
 lazy val createDistribution = taskKey[Unit]("Create binary distribution of extension")
 createDistribution := {
   (Universal/packageZipTarball).value
   val pkgBin = (Universal/packageBin).value
-  val dstArchive = "./query-database.zip"
+  val dstArchive = "./querydb.zip"
   IO.copy(
     List((pkgBin, file(dstArchive))),
     CopyOptions(overwrite = true, preserveLastModified = true, preserveExecutable = true)

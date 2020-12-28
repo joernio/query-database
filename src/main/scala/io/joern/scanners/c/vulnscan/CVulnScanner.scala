@@ -1,5 +1,6 @@
 package io.joern.scanners.c.vulnscan
 
+import io.joern.scanners.language._
 import io.shiftleft.codepropertygraph.Cpg
 import io.shiftleft.dataflowengineoss.queryengine.EngineContext
 import io.shiftleft.passes.{CpgPass, DiffGraph}
@@ -25,6 +26,7 @@ class CScanner(options: CScannerOptions)(implicit engineContext: EngineContext)
   override def create(context: LayerCreatorContext,
                       storeUndoInfo: Boolean): Unit = {
     runPass(new CScannerPass(context.cpg), context, storeUndoInfo)
+    outputFindings(context.cpg)
   }
 }
 

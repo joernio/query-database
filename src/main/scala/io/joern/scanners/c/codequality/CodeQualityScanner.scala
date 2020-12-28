@@ -1,5 +1,6 @@
 package io.joern.scanners.c.codequality
 
+import io.joern.scanners.language._
 import io.shiftleft.codepropertygraph.Cpg
 import io.shiftleft.passes.{CpgPass, DiffGraph}
 import io.shiftleft.semanticcpg.layers.{
@@ -32,6 +33,7 @@ class CodeQualityScanner(options: CodeQualityScannerOptions)
   override def create(context: LayerCreatorContext,
                       storeUndoInfo: Boolean): Unit = {
     runPass(new CodeQualityPass(context.cpg), context, storeUndoInfo)
+    outputFindings(context.cpg)
   }
 }
 
