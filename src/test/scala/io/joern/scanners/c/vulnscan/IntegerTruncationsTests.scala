@@ -19,7 +19,7 @@ class IntegerTruncationsTests extends Suite {
     """
 
   "find truncation in assignment of `strlen` to `int`" in {
-    IntegerTruncations.strlenAssignmentTruncations(cpg) match {
+    IntegerTruncations.strlenAssignmentTruncations()(cpg) match {
       case List(result) =>
         result.evidence match {
           case List(x: nodes.Identifier) => x.method.name shouldBe "vulnerable"
