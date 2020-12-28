@@ -1,6 +1,6 @@
 package io.joern.scanners.c.vulnscan
 
-import io.joern.scanners.language._
+import io.joern.scanners._
 import io.shiftleft.codepropertygraph.Cpg
 import io.shiftleft.dataflowengineoss.queryengine.EngineContext
 import io.shiftleft.passes.{CpgPass, DiffGraph}

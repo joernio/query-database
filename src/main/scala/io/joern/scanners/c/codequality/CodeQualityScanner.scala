@@ -1,6 +1,6 @@
 package io.joern.scanners.c.codequality
 
-import io.joern.scanners.language._
+import io.joern.scanners.outputFindings
 import io.shiftleft.codepropertygraph.Cpg
 import io.shiftleft.passes.{CpgPass, DiffGraph}
 import io.shiftleft.semanticcpg.layers.{
