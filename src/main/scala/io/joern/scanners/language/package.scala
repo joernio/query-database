@@ -1,11 +1,25 @@
 package io.joern.scanners
 
 import io.shiftleft.codepropertygraph.Cpg
-import io.shiftleft.codepropertygraph.generated.{NodeTypes, nodes}
+import io.shiftleft.codepropertygraph.generated.nodes
 import overflowdb.traversal._
 import io.shiftleft.semanticcpg.language._
 
 package object language {
+
+  case class Query(title: String,
+                   description: String,
+                   score: Double,
+                   f: Cpg => Traversal[nodes.StoredNode]) {
+
+    def apply(cpg: Cpg): List[nodes.NewFinding] = {
+      f(cpg)
+        .map(
+          finding(_, title = title, description = description, score = score)
+        )
+        .l
+    }
+  }
 
   implicit def toScannerStarters(cpg: Cpg): ScannerStarters =
     new ScannerStarters(cpg)

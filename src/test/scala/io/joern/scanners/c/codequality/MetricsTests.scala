@@ -69,7 +69,7 @@ class MetricsTests extends Suite {
     """
 
   "find functions with too many parameters" in {
-    Metrics.tooManyParameters(cpg, 4).map(_.evidence) match {
+    Metrics.tooManyParameters(4)(cpg).map(_.evidence) match {
       case List(List(method: nodes.Method)) =>
         method.name shouldBe "too_many_params"
       case _ => fail
@@ -77,7 +77,7 @@ class MetricsTests extends Suite {
   }
 
   "find functions with high cyclomatic complexity" in {
-    Metrics.tooHighComplexity(cpg, 4).map(_.evidence) match {
+    Metrics.tooHighComplexity(4)(cpg).map(_.evidence) match {
       case List(List(method: nodes.Method)) =>
         method.name shouldBe "high_cyclomatic_complexity"
       case _ => fail
@@ -85,7 +85,7 @@ class MetricsTests extends Suite {
   }
 
   "find functions that are long (in terms of line numbers)" in {
-    Metrics.tooLong(cpg, 13).map(_.evidence) match {
+    Metrics.tooLong(13)(cpg).map(_.evidence) match {
       case List(List(method: nodes.Method)) =>
         method.name shouldBe "func_with_many_lines"
       case _ => fail
@@ -93,7 +93,7 @@ class MetricsTests extends Suite {
   }
 
   "find functions with multiple returns" in {
-    Metrics.multipleReturns(cpg).map(_.evidence) match {
+    Metrics.multipleReturns()(cpg).map(_.evidence) match {
       case List(List(method: nodes.Method)) =>
         method.name shouldBe "func_with_multiple_returns"
       case _ => fail
@@ -101,7 +101,7 @@ class MetricsTests extends Suite {
   }
 
   "find functions with high number of loops" in {
-    Metrics.tooManyLoops(cpg, 3).map(_.evidence) match {
+    Metrics.tooManyLoops(3)(cpg).map(_.evidence) match {
       case List(List(method: nodes.Method)) =>
         method.name shouldBe "high_number_of_loops"
       case _ => fail
@@ -109,7 +109,7 @@ class MetricsTests extends Suite {
   }
 
   "find deeply nested functions" in {
-    Metrics.tooNested(cpg, 2).map(_.evidence) match {
+    Metrics.tooNested(2)(cpg).map(_.evidence) match {
       case List(List(method: nodes.Method)) =>
         method.name shouldBe "func_with_nesting_level_of_3"
       case _ => fail

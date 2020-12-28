@@ -46,8 +46,8 @@ class CodeQualityPass(cpg: Cpg) extends CpgPass(cpg) {
     * */
   override def run(): Iterator[DiffGraph] = {
     val diffGraph = DiffGraph.newBuilder
-    (tooManyParameters(cpg) ++ tooManyLoops(cpg) ++ tooNested(cpg) ++
-      tooLong(cpg) ++ tooHighComplexity(cpg) ++ multipleReturns(cpg))
+    (tooManyParameters()(cpg) ++ tooManyLoops()(cpg) ++ tooNested()(cpg) ++
+      tooLong()(cpg) ++ tooHighComplexity()(cpg) ++ multipleReturns()(cpg))
       .foreach(diffGraph.addNode)
     Iterator(diffGraph.build)
   }

@@ -35,10 +35,12 @@ class CScannerPass(cpg: Cpg)(implicit engineContext: EngineContext)
   override def run(): Iterator[DiffGraph] = {
     val diffGraph = DiffGraph.newBuilder
     IntegerTruncations
-      .strlenAssignmentTruncations(cpg)
+      .strlenAssignmentTruncations()(cpg)
       .foreach(diffGraph.addNode)
-    HeapBasedOverflow.mallocMemcpyIntOverflow(cpg).foreach(diffGraph.addNode)
-    CopyLoops.isCopyLoop(cpg).foreach(diffGraph.addNode)
+
+    val x = HeapBasedOverflow.mallocMemcpyIntOverflow()
+    x(cpg).foreach(diffGraph.addNode)
+    CopyLoops.isCopyLoop()(cpg).foreach(diffGraph.addNode)
     Iterator(diffGraph.build)
   }
 }
