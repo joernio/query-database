@@ -39,6 +39,7 @@ class CodeQualityScanner(options: CodeQualityScannerOptions)
 
 class CodeQualityPass(cpg: Cpg) extends CpgPass(cpg) {
   import Metrics._
+
   /**
     * All we do here is call all queries and add a node to
     * the graph for each result.
