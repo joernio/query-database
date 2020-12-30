@@ -41,6 +41,7 @@ class CScannerPass(cpg: Cpg)(implicit engineContext: EngineContext)
     val x = HeapBasedOverflow.mallocMemcpyIntOverflow()
     x(cpg).foreach(diffGraph.addNode)
     CopyLoops.isCopyLoop()(cpg).foreach(diffGraph.addNode)
+    InsecureFunctions.getsUsed()(cpg).foreach(diffGraph.addNode)
     Iterator(diffGraph.build)
   }
 }
