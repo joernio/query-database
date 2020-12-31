@@ -1,10 +1,10 @@
 package io.joern.scanners.c.codequality
 
+import io.joern.scanners.{QueryBundle, query}
 import io.joern.scanners.language._
-import io.joern.scanners.query
 import io.shiftleft.semanticcpg.language._
 
-object Metrics {
+object Metrics extends QueryBundle {
 
   @query
   def tooManyParameters(n: Int = 4): Query = Query(
