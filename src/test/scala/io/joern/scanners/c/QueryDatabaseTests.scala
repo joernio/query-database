@@ -10,14 +10,14 @@ class QueryDatabaseTests extends AnyWordSpec with Matchers {
 
     "contain Metrics bundle" in {
       new QueryDatabase().allBundles.count { bundle =>
-        bundle.getName == "io.joern.scanners.c.codequality.Metrics$"
+        bundle.getName == "io.joern.scanners.c.Metrics$"
       } shouldBe 1
     }
 
     "contain `tooManyParameters` query" in {
       val qdb = new QueryDatabase()
       val metricsBundles = qdb.allBundles.filter { bundle =>
-        bundle.getName == "io.joern.scanners.c.codequality.Metrics$"
+        bundle.getName == "io.joern.scanners.c.Metrics$"
       }
       metricsBundles.size shouldBe 1
       val metricsBundle = metricsBundles.head

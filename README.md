@@ -61,8 +61,9 @@ file `Metrics.scala` contains its queries:
 
 
 ```
-object Metrics {
+object Metrics extends QueryBundle {
 
+  @query
   def tooManyParameters(n: Int = 4): Query = Query(
     title = s"Number of parameters larger than $n",
     description =
@@ -72,6 +73,7 @@ object Metrics {
     }
   )
 
+  @query
   def tooHighComplexity(n: Int = 4): Query = Query(
     title = s"Cyclomatic complexity higher than $n",
     description =

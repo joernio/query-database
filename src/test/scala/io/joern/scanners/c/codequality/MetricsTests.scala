@@ -1,6 +1,6 @@
 package io.joern.scanners.c.codequality
 
-import io.joern.scanners.c.Suite
+import io.joern.scanners.c.{Metrics, Suite}
 import io.shiftleft.codepropertygraph.generated.nodes
 
 class MetricsTests extends Suite {

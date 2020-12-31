@@ -1,12 +1,12 @@
-package io.joern.scanners.c.vulnscan
+package io.joern.scanners.c
 
-import io.joern.scanners.language._
+import io.joern.scanners.language.Query
+import io.joern.scanners.{QueryBundle, query}
 import io.shiftleft.semanticcpg.language._
-import io.shiftleft.dataflowengineoss.language._
-import io.shiftleft.dataflowengineoss.queryengine.EngineContext
 
-object InsecureFunctions {
+object InsecureFunctions extends QueryBundle {
 
+  @query
   def getsUsed(): Query = Query(
     title = "Insecure function gets() used",
     description =
