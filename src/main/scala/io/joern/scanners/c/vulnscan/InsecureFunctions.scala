@@ -10,7 +10,7 @@ object InsecureFunctions {
   def getsUsed(): Query = Query(
     title = "Insecure function gets() used",
     description =
-      "Avoid gets() function as it can lead to reads beyond buffer boundary and cause buffer overlfows. Some secure alternatives are fgets() and gets_s()",
+      "Avoid gets() function as it can lead to reads beyond buffer boundary and cause buffer overflows. Some secure alternatives are fgets() and gets_s()",
     score = 4, { cpg =>
       cpg
         .call("gets")
