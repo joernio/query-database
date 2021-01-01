@@ -31,7 +31,7 @@ The query database is installed as an extension.
 You can run all queries as follows:
 
 ```
-./joern-scan --src path/to/code [--param k1=v1,...]
+./joern-scan path/to/code
 ```
 
 For example,

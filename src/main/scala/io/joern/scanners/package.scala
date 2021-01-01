@@ -5,14 +5,9 @@ import io.shiftleft.codepropertygraph.generated.{NodeTypes, nodes}
 import overflowdb.traversal.Traversal
 import io.shiftleft.semanticcpg.language._
 
-import scala.annotation.StaticAnnotation
 import overflowdb.traversal._
 
 package object scanners {
-
-  trait QueryBundle
-
-  class q() extends StaticAnnotation
 
   implicit class ScannerStarters(val cpg: Cpg) extends AnyVal {
 

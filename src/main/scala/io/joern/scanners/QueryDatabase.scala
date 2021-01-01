@@ -1,15 +1,20 @@
 package io.joern.scanners
 
-import io.joern.scanners._
-import io.shiftleft.dataflowengineoss.queryengine.EngineContext
 import org.reflections8.Reflections
 import org.reflections8.util.{ClasspathHelper, ConfigurationBuilder}
+import org.slf4j.{Logger, LoggerFactory}
 
+import scala.annotation.StaticAnnotation
 import scala.jdk.CollectionConverters._
 import scala.reflect.runtime.universe._
 import scala.reflect.runtime.{universe => ru}
 
-class QueryDatabase(implicit context: EngineContext) {
+trait QueryBundle
+class q() extends StaticAnnotation
+
+class QueryDatabase(defaultArgumentProvider: DefaultArgumentProvider) {
+
+  private val logger: Logger = LoggerFactory.getLogger(classOf[QueryDatabase])
 
   private val runtimeMirror: ru.Mirror =
     ru.runtimeMirror(getClass.getClassLoader)
@@ -50,10 +55,16 @@ class QueryDatabase(implicit context: EngineContext) {
     * */
   def queryCreatorsInBundle[T <: QueryBundle](
       bundle: Class[T]): List[(ru.MethodMirror, List[Any])] = {
-    methodsForBundle(bundle).map(m => (m, bundle)).map {
+    methodsForBundle(bundle).map(m => (m, bundle)).flatMap {
       case (method, bundle) =>
         val args = defaultArgs(method.symbol, classToType(bundle))
-        (method, args)
+        if (args.isDefined) {
+          List((method, args.get))
+        } else {
+          logger.warn(s"Cannot determine default arguments for query: $method")
+          List()
+        }
+
     }
   }
 
@@ -78,29 +89,44 @@ class QueryDatabase(implicit context: EngineContext) {
     }.toList
   }
 
-  private def defaultArgs(method: MethodSymbol, bundleType: Type) = {
+  private def defaultArgs(method: MethodSymbol,
+                          bundleType: Type): Option[List[Any]] = {
     val runtimeMirror = ru.runtimeMirror(getClass.getClassLoader)
     val im = runtimeMirror.reflect(
       runtimeMirror
         .reflectModule(bundleType.typeSymbol.asClass.module.asModule)
         .instance)
-    val typeSignature = im.symbol.typeSignature
-    (for (ps <- method.paramLists; p <- ps) yield p).zipWithIndex
+    val args = (for (ps <- method.paramLists; p <- ps) yield p).zipWithIndex
       .map {
-        case (x, i) =>
-          if (x.typeSignature.toString.endsWith("EngineContext")) {
-            context
-          } else {
-            val defaultMethodName = s"${method.name}$$default$$${i + 1}"
-            val m = typeSignature.member(TermName(defaultMethodName))
-            if (m.isMethod) {
-              im.reflectMethod(m.asMethod).apply()
-            } else {
-              throw new RuntimeException("Shouldn't happen")
-            }
-          }
+        case (x, i) => defaultArgumentProvider.defaultArgument(method, im, x, i)
       }
-
+    if (args.contains(None)) {
+      None
+    } else {
+      Some(args.map(_.get))
+    }
   }
 
+}
+
+abstract class DefaultArgumentProvider {
+
+  def defaultArgument(method: MethodSymbol,
+                      im: InstanceMirror,
+                      x: Symbol,
+                      i: Int): Option[Any]
+
+  protected def invokeDefaultMethod(method: MethodSymbol,
+                                    im: InstanceMirror,
+                                    x: Symbol,
+                                    i: Int): Option[Any] = {
+    val typeSignature = im.symbol.typeSignature
+    val defaultMethodName = s"${method.name}$$default$$${i + 1}"
+    val m = typeSignature.member(TermName(defaultMethodName))
+    if (m.isMethod) {
+      Some(im.reflectMethod(m.asMethod).apply())
+    } else {
+      None
+    }
+  }
 }

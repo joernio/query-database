@@ -9,6 +9,8 @@ import io.shiftleft.semanticcpg.layers.{
   LayerCreatorOptions
 }
 
+import scala.reflect.runtime.universe._
+
 object Scan {
   val overlayName = "scan"
   val description = "Joern/Ocular Code Scanner"
@@ -29,12 +31,27 @@ class Scan(options: ScanOptions)(implicit engineContext: EngineContext)
   }
 }
 
+class JoernDefaultArgumentProvider(implicit context: EngineContext)
+    extends DefaultArgumentProvider {
+
+  def defaultArgument(method: MethodSymbol,
+                      im: InstanceMirror,
+                      x: Symbol,
+                      i: Int): Option[Any] = {
+    if (x.typeSignature.toString.endsWith("EngineContext")) {
+      Some(context)
+    } else {
+      invokeDefaultMethod(method, im, x, i)
+    }
+  }
+}
+
 class ScanPass(cpg: Cpg)(implicit engineContext: EngineContext)
     extends CpgPass(cpg) {
 
   override def run(): Iterator[DiffGraph] = {
     val diffGraph = DiffGraph.newBuilder
-    val queryDb = new QueryDatabase()
+    val queryDb = new QueryDatabase(new JoernDefaultArgumentProvider())
     queryDb.allQueries.foreach { query =>
       query(cpg).foreach(diffGraph.addNode)
     }

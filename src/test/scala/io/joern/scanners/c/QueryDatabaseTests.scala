@@ -1,19 +1,20 @@
 package io.joern.scanners.c
 
-import io.joern.scanners.QueryDatabase
+import io.joern.scanners.{JoernDefaultArgumentProvider, QueryDatabase}
 
 class QueryDatabaseTests extends Suite {
 
   "QueryDatabase" should {
 
     "contain Metrics bundle" in {
-      new QueryDatabase().allBundles.count { bundle =>
-        bundle.getName == "io.joern.scanners.c.Metrics$"
+      new QueryDatabase(new JoernDefaultArgumentProvider()).allBundles.count {
+        bundle =>
+          bundle.getName == "io.joern.scanners.c.Metrics$"
       } shouldBe 1
     }
 
     "contain `tooManyParameters` query" in {
-      val qdb = new QueryDatabase()
+      val qdb = new QueryDatabase(new JoernDefaultArgumentProvider())
       val metricsBundles = qdb.allBundles.filter { bundle =>
         bundle.getName == "io.joern.scanners.c.Metrics$"
       }
@@ -24,7 +25,7 @@ class QueryDatabaseTests extends Suite {
     }
 
     "not crash when loading all queries" in {
-      new QueryDatabase().allQueries.size should be > 0
+      new QueryDatabase(new JoernDefaultArgumentProvider()).allQueries.size should be > 0
     }
 
   }
