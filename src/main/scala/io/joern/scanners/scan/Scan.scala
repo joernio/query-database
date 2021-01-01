@@ -4,7 +4,11 @@ import io.shiftleft.codepropertygraph.Cpg
 import io.shiftleft.console.{DefaultArgumentProvider, Query, QueryDatabase}
 import io.shiftleft.dataflowengineoss.queryengine.EngineContext
 import io.shiftleft.passes.{CpgPass, DiffGraph, KeyPoolCreator, ParallelCpgPass}
-import io.shiftleft.semanticcpg.layers.{LayerCreator, LayerCreatorContext, LayerCreatorOptions}
+import io.shiftleft.semanticcpg.layers.{
+  LayerCreator,
+  LayerCreatorContext,
+  LayerCreatorOptions
+}
 
 import scala.reflect.runtime.universe._
 
@@ -46,8 +50,12 @@ class JoernDefaultArgumentProvider(implicit context: EngineContext)
   }
 }
 
-class ScanPass(cpg: Cpg, queries : List[Query])(implicit engineContext: EngineContext)
-    extends ParallelCpgPass[Query](cpg, keyPools = Some(KeyPoolCreator.obtain(queries.size, 42949672950L).iterator)) {
+class ScanPass(cpg: Cpg, queries: List[Query])(
+    implicit engineContext: EngineContext)
+    extends ParallelCpgPass[Query](
+      cpg,
+      keyPools =
+        Some(KeyPoolCreator.obtain(queries.size, 42949672950L).iterator)) {
 
   override def partIterator: Iterator[Query] = queries.iterator
 
