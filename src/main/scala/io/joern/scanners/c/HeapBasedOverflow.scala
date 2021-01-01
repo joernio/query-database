@@ -1,7 +1,6 @@
 package io.joern.scanners.c
 
-import io.joern.scanners.language.Query
-import io.joern.scanners.{QueryBundle, query}
+import io.joern.scanners._
 import io.shiftleft.dataflowengineoss.queryengine.EngineContext
 import io.shiftleft.semanticcpg.language._
 import io.shiftleft.dataflowengineoss.language._
@@ -15,7 +14,7 @@ object HeapBasedOverflow extends QueryBundle {
     * an adaption of the old-joern query first shown at 31C3 that found a
     * buffer overflow in VLC's MP4 demuxer (CVE-2014-9626).
     * */
-  @query
+  @q
   def mallocMemcpyIntOverflow()(implicit context: EngineContext): Query = Query(
     name = "malloc-memcpy-int-overflow",
     title = "Dangerous copy-operation into heap-allocated buffer",

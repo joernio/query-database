@@ -1,7 +1,7 @@
 package io.joern.scanners.c
 
-import io.joern.scanners.language.Query
-import io.joern.scanners.{QueryBundle, query}
+import io.joern.scanners._
+import io.joern.scanners.{QueryBundle, q}
 import io.shiftleft.semanticcpg.language._
 
 object IntegerTruncations extends QueryBundle {
@@ -11,7 +11,7 @@ object IntegerTruncations extends QueryBundle {
     * to variables of type `int`, potentially causing truncation
     * on 64 bit platforms.
     * */
-  @query
+  @q
   def strlenAssignmentTruncations(): Query = Query(
     name = "strlen-truncation",
     title = "Truncation in assigment involving strlen call",

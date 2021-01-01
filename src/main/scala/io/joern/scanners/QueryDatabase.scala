@@ -1,6 +1,6 @@
 package io.joern.scanners
 
-import io.joern.scanners.language.Query
+import io.joern.scanners._
 import org.reflections8.Reflections
 import org.reflections8.util.{ClasspathHelper, ConfigurationBuilder}
 
@@ -65,7 +65,7 @@ class QueryDatabase {
     val methods = bundleType.members
       .collect { case m if m.isMethod => m.asMethod }
       .filter { m =>
-        m.annotations.map(_.tree.tpe.typeSymbol.name.toString).contains("query")
+        m.annotations.map(_.tree.tpe.typeSymbol.name.toString).contains("q")
       }
 
     val im = runtimeMirror.reflect(

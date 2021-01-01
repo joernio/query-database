@@ -1,6 +1,5 @@
 package io.joern.scanners
 
-import io.joern.scanners.language.outputFindings
 import io.shiftleft.codepropertygraph.Cpg
 import io.shiftleft.dataflowengineoss.queryengine.EngineContext
 import io.shiftleft.passes.{CpgPass, DiffGraph}

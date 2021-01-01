@@ -1,12 +1,11 @@
 package io.joern.scanners.c
 
-import io.joern.scanners.language.Query
-import io.joern.scanners.{QueryBundle, query}
+import io.joern.scanners._
 import io.shiftleft.semanticcpg.language._
 
 object Metrics extends QueryBundle {
 
-  @query
+  @q
   def tooManyParameters(n: Int = 4): Query = Query(
     name = "too-many-params",
     title = s"Number of parameters larger than $n",
@@ -17,7 +16,7 @@ object Metrics extends QueryBundle {
     }
   )
 
-  @query
+  @q
   def tooHighComplexity(n: Int = 4): Query = Query(
     name = "too-high-complexity",
     title = s"Cyclomatic complexity higher than $n",
@@ -28,7 +27,7 @@ object Metrics extends QueryBundle {
     }
   )
 
-  @query
+  @q
   def tooLong(n: Int = 1000): Query = Query(
     name = "too-long",
     title = s"More than $n lines",
@@ -39,7 +38,7 @@ object Metrics extends QueryBundle {
     }
   )
 
-  @query
+  @q
   def multipleReturns(): Query = Query(
     name = "multiple-returns",
     title = s"Multiple returns",
@@ -49,7 +48,7 @@ object Metrics extends QueryBundle {
     }
   )
 
-  @query
+  @q
   def tooManyLoops(n: Int = 4): Query = Query(
     name = "too-many-loops",
     title = s"More than $n loops",
@@ -61,7 +60,7 @@ object Metrics extends QueryBundle {
     }
   )
 
-  @query
+  @q
   def tooNested(n: Int = 3): Query = Query(
     name = "too-nested",
     title = s"Nesting level higher than $n",

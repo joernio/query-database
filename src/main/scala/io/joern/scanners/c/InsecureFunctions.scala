@@ -1,12 +1,11 @@
 package io.joern.scanners.c
 
-import io.joern.scanners.language.Query
-import io.joern.scanners.{QueryBundle, query}
+import io.joern.scanners._
 import io.shiftleft.semanticcpg.language._
 
 object InsecureFunctions extends QueryBundle {
 
-  @query
+  @q
   def getsUsed(): Query = Query(
     name = "call-to-gets",
     title = "Insecure function gets() used",

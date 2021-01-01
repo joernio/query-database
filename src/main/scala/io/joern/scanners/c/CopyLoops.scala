@@ -1,12 +1,11 @@
 package io.joern.scanners.c
 
-import io.joern.scanners.language.Query
-import io.joern.scanners.{QueryBundle, query}
+import io.joern.scanners._
 import io.shiftleft.semanticcpg.language._
 
 object CopyLoops extends QueryBundle {
 
-  @query
+  @q
   def isCopyLoop(): Query = Query(
     name = "copy-loop",
     title = "Copy loop detected",
