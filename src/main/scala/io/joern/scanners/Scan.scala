@@ -9,28 +9,27 @@ import io.shiftleft.semanticcpg.layers.{
   LayerCreatorOptions
 }
 
-object JoernScan {
-  val overlayName = "joern-scan"
-  val description = "Joern Code Scanner"
-  def defaultOpts = new JoernScanOptions()
+object Scan {
+  val overlayName = "scan"
+  val description = "Joern/Ocular Code Scanner"
+  def defaultOpts = new ScanOptions()
 }
 
-class JoernScanOptions() extends LayerCreatorOptions {}
+class ScanOptions() extends LayerCreatorOptions {}
 
-class JoernScan(options: JoernScanOptions)(
-    implicit engineContext: EngineContext)
+class Scan(options: ScanOptions)(implicit engineContext: EngineContext)
     extends LayerCreator {
-  override val overlayName: String = JoernScan.overlayName
-  override val description: String = JoernScan.description
+  override val overlayName: String = Scan.overlayName
+  override val description: String = Scan.description
 
   override def create(context: LayerCreatorContext,
                       storeUndoInfo: Boolean): Unit = {
-    runPass(new JoernScanPass(context.cpg), context, storeUndoInfo)
+    runPass(new ScanPass(context.cpg), context, storeUndoInfo)
     outputFindings(context.cpg)
   }
 }
 
-class JoernScanPass(cpg: Cpg)(implicit engineContext: EngineContext)
+class ScanPass(cpg: Cpg)(implicit engineContext: EngineContext)
     extends CpgPass(cpg) {
 
   override def run(): Iterator[DiffGraph] = {
