@@ -1,5 +1,9 @@
 package io.joern.scanners
 
+/*
+ * This file is to be moved to `console` in `codepropertygraph`
+ * */
+
 import org.reflections8.Reflections
 import org.reflections8.util.{ClasspathHelper, ConfigurationBuilder}
 import org.slf4j.{Logger, LoggerFactory}

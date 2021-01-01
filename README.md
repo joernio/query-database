@@ -45,17 +45,27 @@ echo "int foo(int a, int b, int c, int d, int e, int f) {}" > foo/foo.c
 runs all queries on the sample code in the directory `foo`, determining that the function `foo`
 has too many parameters.
 
-## Database overview
+## Adding your own queries
 
-Queries are grouped into bundles. For example, several queries for determining
-software metrics are packaged in the bundle `Metrics` in
-`src/main/scala/io/joern/scanners/c/Metrics.scala`:
+Please follow the rules below for a tear-free query writing experience:
+
+* Queries in the package `io.joern.scanners` are picked up automatically at runtime,
+  so please put your queries there.
+* Each query must begin with the annotation `@q` and must be placed in a query bundle.
+  A query bundle is simply an `object` that derives from `QueryBundle`
+* Queries can have parameters,but you must provide a default value for each parameter
+* Please add unit tests for queries. These also serve as a spec for what your query does.
+* Please format the code before sending a PR using `sbt scalafmt` and `sbt test:scalafmt`
+
+Take a look at the query bundle `Metrics` at `src/main/scala/io/joern/scanners/c/Metrics.scala`
+as an example:
 
 ```
 object Metrics extends QueryBundle {
 
   @q
   def tooManyParameters(n: Int = 4): Query = Query(
+    name = "too-many-parameters",
     title = s"Number of parameters larger than $n",
     description =
       s"This query identifies functions with more than $n formal parameters",
@@ -76,10 +86,6 @@ object Metrics extends QueryBundle {
   ...
 }
 ```
-
-As you can see, each query is implemented in a function that receives
-a code property graph (type `Cpg`) and returns a list of findings
-(type `List[nodes.NewFinding]`).
 
 Corresponding tests for queries are located in
 `src/test/scala/io/joern/scanners`. For example, tests for the metrics
@@ -122,17 +128,10 @@ follows:
 sbt test
 ```
 
-Automatic code formatting can be performed as follows:
+You can test newly developed queries 
+
+If you want to test newly created queries with `joern-scan` as follows:
 
 ```
-sbt scalafmt
-sbt test:scalafmt
+./install.sh && ./joern-scan <src>
 ```
-
-## Adding queries to existing scripts
-
-You can add queries to existing bundles, simply by defining a method in the bundle class with the
-method annotation `@q`. You can also add your own bundles by placing an `object` that extends from
-`QueryBundle` directly in or in a sub package of `io.joern.scanners`. Please also add tests
-for your queries to ensure that they continue functioning. Tests also serve as a specification
-for what your queries should and should not do.
