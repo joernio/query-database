@@ -17,6 +17,7 @@ object HeapBasedOverflow extends QueryBundle {
   @q
   def mallocMemcpyIntOverflow()(implicit context: EngineContext): Query = Query(
     name = "malloc-memcpy-int-overflow",
+    author = Crew.fabs,
     title = "Dangerous copy-operation into heap-allocated buffer",
     description = "-",
     score = 4, { cpg =>
