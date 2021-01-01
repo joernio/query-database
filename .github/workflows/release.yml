@@ -19,6 +19,7 @@ jobs:
           key: ${{ runner.os }}-sbt-${{ hashfiles('**/build.sbt') }}
       - run: sbt scalafmtCheck test stage
       - run: sbt ciReleaseTagNextVersion createDistribution
+      - run: sbt run
       - run: sha512sum ./querydb.zip > ./querydb.zip.sha512
       - name: Export ENV vars
         run:
@@ -51,3 +52,12 @@ jobs:
           asset_path: ./querydb.zip.sha512
           asset_name: querydb.zip.sha512
           asset_content_type: text/plain
+      - name: Upload querydb.json
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./querydb.json
+          asset_name: querydb.json
+          asset_content_type: application/json
