@@ -1,6 +1,7 @@
 package io.joern.scanners
 
 import io.joern.scanners._
+import io.shiftleft.dataflowengineoss.queryengine.EngineContext
 import org.reflections8.Reflections
 import org.reflections8.util.{ClasspathHelper, ConfigurationBuilder}
 
@@ -8,7 +9,7 @@ import scala.jdk.CollectionConverters._
 import scala.reflect.runtime.universe._
 import scala.reflect.runtime.{universe => ru}
 
-class QueryDatabase {
+class QueryDatabase(implicit context : EngineContext) {
 
   private val runtimeMirror: ru.Mirror =
     ru.runtimeMirror(getClass.getClassLoader)
@@ -85,14 +86,20 @@ class QueryDatabase {
         .instance)
     val typeSignature = im.symbol.typeSignature
     (for (ps <- method.paramLists; p <- ps) yield p).zipWithIndex
-      .map { case (_, i) => s"${method.name}$$default$$${i + 1}" }
-      .map { name =>
-        typeSignature.member(TermName(name)).asMethod
+      .map { case (x, i) =>
+        if (x.typeSignature.toString.endsWith("EngineContext")) {
+          context
+        } else {
+          val defaultMethodName = s"${method.name}$$default$$${i + 1}"
+          val m = typeSignature.member(TermName(defaultMethodName))
+          if (m.isMethod) {
+            im.reflectMethod(m.asMethod).apply()
+          } else {
+            throw new RuntimeException("Shouldn't happen")
+          }
+        }
       }
-      .map(m => im.reflectMethod(m))
-      .map { m =>
-        m.apply()
-      }
+
   }
 
 }
