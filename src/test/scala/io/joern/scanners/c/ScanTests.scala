@@ -1,6 +1,7 @@
 package io.joern.scanners.c
 
-import io.joern.scanners.{JoernDefaultArgumentProvider, QueryDatabase}
+import io.joern.scanners.JoernDefaultArgumentProvider
+import io.shiftleft.console.QueryDatabase
 
 class ScanTests extends Suite {
 

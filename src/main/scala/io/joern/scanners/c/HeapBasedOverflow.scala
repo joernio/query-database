@@ -4,6 +4,7 @@ import io.joern.scanners._
 import io.shiftleft.dataflowengineoss.queryengine.EngineContext
 import io.shiftleft.semanticcpg.language._
 import io.shiftleft.dataflowengineoss.language._
+import io.shiftleft.console._
 
 object HeapBasedOverflow extends QueryBundle {
 

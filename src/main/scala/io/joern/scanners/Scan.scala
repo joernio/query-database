@@ -1,7 +1,7 @@
 package io.joern.scanners
 
 import io.shiftleft.codepropertygraph.Cpg
-import io.shiftleft.codepropertygraph.generated.nodes
+import io.shiftleft.console.{DefaultArgumentProvider, QueryDatabase}
 import io.shiftleft.dataflowengineoss.queryengine.EngineContext
 import io.shiftleft.passes.{CpgPass, DiffGraph}
 import io.shiftleft.semanticcpg.layers.{
