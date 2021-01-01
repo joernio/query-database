@@ -35,7 +35,7 @@ class ScanPass(cpg: Cpg)(implicit engineContext: EngineContext)
   override def run(): Iterator[DiffGraph] = {
     val diffGraph = DiffGraph.newBuilder
     val queryDb = new QueryDatabase()
-    queryDb.allQueries.foreach{ query =>
+    queryDb.allQueries.foreach { query =>
       query(cpg).foreach(diffGraph.addNode)
     }
     Iterator(diffGraph.build)

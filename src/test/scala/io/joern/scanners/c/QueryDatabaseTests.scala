@@ -1,10 +1,8 @@
 package io.joern.scanners.c
 
 import io.joern.scanners.QueryDatabase
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpec
 
-class QueryDatabaseTests extends AnyWordSpec with Matchers {
+class QueryDatabaseTests extends Suite {
 
   "QueryDatabase" should {
 
@@ -23,6 +21,10 @@ class QueryDatabaseTests extends AnyWordSpec with Matchers {
       val metricsBundle = metricsBundles.head
       val queries = qdb.queriesInBundle(metricsBundle)
       queries.count(_.title == s"Number of parameters larger than 4") shouldBe 1
+    }
+
+    "not crash when loading all queries" in {
+      new QueryDatabase().allQueries.size should be > 0
     }
 
   }
