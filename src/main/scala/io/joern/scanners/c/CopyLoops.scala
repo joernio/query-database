@@ -1,11 +1,13 @@
-package io.joern.scanners.c.vulnscan
+package io.joern.scanners.c
 
-import io.joern.scanners.language._
+import io.joern.scanners._
 import io.shiftleft.semanticcpg.language._
 
-object CopyLoops {
+object CopyLoops extends QueryBundle {
 
+  @q
   def isCopyLoop(): Query = Query(
+    name = "copy-loop",
     title = "Copy loop detected",
     description =
       """

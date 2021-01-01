@@ -5,8 +5,6 @@ ThisBuild/scalaVersion := "2.13.0"
 enablePlugins(JavaAppPackaging)
 enablePlugins(GitVersioning)
 
-lazy val schema = project.in(file("schema"))
-dependsOn(schema)
 libraryDependencies ++= Seq(
   "com.lihaoyi" %% "upickle" % "1.2.2",
   "com.github.pathikrit" %% "better-files"             % "3.8.0",
@@ -19,7 +17,6 @@ libraryDependencies ++= Seq(
   "io.shiftleft" %% "fuzzyc2cpg" % Versions.cpg % Test,
   "org.scalatest" %% "scalatest" % "3.1.1" % Test
 )
-excludeDependencies += ExclusionRule("io.shiftleft", "codepropertygraph-domain-classes_2.13")
 
 // We exclude a few jars that the main joern distribution already includes
 Universal / mappings := (Universal / mappings).value.filterNot {
@@ -30,6 +27,9 @@ Universal / mappings := (Universal / mappings).value.filterNot {
     path.contains("com.google.protobuf") ||
     path.contains("com.lihaoyi.u")
 }
+
+sources in (Compile,doc) := Seq.empty
+publishArtifact in (Compile, packageDoc) := false
 
 lazy val createDistribution = taskKey[Unit]("Create binary distribution of extension")
 createDistribution := {

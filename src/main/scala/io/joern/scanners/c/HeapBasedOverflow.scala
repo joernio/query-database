@@ -1,11 +1,11 @@
-package io.joern.scanners.c.vulnscan
+package io.joern.scanners.c
 
-import io.joern.scanners.language._
+import io.joern.scanners._
+import io.shiftleft.dataflowengineoss.queryengine.EngineContext
 import io.shiftleft.semanticcpg.language._
 import io.shiftleft.dataflowengineoss.language._
-import io.shiftleft.dataflowengineoss.queryengine.EngineContext
 
-object HeapBasedOverflow {
+object HeapBasedOverflow extends QueryBundle {
 
   /**
     * Find calls to malloc where the first argument contains an arithmetic expression,
@@ -14,7 +14,9 @@ object HeapBasedOverflow {
     * an adaption of the old-joern query first shown at 31C3 that found a
     * buffer overflow in VLC's MP4 demuxer (CVE-2014-9626).
     * */
+  @q
   def mallocMemcpyIntOverflow()(implicit context: EngineContext): Query = Query(
+    name = "malloc-memcpy-int-overflow",
     title = "Dangerous copy-operation into heap-allocated buffer",
     description = "-",
     score = 4, { cpg =>

@@ -4,7 +4,7 @@ set -o pipefail
 set -o nounset
 set -eu
 
-readonly JOERN_VERSION="v1.1.63"
+readonly JOERN_VERSION="v1.1.64"
 
 if [ "$(uname)" = 'Darwin' ]; then
   # get script location
@@ -71,10 +71,3 @@ pushd $SCRIPT_ABS_DIR
   ./joern --add-plugin ./querydb.zip
   rm lib
 popd
-
-echo "Adapting CPG schema"
-cp ${SCHEMA_SRC_DIR}/*.json ${JOERN_INSTALL}/schema-extender/schemas/
-pushd $JOERN_INSTALL
-  ./schema-extender.sh
-popd
-
