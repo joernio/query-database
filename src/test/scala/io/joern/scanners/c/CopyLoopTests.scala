@@ -1,7 +1,5 @@
-package io.joern.scanners.c.vulnscan
+package io.joern.scanners.c
 
-import io.joern.scanners.c.{CopyLoops, Suite}
-import io.shiftleft.codepropertygraph.Cpg
 import io.shiftleft.codepropertygraph.generated.nodes
 import io.shiftleft.semanticcpg.language._
 
