@@ -39,7 +39,7 @@ For example,
 ```
 mkdir foo
 echo "int foo(int a, int b, int c, int d, int e, int f) {}" > foo/foo.c
-./joern-scan --src foo
+./joern-scan foo
 ```
 
 runs all queries on the sample code in the directory `foo`, determining that the function `foo`
