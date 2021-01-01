@@ -1,9 +1,9 @@
-package io.joern.scanners
+package io.joern.scanners.scan
 
 import io.shiftleft.codepropertygraph.Cpg
-import io.shiftleft.console.{DefaultArgumentProvider, QueryDatabase}
+import io.shiftleft.console.{DefaultArgumentProvider, Query, QueryDatabase}
 import io.shiftleft.dataflowengineoss.queryengine.EngineContext
-import io.shiftleft.passes.{CpgPass, DiffGraph}
+import io.shiftleft.passes.{CpgPass, DiffGraph, KeyPoolCreator, ParallelCpgPass}
 import io.shiftleft.semanticcpg.layers.{
   LayerCreator,
   LayerCreatorContext,
@@ -22,12 +22,15 @@ class ScanOptions() extends LayerCreatorOptions {}
 
 class Scan(options: ScanOptions)(implicit engineContext: EngineContext)
     extends LayerCreator {
+
   override val overlayName: String = Scan.overlayName
   override val description: String = Scan.description
 
   override def create(context: LayerCreatorContext,
                       storeUndoInfo: Boolean): Unit = {
-    runPass(new ScanPass(context.cpg), context, storeUndoInfo)
+    val queryDb = new QueryDatabase(new JoernDefaultArgumentProvider())
+    val allQueries: List[Query] = queryDb.allQueries
+    runPass(new ScanPass(context.cpg, allQueries), context, storeUndoInfo)
     outputFindings(context.cpg)
   }
 }
@@ -47,15 +50,18 @@ class JoernDefaultArgumentProvider(implicit context: EngineContext)
   }
 }
 
-class ScanPass(cpg: Cpg)(implicit engineContext: EngineContext)
-    extends CpgPass(cpg) {
+class ScanPass(cpg: Cpg, queries: List[Query])(
+    implicit engineContext: EngineContext)
+    extends ParallelCpgPass[Query](
+      cpg,
+      keyPools =
+        Some(KeyPoolCreator.obtain(queries.size, 42949672950L).iterator)) {
 
-  override def run(): Iterator[DiffGraph] = {
+  override def partIterator: Iterator[Query] = queries.iterator
+
+  override def runOnPart(query: Query): Iterator[DiffGraph] = {
     val diffGraph = DiffGraph.newBuilder
-    val queryDb = new QueryDatabase(new JoernDefaultArgumentProvider())
-    queryDb.allQueries.foreach { query =>
-      query(cpg).foreach(diffGraph.addNode)
-    }
+    query(cpg).foreach(diffGraph.addNode)
     Iterator(diffGraph.build)
   }
 
