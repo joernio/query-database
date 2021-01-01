@@ -4,9 +4,12 @@ package io.joern.scanners
  * This file is to be moved to `console` in `codepropertygraph`
  * */
 
+import io.shiftleft.codepropertygraph.Cpg
+import io.shiftleft.codepropertygraph.generated.nodes
 import org.reflections8.Reflections
 import org.reflections8.util.{ClasspathHelper, ConfigurationBuilder}
 import org.slf4j.{Logger, LoggerFactory}
+import overflowdb.traversal.Traversal
 
 import scala.annotation.StaticAnnotation
 import scala.jdk.CollectionConverters._
@@ -15,6 +18,13 @@ import scala.reflect.runtime.{universe => ru}
 
 trait QueryBundle
 class q() extends StaticAnnotation
+
+case class Query(name: String,
+                 author: String,
+                 title: String,
+                 description: String,
+                 score: Double,
+                 f: Cpg => Traversal[nodes.StoredNode])
 
 class QueryDatabase(
     defaultArgumentProvider: DefaultArgumentProvider =

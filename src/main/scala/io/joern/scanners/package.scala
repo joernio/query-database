@@ -16,17 +16,14 @@ package object scanners {
 
   }
 
-  case class Query(name: String,
-                   author: String,
-                   title: String,
-                   description: String,
-                   score: Double,
-                   f: Cpg => Traversal[nodes.StoredNode]) {
-
+  implicit class QueryWrapper(q: Query) {
     def apply(cpg: Cpg): List[nodes.NewFinding] = {
-      f(cpg)
+      q.f(cpg)
         .map(
-          finding(_, title = title, description = description, score = score)
+          finding(_,
+                  title = q.title,
+                  description = q.description,
+                  score = q.score)
         )
         .l
     }
