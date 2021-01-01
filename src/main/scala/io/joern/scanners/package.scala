@@ -2,9 +2,9 @@ package io.joern
 
 import io.shiftleft.codepropertygraph.Cpg
 import io.shiftleft.codepropertygraph.generated.{NodeTypes, nodes}
+import io.shiftleft.console.Query
 import overflowdb.traversal.Traversal
 import io.shiftleft.semanticcpg.language._
-
 import overflowdb.traversal._
 
 package object scanners {
@@ -16,17 +16,14 @@ package object scanners {
 
   }
 
-  case class Query(name: String,
-                   author: String,
-                   title: String,
-                   description: String,
-                   score: Double,
-                   f: Cpg => Traversal[nodes.StoredNode]) {
-
+  implicit class QueryWrapper(q: Query) {
     def apply(cpg: Cpg): List[nodes.NewFinding] = {
-      f(cpg)
+      q.f(cpg)
         .map(
-          finding(_, title = title, description = description, score = score)
+          finding(_,
+                  title = q.title,
+                  description = q.description,
+                  score = q.score)
         )
         .l
     }
