@@ -2,7 +2,7 @@ package io.joern.scanners.c
 
 import io.shiftleft.codepropertygraph.generated.nodes
 import io.shiftleft.semanticcpg.language._
-import io.joern.scanners._
+import io.joern.scanners.scan._
 
 class CopyLoopTests extends Suite {
 

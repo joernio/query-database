@@ -1,35 +1,40 @@
-package io.joern
+package io.joern.scanners
 
 import io.shiftleft.codepropertygraph.Cpg
 import io.shiftleft.codepropertygraph.generated.{NodeTypes, nodes}
 import io.shiftleft.console.Query
-import overflowdb.traversal.Traversal
-import io.shiftleft.semanticcpg.language._
 import overflowdb.traversal._
+import io.shiftleft.semanticcpg.language._
 
-package object scanners {
+package object scan {
 
   implicit class ScannerStarters(val cpg: Cpg) extends AnyVal {
-
     def finding: Traversal[nodes.Finding] =
       cpg.graph.nodes(NodeTypes.FINDING).cast[nodes.Finding]
-
   }
 
   implicit class QueryWrapper(q: Query) {
+
+    /**
+      * Obtain list of findings by running query on CPG
+      * */
     def apply(cpg: Cpg): List[nodes.NewFinding] = {
       q.f(cpg)
         .map(
-          finding(_,
-                  title = q.title,
-                  description = q.description,
-                  score = q.score)
-        )
+          evidence =>
+            finding(evidence = evidence,
+                    name = q.name,
+                    author = q.author,
+                    title = q.title,
+                    description = q.description,
+                    score = q.score))
         .l
     }
   }
 
-  object FindingKeys {
+  private object FindingKeys {
+    val name = "name"
+    val author = "author"
     val title = "title"
     val description = "description"
     val score = "score"
@@ -37,6 +42,10 @@ package object scanners {
 
   implicit class ScannerFindingStep(val traversal: Traversal[nodes.Finding])
       extends AnyRef {
+
+    def name: Traversal[String] = traversal.map(_.name)
+
+    def author: Traversal[String] = traversal.map(_.author)
 
     def title: Traversal[String] = traversal.map(_.title)
 
@@ -49,6 +58,10 @@ package object scanners {
   implicit class ScannerFindingExtension(val node: nodes.Finding)
       extends AnyRef {
 
+    def name: String = getValue(FindingKeys.name)
+
+    def author: String = getValue(FindingKeys.author)
+
     def title: String = getValue(FindingKeys.title)
 
     def description: String = getValue(FindingKeys.description)
@@ -60,13 +73,17 @@ package object scanners {
 
   }
 
-  def finding(evidence: nodes.StoredNode,
-              title: String,
-              description: String,
-              score: Double): nodes.NewFinding = {
+  private def finding(evidence: nodes.StoredNode,
+                      name: String,
+                      author: String,
+                      title: String,
+                      description: String,
+                      score: Double): nodes.NewFinding = {
     nodes.NewFinding(
       evidence = List(evidence),
       keyValuePairs = List(
+        nodes.NewKeyValuePair(FindingKeys.name, name),
+        nodes.NewKeyValuePair(FindingKeys.author, author),
         nodes.NewKeyValuePair(FindingKeys.title, title),
         nodes.NewKeyValuePair(FindingKeys.description, description),
         nodes.NewKeyValuePair(FindingKeys.score, score.toString)
@@ -74,6 +91,9 @@ package object scanners {
     )
   }
 
+  /**
+    * Print human readable list of findings to standard out.
+    * */
   def outputFindings(cpg: Cpg): Unit = {
     cpg.finding.sortBy(_.score.toInt).foreach { finding =>
       val evidence = finding.evidence.headOption

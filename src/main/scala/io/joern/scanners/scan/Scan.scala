@@ -1,4 +1,4 @@
-package io.joern.scanners
+package io.joern.scanners.scan
 
 import io.shiftleft.codepropertygraph.Cpg
 import io.shiftleft.console.{DefaultArgumentProvider, QueryDatabase}
@@ -22,6 +22,7 @@ class ScanOptions() extends LayerCreatorOptions {}
 
 class Scan(options: ScanOptions)(implicit engineContext: EngineContext)
     extends LayerCreator {
+
   override val overlayName: String = Scan.overlayName
   override val description: String = Scan.description
 

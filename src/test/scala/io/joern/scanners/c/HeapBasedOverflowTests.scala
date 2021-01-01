@@ -1,7 +1,7 @@
 package io.joern.scanners.c
 
 import io.shiftleft.codepropertygraph.generated.nodes
-import io.joern.scanners._
+import io.joern.scanners.scan._
 
 class HeapBasedOverflowTests extends Suite {
 
