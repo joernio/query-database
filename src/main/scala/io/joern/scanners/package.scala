@@ -17,6 +17,7 @@ package object scanners {
   }
 
   case class Query(name: String,
+                   author: String,
                    title: String,
                    description: String,
                    score: Double,

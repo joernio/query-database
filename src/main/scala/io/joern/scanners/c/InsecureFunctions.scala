@@ -8,6 +8,7 @@ object InsecureFunctions extends QueryBundle {
   @q
   def getsUsed(): Query = Query(
     name = "call-to-gets",
+    author = Crew.suchakra,
     title = "Insecure function gets() used",
     description =
       """
