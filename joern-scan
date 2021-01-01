@@ -7,4 +7,9 @@ else
 fi
 SCRIPT_ABS_DIR=$(dirname "$SCRIPT_ABS_PATH")
 
-$SCRIPT_ABS_DIR/joern --run scan "$@"
+if [ "$#" -lt 1 ]; then
+    echo "Pass in the source directory to scan"
+    exit 1
+fi
+
+$SCRIPT_ABS_DIR/joern --run scan --src "$@"
