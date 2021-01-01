@@ -34,14 +34,14 @@ class Scan(options: ScanOptions)(implicit engineContext: EngineContext)
 class JoernDefaultArgumentProvider(implicit context: EngineContext)
     extends DefaultArgumentProvider {
 
-  def defaultArgument(method: MethodSymbol,
-                      im: InstanceMirror,
-                      x: Symbol,
-                      i: Int): Option[Any] = {
+  override def defaultArgument(method: MethodSymbol,
+                               im: InstanceMirror,
+                               x: Symbol,
+                               i: Int): Option[Any] = {
     if (x.typeSignature.toString.endsWith("EngineContext")) {
       Some(context)
     } else {
-      invokeDefaultMethod(method, im, x, i)
+      super.defaultArgument(method, im, x, i)
     }
   }
 }

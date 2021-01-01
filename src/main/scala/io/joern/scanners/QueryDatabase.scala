@@ -12,7 +12,9 @@ import scala.reflect.runtime.{universe => ru}
 trait QueryBundle
 class q() extends StaticAnnotation
 
-class QueryDatabase(defaultArgumentProvider: DefaultArgumentProvider) {
+class QueryDatabase(
+    defaultArgumentProvider: DefaultArgumentProvider =
+      new DefaultArgumentProvider) {
 
   private val logger: Logger = LoggerFactory.getLogger(classOf[QueryDatabase])
 
@@ -109,17 +111,20 @@ class QueryDatabase(defaultArgumentProvider: DefaultArgumentProvider) {
 
 }
 
-abstract class DefaultArgumentProvider {
+/**
+  * Joern and Ocular require different implicits to be present, and when
+  * we encounter these implicits as parameters in a query that we invoke
+  * via reflection, we need to obtain these implicits from somewhere.
+  *
+  * We achieve this by implementing a `DefaultArgumentProvider` for Ocular,
+  * and one for Joern.
+  * */
+class DefaultArgumentProvider {
 
   def defaultArgument(method: MethodSymbol,
                       im: InstanceMirror,
                       x: Symbol,
-                      i: Int): Option[Any]
-
-  protected def invokeDefaultMethod(method: MethodSymbol,
-                                    im: InstanceMirror,
-                                    x: Symbol,
-                                    i: Int): Option[Any] = {
+                      i: Int): Option[Any] = {
     val typeSignature = im.symbol.typeSignature
     val defaultMethodName = s"${method.name}$$default$$${i + 1}"
     val m = typeSignature.member(TermName(defaultMethodName))
@@ -129,4 +134,5 @@ abstract class DefaultArgumentProvider {
       None
     }
   }
+
 }
