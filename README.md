@@ -1,4 +1,4 @@
-# Joern Query Database
+# Joern Query Database ("Joern-Scan")
 
 This is the central query database for the open-source code analysis
 platform [Joern](https://github.com/ShiftLeftSecurity/joern). It has
@@ -9,9 +9,7 @@ two purposes:
 
 The query database is distributed as a standalone library that
 includes Joern as a dependency. This means that it is not necessary to
-install Joern to make use of the scanners in the database. Instead,
-scanners can be invoked from any JVM-based program - as the automatic
-tests included in the database demonstrate.
+install Joern to make use of the queries in the database.
 
 At the same time, the database is a Joern extension, that is, when
 dynamically loaded at startup, its functionality becomes available on
@@ -23,22 +21,17 @@ for inclusion in the default distribution.
 
 ## Installing and running
 
-The installation scripts downloads joern and installs it in a sub-directory.
+The installation script downloads joern and installs it in a sub-directory.
 The query database is installed as an extension.
 
 ```
 ./install.sh
 ```
 
-The query database currently makes available the following scanners:
-
-* codequalityscanner - a code quality scanner for C code
-* cvulnscanner - a vulnerability scanner for C code
-
-You can run scanners as follows:
+You can run all queries as follows:
 
 ```
-./joern --src path/to/code --run <scannername> --param k1=v1,...
+./joern-scan --src path/to/code [--param k1=v1,...]
 ```
 
 For example,
@@ -46,24 +39,22 @@ For example,
 ```
 mkdir foo
 echo "int foo(int a, int b, int c, int d, int e, int f) {}" > foo/foo.c
-./joern --src foo --run codequalityscanner
+./joern-scan --src foo
 ```
 
-runs the code quality scanner and determines that the function `foo` has too many parameters.
+runs all queries on the sample code in the directory `foo`, determining that the function `foo`
+has too many parameters.
 
 ## Database overview
 
-Each scanner is hosted in a sub package of `io.joern.scanners`, that
-is, it is located in a directory in
-`src/main/scala/io/joern/scanners`. As an example, let us look into
-the `CodeQualityScanner` at `src/main/scala/io/joern/scanners`. The
-file `Metrics.scala` contains its queries:
-
+Queries are grouped into bundles. For example, several queries for determining
+software metrics are packaged in the bundle `Metrics` in
+`src/main/scala/io/joern/scanners/c/Metrics.scala`:
 
 ```
 object Metrics extends QueryBundle {
 
-  @query
+  @q
   def tooManyParameters(n: Int = 4): Query = Query(
     title = s"Number of parameters larger than $n",
     description =
@@ -73,7 +64,7 @@ object Metrics extends QueryBundle {
     }
   )
 
-  @query
+  @q
   def tooHighComplexity(n: Int = 4): Query = Query(
     title = s"Cyclomatic complexity higher than $n",
     description =
@@ -90,34 +81,10 @@ As you can see, each query is implemented in a function that receives
 a code property graph (type `Cpg`) and returns a list of findings
 (type `List[nodes.NewFinding]`).
 
-These queries are invoked in sequence in `CodeQualityPass` in the file
-`CodeQualityScanner.scala`:
-
-```
-...
-class CodeQualityPass(cpg: Cpg) extends CpgPass(cpg) {
-  import Metrics._
-  /**
-    * All we do here is call all queries and add a node to
-    * the graph for each result.
-    * */
-  override def run(): Iterator[DiffGraph] = {
-    val diffGraph = DiffGraph.newBuilder
-    (tooManyParameters()(cpg) ++ tooManyLoops()(cpg) ++ tooNested()(cpg) ++
-      tooLong()(cpg) ++ tooHighComplexity()(cpg) ++ multipleReturns()(cpg))
-      .foreach(diffGraph.addNode)
-    Iterator(diffGraph.build)
-  }
-}
-...
-```
-Apart from these query invocations, `CodeQualityScanner.scala` merely
-contains boilerplate code that turns the scanner into a Joern extension.
-
 Corresponding tests for queries are located in
 `src/test/scala/io/joern/scanners`. For example, tests for the metrics
 queries are located in
-`src/test/scala/io/joern/scanners/c/codequality/MetricsTests.scala`:
+`src/test/scala/io/joern/scanners/c/MetricsTests.scala`:
 
 ```
 class MetricsTests extends Suite {
@@ -164,74 +131,8 @@ sbt test:scalafmt
 
 ## Adding queries to existing scripts
 
-You can add queries to an existing bundles by creating a new query set
-in the script package. For example, query sets for the C scanner can
-be placed here:
-
-https://github.com/joernio/batteries/blob/main/src/main/scala/io/joern/batteries/c/vulnscan/
-
-The file [`SampleQuerySet.scala`](https://github.com/joernio/batteries/blob/main/src/main/scala/io/joern/batteries/c/vulnscan/SampleQuerySet.scala) serves as a template.
-
-```
-object SampleQuerySet {
-
-  def myQuery1(cpg: Cpg): List[nodes.NewFinding] = {
-    // Add your query here
-  }
-
-  def myQuery2(cpg: Cpg): List[nodes.NewFinding] = {
-    // Add another query here
-  }
-  // ...
-}
-
-class SampleQuertSet(cpg: Cpg) extends CpgPass(cpg) {
-  import SampleQuerySet._
-
-  override def run(): Iterator[DiffGraph] = {
-    val diffGraph = DiffGraph.newBuilder
-    // Execute queries
-    myQuery1(cpg).foreach(diffGraph.addNode)
-    myQuery2(cpg).foreach(diffGraph.addNode)
-
-    Iterator(diffGraph.build)
-  }
-```
-
-Finally, add
-a `runPass` line to the script [here](https://github.com/joernio/batteries/blob/main/src/main/scala/io/joern/batteries/c/vulnscan/CScanner.scala#L23):
-
-```
-class CScanner(options: CScannerOptions) extends LayerCreator {
-  override val overlayName: String = CScanner.overlayName
-  override val description: String = CScanner.description
-
-  override def create(context: LayerCreatorContext,
-                      storeUndoInfo: Boolean): Unit = {
-    runPass(new IntegerTruncations(context.cpg), context, storeUndoInfo)
-    // add more `runPass` calls to execute query sets by default
-  }
-```
-
-## Adding Tests
-
-Please add tests for your queries to ensure that they continue functioning.
-Tests also serve as a specification for what your queries should and should not do.
-
-A template for an automated query set test can be found [here](https://github.com/joernio/batteries/blob/main/src/test/scala/io/joern/batteries/c/vulnscan/SampleQuerySetTests.scala)
-
-```
-package io.joern.batteries.c.vulnscan
-
-class SampleQuerySetTests extends Suite {
-
-  override val code: String =
-    """
-       void place_your_code_here() {}
-    """
-
-  "find ..." in {
-    // test code goes here
-  }
-}
-```
+You can add queries to existing bundles, simply by defining a method in the bundle class with the
+method annotation `@q`. You can also add your own bundles by placing an `object` that extends from
+`QueryBundle` directly in or in a sub package of `io.joern.scanners`. Please also add tests
+for your queries to ensure that they continue functioning. Tests also serve as a specification
+for what your queries should and should not do.
