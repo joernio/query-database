@@ -8,6 +8,7 @@ object Metrics extends QueryBundle {
 
   @query
   def tooManyParameters(n: Int = 4): Query = Query(
+    name = "too-many-params",
     title = s"Number of parameters larger than $n",
     description =
       s"This query identifies functions with more than $n formal parameters",
@@ -18,6 +19,7 @@ object Metrics extends QueryBundle {
 
   @query
   def tooHighComplexity(n: Int = 4): Query = Query(
+    name = "too-high-complexity",
     title = s"Cyclomatic complexity higher than $n",
     description =
       s"This query identifies functions with a cyclomatic complexity higher than $n",
@@ -28,6 +30,7 @@ object Metrics extends QueryBundle {
 
   @query
   def tooLong(n: Int = 1000): Query = Query(
+    name = "too-long",
     title = s"More than $n lines",
     description =
       s"This query identifies functions that are more than $n lines long",
@@ -38,6 +41,7 @@ object Metrics extends QueryBundle {
 
   @query
   def multipleReturns(): Query = Query(
+    name = "multiple-returns",
     title = s"Multiple returns",
     description = "This query identifies functions with more than one return",
     score = 2.0, { cpg =>
@@ -47,6 +51,7 @@ object Metrics extends QueryBundle {
 
   @query
   def tooManyLoops(n: Int = 4): Query = Query(
+    name = "too-many-loops",
     title = s"More than $n loops",
     description = s"This query identifies functions with more than $n loops",
     score = 2, { cpg =>
@@ -58,6 +63,7 @@ object Metrics extends QueryBundle {
 
   @query
   def tooNested(n: Int = 3): Query = Query(
+    name = "too-nested",
     title = s"Nesting level higher than $n",
     description =
       s"This query identifies functions with a nesting level higher than $n",

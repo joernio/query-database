@@ -8,6 +8,7 @@ object CopyLoops extends QueryBundle {
 
   @query
   def isCopyLoop(): Query = Query(
+    name = "copy-loop",
     title = "Copy loop detected",
     description =
       """

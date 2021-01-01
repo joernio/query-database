@@ -8,12 +8,15 @@ object InsecureFunctions extends QueryBundle {
 
   @query
   def getsUsed(): Query = Query(
+    name = "call-to-gets",
     title = "Insecure function gets() used",
     description =
-      "Avoid gets() function as it can lead to reads beyond buffer boundary and cause buffer overflows. Some secure alternatives are fgets() and gets_s()",
+      """
+        | Avoid gets() function as it can lead to reads beyond buffer boundary and cause
+        | buffer overflows. Some secure alternatives are fgets() and gets_s().
+        |""".stripMargin,
     score = 4, { cpg =>
-      cpg
-        .call("gets")
+      cpg.call("gets")
     }
   )
 

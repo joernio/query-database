@@ -7,7 +7,8 @@ import io.shiftleft.semanticcpg.language._
 
 package object language {
 
-  case class Query(title: String,
+  case class Query(name: String,
+                   title: String,
                    description: String,
                    score: Double,
                    f: Cpg => Traversal[nodes.StoredNode]) {

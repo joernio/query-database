@@ -13,6 +13,7 @@ object IntegerTruncations extends QueryBundle {
     * */
   @query
   def strlenAssignmentTruncations(): Query = Query(
+    name = "strlen-truncation",
     title = "Truncation in assigment involving strlen call",
     description = "-",
     score = 2, { cpg =>
