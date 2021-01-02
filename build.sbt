@@ -29,7 +29,10 @@ Universal / mappings := (Universal / mappings).value.filterNot {
     path.contains("com.lihaoyi.u") ||
     path.contains("io.shiftleft.codepropertygraph-domain-classes") ||
     path.contains("org.typelevel") ||
-    path.contains("io.undertow")
+    path.contains("io.undertow") ||
+    path.contains("com.chuusai") ||
+    path.contains("io.get-coursier") ||
+    path.contains("io.circe")
 }
 
 sources in (Compile,doc) := Seq.empty
