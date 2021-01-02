@@ -36,9 +36,9 @@ object InsecureFunctions extends QueryBundle {
       cpg
         .call("printf")
         .whereNot(_.argument.order(1).isLiteral) ++
-      cpg
-        .call("(sprintf|vsprintf)")
-        .whereNot(_.argument.order(2).isLiteral)
+        cpg
+          .call("(sprintf|vsprintf)")
+          .whereNot(_.argument.order(2).isLiteral)
     }
   )
 

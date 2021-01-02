@@ -53,8 +53,12 @@ class InsecureFunctionsTests extends Suite {
   }
 
   "find insecure printf() function usage" in {
-    val results = InsecureFunctions.argvUsedInPrintf()(cpg).flatMap(_.evidence)
-      .collect { case x : nodes.Call => x }.method.name
+    val results = InsecureFunctions
+      .argvUsedInPrintf()(cpg)
+      .flatMap(_.evidence)
+      .collect { case x: nodes.Call => x }
+      .method
+      .name
       .toSet
     results shouldBe Set("insecure_sprintf", "insecure_printf")
   }
