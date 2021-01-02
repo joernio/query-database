@@ -19,7 +19,7 @@ jobs:
           key: ${{ runner.os }}-sbt-${{ hashfiles('**/build.sbt') }}
       - run: sbt scalafmtCheck test stage
       - run: sbt ciReleaseTagNextVersion createDistribution
-      - run: sbt run
+      - run: ./joern-scan --dump
       - run: sha512sum ./querydb.zip > ./querydb.zip.sha512
       - name: Export ENV vars
         run:

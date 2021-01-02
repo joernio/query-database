@@ -4,7 +4,7 @@ set -o pipefail
 set -o nounset
 set -eu
 
-readonly JOERN_VERSION="v1.1.67"
+readonly JOERN_VERSION="v1.1.68"
 
 if [ "$(uname)" = 'Darwin' ]; then
   # get script location
@@ -56,6 +56,7 @@ if [ ! -d "${JOERN_INSTALL}" ]; then
     ln -s joern-inst/joern-cli/joern . || true
     ln -s joern-inst/joern-cli/joern-parse . || true
     ln -s joern-inst/joern-cli/fuzzyc2cpg.sh . || true
+    ln -s joern-inst/joern-cli/joern-scan . || true
     popd
 fi
 
