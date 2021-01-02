@@ -27,7 +27,7 @@ Universal / mappings := (Universal / mappings).value.filterNot {
     path.contains("org.apache.logging") ||
     path.contains("com.google.protobuf") ||
     path.contains("com.lihaoyi.u") ||
-    path.contains("io.shiftleft.codepropertygraph-domain-classes") ||
+    path.contains("io.shiftleft") ||
     path.contains("org.typelevel") ||
     path.contains("io.undertow") ||
     path.contains("com.chuusai") ||
