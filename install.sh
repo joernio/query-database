@@ -56,6 +56,7 @@ if [ ! -d "${JOERN_INSTALL}" ]; then
     ln -s joern-inst/joern-cli/joern . || true
     ln -s joern-inst/joern-cli/joern-parse . || true
     ln -s joern-inst/joern-cli/fuzzyc2cpg.sh . || true
+    ln -s joern-inst/joern-cli/joern-scan . || true
     popd
 fi
 

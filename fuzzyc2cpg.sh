@@ -1,1 +1,0 @@
-joern-inst/joern-cli/fuzzyc2cpg.sh
