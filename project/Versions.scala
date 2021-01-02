@@ -1,5 +1,5 @@
 /* Declare dependency versions in one place */
 object Versions {
-  val cpg = "1.3.26"
+  val cpg = "1.3.26+1-b320b5ca"
   val overflowdb = "1.24"
 }
