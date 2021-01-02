@@ -34,12 +34,12 @@ class InsecureFunctionsTests extends Suite {
 
       int insecure_sprintf() {
         char buffer [BUFF_SIZE];
-        sprintf (buffer, argv[2], 4242);
+        sprintf(buffer, argv[2], 4242);
       }
 
       int secure_sprintf() {
         char buffer [BUFF_SIZE];
-        snprintf (buffer, BUFF_SIZE, argv[2], 4242);
+        snprintf(buffer, BUFF_SIZE, argv[2], 4242);
       }
 
     """
@@ -56,7 +56,6 @@ class InsecureFunctionsTests extends Suite {
     InsecureFunctions.argvUsedInPrintf()(cpg).map(_.evidence) match {
       case List(List(expr: nodes.Expression)) =>
         expr.method.name should contain ("insecure_sprintf")
-        expr.method.name should contain ("insecure_printf")
       case _ => fail
     }
   }

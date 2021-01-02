@@ -35,14 +35,10 @@ object InsecureFunctions extends QueryBundle {
     score = 4, { cpg =>
       cpg
         .call("printf")
-        .argument
-        .filter(_.argumentIndex.equals(1))
-        .filter(_.code.contains("argv")) ++
+        .whereNot(_.argument.order(1).isLiteral) ++
       cpg
         .call("(sprintf|vsprintf)")
-        .argument
-        .filter(_.argumentIndex.equals(2))
-        .filter(_.code.contains("argv"))
+        .whereNot(_.argument.order(2).isLiteral)
     }
   )
 
