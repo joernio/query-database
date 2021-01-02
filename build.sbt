@@ -26,7 +26,13 @@ Universal / mappings := (Universal / mappings).value.filterNot {
     path.contains("com.google.guava") ||
     path.contains("org.apache.logging") ||
     path.contains("com.google.protobuf") ||
-    path.contains("com.lihaoyi.u")
+    path.contains("com.lihaoyi.u") ||
+    path.contains("io.shiftleft") ||
+    path.contains("org.typelevel") ||
+    path.contains("io.undertow") ||
+    path.contains("com.chuusai") ||
+    path.contains("io.get-coursier") ||
+    path.contains("io.circe")
 }
 
 sources in (Compile,doc) := Seq.empty
