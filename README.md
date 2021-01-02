@@ -138,9 +138,9 @@ If you want to test newly created queries with `joern-scan` as follows:
 
 ## Exporting the database to JSON
 
-You can launch
+After running `install.sh`, you can launch
 ```
-sbt run
+./joern-scan --dump
 ```
 to create a file named `querydb.json` that contains the list of all available queries
 along with its meta information.
