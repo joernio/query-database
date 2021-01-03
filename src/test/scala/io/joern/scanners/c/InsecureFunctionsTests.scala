@@ -65,6 +65,12 @@ class InsecureFunctionsTests extends Suite {
         return 0;
       }
 
+      int insecure_getwd() {
+        char dir[12];
+        getwd(dir);
+        printf("Working directory:%s\n",dir);
+        return 0;
+      }
     """
 
   "find insecure gets() function usage" in {
@@ -114,6 +120,14 @@ class InsecureFunctionsTests extends Suite {
     InsecureFunctions.strtokUsed()(cpg).map(_.evidence) match {
       case List(List(expr: nodes.Expression)) =>
         expr.method.name shouldBe "insecure_strtok"
+      case _ => fail
+    }
+  }
+
+  "find insecure getwd() function usage" in {
+    InsecureFunctions.getwdUsed()(cpg).map(_.evidence) match {
+      case List(List(expr: nodes.Expression)) =>
+        expr.method.name shouldBe "insecure_getwd"
       case _ => fail
     }
   }
