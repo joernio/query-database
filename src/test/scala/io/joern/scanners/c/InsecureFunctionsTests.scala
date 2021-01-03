@@ -67,8 +67,8 @@ class InsecureFunctionsTests extends Suite {
 
       int insecure_getwd() {
         char dir[12];
-        getwd(buf);
-        printf("Working directory:%s\n",buf);
+        getwd(dir);
+        printf("Working directory:%s\n",dir);
         return 0;
       }
     """
