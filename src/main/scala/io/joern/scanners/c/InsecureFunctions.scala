@@ -106,4 +106,19 @@ object InsecureFunctions extends QueryBundle {
     }
   )
 
+  @q
+  def getwdUsed(): Query = Query(
+    name = "call-to-getwd",
+    author = Crew.claudiu,
+    title = "Insecure function getwd() used",
+    description =
+      """
+        | Avoid the getwd() function, it does not check buffer lengths.
+        | Use getcwd() instead, as it checks the buffer size.
+        |""".stripMargin,
+    score = 4, { cpg =>
+      cpg.call("getwd")
+    }
+  )
+
 }
