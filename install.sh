@@ -4,7 +4,7 @@ set -o pipefail
 set -o nounset
 set -eu
 
-readonly JOERN_VERSION="v1.1.79"
+readonly JOERN_VERSION="v1.1.81"
 
 if [ "$(uname)" = 'Darwin' ]; then
   # get script location
@@ -35,9 +35,7 @@ check_installed() {
   fi
 }
 
-readonly JOERN_INSTALL=$SCRIPT_ABS_DIR/joern-inst/joern-cli
-readonly PLUGIN_DIR=${JOERN_INSTALL}/lib/
-readonly SCHEMA_SRC_DIR=schema/src/main/resources/schema/
+readonly JOERN_INSTALL="$SCRIPT_ABS_DIR/joern-inst"
 
 echo "Examining Joern installation..."
 
@@ -45,26 +43,37 @@ if [ ! -d "${JOERN_INSTALL}" ]; then
     echo "Cannot find Joern installation at ${JOERN_INSTALL}"
     echo "Installing..."
     check_installed "curl"
-    echo "https://github.com/ShiftLeftSecurity/joern/releases/download/$JOERN_VERSION/joern-cli.zip"
-    curl -L "https://github.com/ShiftLeftSecurity/joern/releases/download/$JOERN_VERSION/joern-cli.zip" -o "$SCRIPT_ABS_DIR/joern-cli.zip"
-    mkdir $SCRIPT_ABS_DIR/"joern-inst"
-    mv "joern-cli.zip" $SCRIPT_ABS_DIR/"joern-inst/"
-    pushd $SCRIPT_ABS_DIR/"joern-inst/"
-      unzip "joern-cli.zip"
-    popd
+
+    # Fetch installer
+
+    echo "https://github.com/ShiftLeftSecurity/joern/releases/download/$JOERN_VERSION/joern-install.sh"
+    curl -L "https://github.com/ShiftLeftSecurity/joern/releases/download/$JOERN_VERSION/joern-install.sh" -o "$SCRIPT_ABS_DIR/joern-install.sh"
+
+    # Install into `joern-inst`
+    chmod +x $SCRIPT_ABS_DIR/joern-install.sh
+    $SCRIPT_ABS_DIR/joern-install.sh --install-dir="$SCRIPT_ABS_DIR/joern-inst" --version=$JOERN_VERSION --without-plugins
+    rm $SCRIPT_ABS_DIR/joern-install.sh
+
+    # Create symlinks
+
     pushd $SCRIPT_ABS_DIR
     ln -s joern-inst/joern-cli/joern . || true
     ln -s joern-inst/joern-cli/joern-parse . || true
     ln -s joern-inst/joern-cli/fuzzyc2cpg.sh . || true
     ln -s joern-inst/joern-cli/joern-scan . || true
     popd
+
 fi
+
+# Build the plugin
 
 echo "Compiling (sbt createDistribution)..."
 pushd $SCRIPT_ABS_DIR
 rm lib || true
 sbt createDistribution
 popd
+
+# Install the plugin
 
 pushd $SCRIPT_ABS_DIR
   ln -s joern-inst/joern-cli/lib . || true
