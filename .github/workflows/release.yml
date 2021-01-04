@@ -22,6 +22,7 @@ jobs:
       - run: sha512sum ./querydb.zip > ./querydb.zip.sha512
       - run: ./install.sh
       - run: ./joern-scan --dump
+      - run: cp /tmp/querydb.json .
       - name: Export ENV vars
         run:
           echo "LATEST_TAG=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
