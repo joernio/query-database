@@ -18,7 +18,6 @@ jobs:
             ~/.coursier
           key: ${{ runner.os }}-sbt-${{ hashfiles('**/build.sbt') }}
       - run: sbt scalafmtCheck test stage
-      - run: rm lib || true
       - run: sbt ciReleaseTagNextVersion createDistribution
       - run: sha512sum ./querydb.zip > ./querydb.zip.sha512
       - run: ./install.sh

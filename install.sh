@@ -70,7 +70,6 @@ fi
 echo "Compiling (sbt createDistribution)..."
 pushd $SCRIPT_ABS_DIR
 rm lib || true
-ln -s joern-inst/joern-cli/lib . || true
 sbt createDistribution
 popd
 
