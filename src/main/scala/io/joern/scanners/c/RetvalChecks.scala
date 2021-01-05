@@ -23,7 +23,6 @@ object RetvalChecks extends QueryBundle {
         val targets = call.inAssignment.target.code.toSet
         (targets & identifiersInCheck).nonEmpty
       }
-
     }
   )
 
