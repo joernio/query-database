@@ -14,11 +14,20 @@ class RetvalChecksTests extends Suite {
       |}
       |
       |void checked_after_assignment() {
-      | int nbytes = read(fd, buf, sizeof(buf))
+      | int nbytes = read(fd, buf, sizeof(buf));
       | if( nbytes != sizeof(buf)) {
       |
       | }
       |}
+      |
+      |void checks_something_else() {
+      |
+      | int nbytes = read(fd, buf, sizeof(buf));
+      | if( foo != sizeof(buf)) {
+      |
+      | }
+      |}
+      |
       |void immediately_checked() {
       | if ( (read(fd, buf, sizeof(buf))) != sizeof(buf)) {
       |
@@ -29,12 +38,11 @@ class RetvalChecksTests extends Suite {
       |""".stripMargin
 
   "should find unchecked read and not flag others" in {
-    RetvalChecks.uncheckedRead()(cpg).flatMap(_.evidence) match {
-      case List(x: nodes.Call) =>
-        x.name shouldBe "read"
-        x.method.name shouldBe "unchecked_read"
-      case _ => fail
-    }
+    val results =
+      RetvalChecks.uncheckedRead()(cpg).flatMap(_.evidence).collect {
+        case call: nodes.Call => call.method.name
+      }
+    results.toSet shouldBe Set("unchecked_read", "checks_something_else")
   }
 
 }

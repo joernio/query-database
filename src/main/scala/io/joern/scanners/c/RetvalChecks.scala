@@ -12,10 +12,18 @@ object RetvalChecks extends QueryBundle {
     title = "Unchecked read/recv",
     description = "<description>",
     score = 3.0, { cpg =>
-      cpg
+      val callsNotDirectlyChecked = cpg
         .call("(read|recv)")
         .whereNot(_.inAstMinusLeaf.isControlStructure)
-        .whereNot(_.inAssignment)
+        .l
+
+      callsNotDirectlyChecked.filterNot { call =>
+        val identifiersInCheck =
+          call.method.controlStructure.condition.ast.isIdentifier.name.toSet
+        val targets = call.inAssignment.target.code.toSet
+        (targets & identifiersInCheck).nonEmpty
+      }
+
     }
   )
 
