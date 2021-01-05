@@ -4,7 +4,7 @@ set -o pipefail
 set -o nounset
 set -eu
 
-readonly JOERN_VERSION="v1.1.81"
+readonly JOERN_VERSION="v1.1.83"
 
 if [ "$(uname)" = 'Darwin' ]; then
   # get script location
@@ -70,14 +70,15 @@ fi
 echo "Compiling (sbt createDistribution)..."
 pushd $SCRIPT_ABS_DIR
 rm lib || true
+ln -s joern-inst/joern-cli/lib . || true
 sbt createDistribution
 popd
 
 # Install the plugin
 
-pushd $SCRIPT_ABS_DIR
-  ln -s joern-inst/joern-cli/lib . || true
+echo "Installing plugin"
+
+pushd $SCRIPT_ABS_DIR/joern-inst/joern-cli/
   ./joern --remove-plugin querydb
-  ./joern --add-plugin ./querydb.zip
-  rm lib
+  ./joern --add-plugin ../../querydb.zip
 popd
