@@ -4,7 +4,7 @@ set -o pipefail
 set -o nounset
 set -eu
 
-readonly JOERN_VERSION="v1.1.83"
+readonly JOERN_VERSION="v1.1.87"
 
 if [ "$(uname)" = 'Darwin' ]; then
   # get script location

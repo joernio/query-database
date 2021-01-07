@@ -16,7 +16,7 @@ object InsecureFunctions extends QueryBundle {
         | Avoid gets() function as it can lead to reads beyond buffer boundary and cause
         | buffer overflows. Some secure alternatives are fgets() and gets_s().
         |""".stripMargin,
-    score = 4, { cpg =>
+    score = 8, { cpg =>
       cpg.call("gets")
     }
   )
@@ -64,8 +64,8 @@ object InsecureFunctions extends QueryBundle {
     title = "Insecure functions strcat() or strncat() used",
     description =
       """
-        | Avoid strcat() or strncat() functions. The can be used insucurely causing non
-        | null-termianted strings leading to buffer overflows or memory corruption. 
+        | Avoid strcat() or strncat() functions. These can be used insecurely
+        | causing non null-termianted strings leading to memory corruption.
         | A secure alternative is strcat_s().
         |""".stripMargin,
     score = 4, { cpg =>
