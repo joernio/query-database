@@ -32,7 +32,6 @@ object UseAfterFree extends QueryBundle {
         .l
 
       freeOfStructField.argument(1).filter { arg =>
-        arg.method.methodReturn.reachableByFlows(arg).foreach(println)
         val exitNode = arg.method.methodReturn
         exitNode.reachableBy(arg).nonEmpty
       }
