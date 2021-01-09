@@ -25,7 +25,7 @@ object UseAfterFree extends QueryBundle {
       val freeOfStructField = cpg
         .call("free")
         .where(
-          _.argument(1).ast
+          _.argument(1)
             .isCallTo("<operator>.*[fF]ieldAccess.*")
             .filter(x =>
               x.method.parameter.name.toSet.contains(x.argument(1).code)))
