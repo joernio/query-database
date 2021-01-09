@@ -12,7 +12,7 @@ object UseAfterFree extends QueryBundle {
   def freeFieldNoReassign()(implicit context: EngineContext): Query = Query(
     name = "free-field-no-reassign",
     author = Crew.fabs,
-    title = "A field of a parameter is free and not reassigned on all paths",
+    title = "A field of a parameter is free'd and not reassigned on all paths",
     description =
       """
         | The function is able to modify a field of a structure passed in by
@@ -25,7 +25,7 @@ object UseAfterFree extends QueryBundle {
       val freeOfStructField = cpg
         .call("free")
         .where(
-          _.argument(1).ast
+          _.argument(1)
             .isCallTo("<operator>.*[fF]ieldAccess.*")
             .filter(x =>
               x.method.parameter.name.toSet.contains(x.argument(1).code)))
