@@ -17,6 +17,11 @@ class HeapBasedOverflowTests extends Suite {
        memcpy(dst, src,len + 8);
       }
 
+      int non_vulnerable2(size_t len, char *src) {
+       char *dst = malloc( some_size );
+       assert(dst);
+       memcpy(dst, src, some_size );
+      }
     """
 
   "find calls to malloc/memcpy system with different expressions in arguments" in {

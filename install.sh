@@ -4,7 +4,7 @@ set -o pipefail
 set -o nounset
 set -eu
 
-readonly JOERN_VERSION="v1.1.88"
+readonly JOERN_VERSION="v1.1.91"
 
 if [ "$(uname)" = 'Darwin' ]; then
   # get script location
@@ -70,7 +70,7 @@ fi
 echo "Compiling (sbt createDistribution)..."
 pushd $SCRIPT_ABS_DIR
 rm lib || true
-sbt createDistribution
+sbt clean createDistribution
 popd
 
 # Install the plugin

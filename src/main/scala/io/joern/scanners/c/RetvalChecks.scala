@@ -24,10 +24,10 @@ object RetvalChecks extends QueryBundle {
         .l
 
       callsNotDirectlyChecked.filterNot { call =>
-        val identifiersInCheck =
-          call.method.controlStructure.condition.ast.isIdentifier.name.toSet
+        val inConditions = call.method.controlStructure.condition.ast.l;
+        val checkedVars = inConditions.isIdentifier.name.toSet ++ inConditions.isCall.code.toSet;
         val targets = call.inAssignment.target.code.toSet
-        (targets & identifiersInCheck).nonEmpty
+        (targets & checkedVars).nonEmpty
       }
     }
   )

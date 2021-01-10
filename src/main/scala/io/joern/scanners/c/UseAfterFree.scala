@@ -19,7 +19,9 @@ object UseAfterFree extends QueryBundle {
         | the caller. It frees this field and does not guarantee that on
         | all paths to the exit, the field is reassigned. If any
         | caller now accesses the field, then it accesses memory that is no
-        | longer allocated.
+        | longer allocated. We also check that the function does not free
+        | the entire structure, as in that case, it is unlikely that the
+        | passed in structure will be used again.
         |""".stripMargin,
     score = 5.0, { cpg =>
       val freeOfStructField = cpg
@@ -28,12 +30,19 @@ object UseAfterFree extends QueryBundle {
           _.argument(1)
             .isCallTo("<operator>.*[fF]ieldAccess.*")
             .filter(x =>
-              x.method.parameter.name.toSet.contains(x.argument(1).code)))
+              x.method.parameter.name.toSet.contains(x.argument(1).code))
+        )
+        .whereNot(_.argument(1).isCall.argument(1).filter { struct =>
+          struct.method.ast.isCall
+            .name("free")
+            .argument(1)
+            .codeExact(struct.code)
+            .nonEmpty
+        })
         .l
 
       freeOfStructField.argument(1).filter { arg =>
-        val exitNode = arg.method.methodReturn
-        exitNode.reachableBy(arg).nonEmpty
+        arg.method.methodReturn.reachableBy(arg).nonEmpty
       }
 
     }
