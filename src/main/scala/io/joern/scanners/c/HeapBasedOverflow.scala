@@ -22,14 +22,20 @@ object HeapBasedOverflow extends QueryBundle {
     title = "Dangerous copy-operation into heap-allocated buffer",
     description = "-",
     score = 4, { cpg =>
-      val src = cpg.call("malloc").where(_.argument(1).arithmetics)
+      val src = cpg
+        .call("malloc")
+        .where(_.argument(1).arithmetics)
+        .l
+
       cpg
         .call("memcpy")
-        .filter { call =>
-          call
+        .l
+        .filter { memcpyCall =>
+          memcpyCall
             .argument(1)
             .reachableBy(src)
-            .not(_.argument(1).codeExact(call.argument(3).code))
+            .where(_.inAssignment.target.codeExact(memcpyCall.argument(1).code))
+            .whereNot(_.argument(1).codeExact(memcpyCall.argument(3).code))
             .hasNext
         }
     }
