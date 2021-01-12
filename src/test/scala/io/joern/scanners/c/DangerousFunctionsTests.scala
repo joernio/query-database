@@ -4,7 +4,7 @@ import io.shiftleft.codepropertygraph.generated.nodes
 import io.shiftleft.semanticcpg.language._
 import io.shiftleft.console.scan._
 
-class InsecureFunctionsTests extends Suite {
+class DangerousFunctionsTests extends Suite {
 
   override val code =
     """
@@ -74,7 +74,7 @@ class InsecureFunctionsTests extends Suite {
     """
 
   "find insecure gets() function usage" in {
-    InsecureFunctions.getsUsed()(cpg).map(_.evidence) match {
+    DangerousFunctions.getsUsed()(cpg).map(_.evidence) match {
       case List(List(expr: nodes.Expression)) =>
         expr.method.name shouldBe "insecure_gets"
       case _ => fail
@@ -82,7 +82,7 @@ class InsecureFunctionsTests extends Suite {
   }
 
   "find insecure printf() function usage" in {
-    val results = InsecureFunctions
+    val results = DangerousFunctions
       .argvUsedInPrintf()(cpg)
       .flatMap(_.evidence)
       .collect { case x: nodes.Call => x }
@@ -93,7 +93,7 @@ class InsecureFunctionsTests extends Suite {
   }
 
   "find insecure scanf() function usage" in {
-    InsecureFunctions.scanfUsed()(cpg).map(_.evidence) match {
+    DangerousFunctions.scanfUsed()(cpg).map(_.evidence) match {
       case List(List(expr: nodes.Expression)) =>
         expr.method.name shouldBe "insecure_scanf"
       case _ => fail
@@ -101,7 +101,7 @@ class InsecureFunctionsTests extends Suite {
   }
 
   "find insecure strncat() function usage" in {
-    InsecureFunctions.strcatUsed()(cpg).map(_.evidence) match {
+    DangerousFunctions.strcatUsed()(cpg).map(_.evidence) match {
       case List(List(expr: nodes.Expression)) =>
         expr.method.name shouldBe "insecure_strncat_strncpy"
       case _ => fail
@@ -109,7 +109,7 @@ class InsecureFunctionsTests extends Suite {
   }
 
   "find insecure strncpy() function usage" in {
-    InsecureFunctions.strcpyUsed()(cpg).map(_.evidence) match {
+    DangerousFunctions.strcpyUsed()(cpg).map(_.evidence) match {
       case List(List(expr: nodes.Expression)) =>
         expr.method.name shouldBe "insecure_strncat_strncpy"
       case _ => fail
@@ -117,7 +117,7 @@ class InsecureFunctionsTests extends Suite {
   }
 
   "find insecure strtok() function usage" in {
-    InsecureFunctions.strtokUsed()(cpg).map(_.evidence) match {
+    DangerousFunctions.strtokUsed()(cpg).map(_.evidence) match {
       case List(List(expr: nodes.Expression)) =>
         expr.method.name shouldBe "insecure_strtok"
       case _ => fail
@@ -125,7 +125,7 @@ class InsecureFunctionsTests extends Suite {
   }
 
   "find insecure getwd() function usage" in {
-    InsecureFunctions.getwdUsed()(cpg).map(_.evidence) match {
+    DangerousFunctions.getwdUsed()(cpg).map(_.evidence) match {
       case List(List(expr: nodes.Expression)) =>
         expr.method.name shouldBe "insecure_getwd"
       case _ => fail
