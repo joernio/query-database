@@ -69,7 +69,7 @@ object Metrics extends QueryBundle {
     title = s"Number of parameters larger than $n",
     description =
       s"This query identifies functions with more than $n formal parameters",
-    score = 2.0, f = { cpg =>
+    score = 2.0, traversal = { cpg =>
       cpg.method.filter(_.parameter.size > n)
     }
   )
@@ -79,7 +79,7 @@ object Metrics extends QueryBundle {
     title = s"Cyclomatic complexity higher than $n",
     description =
       s"This query identifies functions with a cyclomatic complexity higher than $n",
-    score = 2.0, f = { cpg =>
+    score = 2.0, traversal = { cpg =>
       cpg.method.filter(_.controlStructure.size > n)
     }
   )
