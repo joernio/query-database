@@ -17,7 +17,8 @@ object RetvalChecks extends QueryBundle {
       |variable its return value has been assigned to (if any) does not
       |occur in any check within the caller.
       |""".stripMargin,
-    score = 3.0, { cpg =>
+    score = 3.0,
+    traversal = { cpg =>
       val callsNotDirectlyChecked = cpg
         .call("(read|recv)")
         .whereNot(_.inAstMinusLeaf.isControlStructure)
