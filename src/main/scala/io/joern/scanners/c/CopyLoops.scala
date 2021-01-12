@@ -20,7 +20,7 @@ object CopyLoops extends QueryBundle {
         |""".stripMargin,
     score = 2,
     docStartLine = sourcecode.Line(),
-    traversal ={ cpg =>
+    traversal = { cpg =>
       cpg.assignment.target.isArrayAccess
         .map { access =>
           (access.array, access.subscripts.code.toSet)
