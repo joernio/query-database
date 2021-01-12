@@ -18,9 +18,12 @@ object DangerousFunctions extends QueryBundle {
         | buffer overflows. Some secure alternatives are `fgets` and `gets_s`.
         |""".stripMargin,
     score = 8,
+    docStartLine = sourcecode.Line(),
     traversal = { cpg =>
       cpg.call("gets")
-    }
+    },
+    docEndLine = sourcecode.Line(),
+    docFileName = sourcecode.FileName()
   )
 
   @q
@@ -35,6 +38,7 @@ object DangerousFunctions extends QueryBundle {
         | alternatives are `snprintf` and `vsnprintf`.
         |""".stripMargin,
     score = 4,
+    docStartLine = sourcecode.Line(),
     traversal = { cpg =>
       cpg
         .call("printf")
@@ -42,7 +46,9 @@ object DangerousFunctions extends QueryBundle {
         cpg
           .call("(sprintf|vsprintf)")
           .whereNot(_.argument.order(2).isLiteral)
-    }
+    },
+    docEndLine = sourcecode.Line(),
+    docFileName = sourcecode.FileName()
   )
 
   @q
@@ -56,9 +62,12 @@ object DangerousFunctions extends QueryBundle {
         | boundary and cause buffer overflows. A secure alternative is `fgets`.
         |""".stripMargin,
     score = 4,
+    docStartLine = sourcecode.Line(),
     traversal = { cpg =>
       cpg.call("scanf")
-    }
+    },
+    docEndLine = sourcecode.Line(),
+    docFileName = sourcecode.FileName()
   )
 
   @q
@@ -73,9 +82,12 @@ object DangerousFunctions extends QueryBundle {
         | A secure alternative is `strcat_s`.
         |""".stripMargin,
     score = 4,
+    docStartLine = sourcecode.Line(),
     traversal = { cpg =>
       cpg.call("(strcat|strncat)")
-    }
+    },
+    docEndLine = sourcecode.Line(),
+    docFileName = sourcecode.FileName()
   )
 
   @q
@@ -92,9 +104,12 @@ object DangerousFunctions extends QueryBundle {
         | memory corruption. A secure alternative (on BSD) is `strlcpy`.
         |""".stripMargin,
     score = 4,
+    docStartLine = sourcecode.Line(),
     traversal = { cpg =>
       cpg.call("(strcpy|strncpy)")
-    }
+    },
+    docEndLine = sourcecode.Line(),
+    docFileName = sourcecode.FileName()
   )
 
   @q
@@ -110,9 +125,12 @@ object DangerousFunctions extends QueryBundle {
         | `saveptr`.
         |""".stripMargin,
     score = 4,
+    docStartLine = sourcecode.Line(),
     traversal = { cpg =>
       cpg.call("strtok")
-    }
+    },
+    docEndLine = sourcecode.Line(),
+    docFileName = sourcecode.FileName()
   )
 
   @q
@@ -126,9 +144,12 @@ object DangerousFunctions extends QueryBundle {
         | Use `getcwd` instead, as it checks the buffer size.
         |""".stripMargin,
     score = 4,
+    docStartLine = sourcecode.Line(),
     traversal = { cpg =>
       cpg.call("getwd")
-    }
+    },
+    docEndLine = sourcecode.Line(),
+    docFileName = sourcecode.FileName()
   )
 
 }

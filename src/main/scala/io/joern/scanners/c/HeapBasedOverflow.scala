@@ -22,6 +22,7 @@ object HeapBasedOverflow extends QueryBundle {
     title = "Dangerous copy-operation into heap-allocated buffer",
     description = "-",
     score = 4,
+    docStartLine = sourcecode.Line(),
     traversal = { cpg =>
       val src = cpg
         .call(".*malloc$")
@@ -39,7 +40,9 @@ object HeapBasedOverflow extends QueryBundle {
             .whereNot(_.argument(1).codeExact(memcpyCall.argument(3).code))
             .hasNext
         }
-    }
+    },
+    docEndLine = sourcecode.Line(),
+    docFileName = sourcecode.FileName()
   )
 
 }

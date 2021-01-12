@@ -18,7 +18,9 @@ object CopyLoops extends QueryBundle {
         |the first argument of that Inc operation and check if they are used as indices for
         |the write operation into the buffer.
         |""".stripMargin,
-    score = 2, { cpg =>
+    score = 2,
+    docStartLine = sourcecode.Line(),
+    traversal ={ cpg =>
       cpg.assignment.target.isArrayAccess
         .map { access =>
           (access.array, access.subscripts.code.toSet)
@@ -34,7 +36,9 @@ object CopyLoops extends QueryBundle {
             (incIdentifiers & subscripts).nonEmpty
         }
         .map(_._1)
-    }
+    },
+    docEndLine = sourcecode.Line(),
+    docFileName = sourcecode.FileName()
   )
 
 }

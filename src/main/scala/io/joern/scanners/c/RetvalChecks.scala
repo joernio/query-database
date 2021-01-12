@@ -18,6 +18,7 @@ object RetvalChecks extends QueryBundle {
       |occur in any check within the caller.
       |""".stripMargin,
     score = 3.0,
+    docStartLine = sourcecode.Line(),
     traversal = { cpg =>
       val callsNotDirectlyChecked = cpg
         .call("(read|recv)")
@@ -30,7 +31,9 @@ object RetvalChecks extends QueryBundle {
         val targets = call.inAssignment.target.code.toSet
         (targets & checkedVars).nonEmpty
       }
-    }
+    },
+    docEndLine = sourcecode.Line(),
+    docFileName = sourcecode.FileName()
   )
 
 }

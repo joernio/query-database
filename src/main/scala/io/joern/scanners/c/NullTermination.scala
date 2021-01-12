@@ -23,6 +23,7 @@ object NullTermination extends QueryBundle {
         | to `strncpy`.
         |""".stripMargin,
       score = 4,
+      docStartLine = sourcecode.Line(),
       traversal = { cpg =>
         val allocations = cpg.call.name(".*malloc$").argument(1).l
         cpg
@@ -41,7 +42,9 @@ object NullTermination extends QueryBundle {
                   .isEmpty
           }
           .map(_._2)
-      }
+      },
+      docEndLine = sourcecode.Line(),
+      docFileName = sourcecode.FileName()
     )
 
 }
