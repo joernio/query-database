@@ -21,7 +21,8 @@ object HeapBasedOverflow extends QueryBundle {
     author = Crew.fabs,
     title = "Dangerous copy-operation into heap-allocated buffer",
     description = "-",
-    score = 4, { cpg =>
+    score = 4,
+    traversal = { cpg =>
       val src = cpg
         .call("malloc")
         .where(_.argument(1).arithmetics)

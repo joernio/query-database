@@ -23,7 +23,8 @@ object UseAfterFree extends QueryBundle {
         | the entire structure, as in that case, it is unlikely that the
         | passed in structure will be used again.
         |""".stripMargin,
-    score = 5.0, { cpg =>
+    score = 5.0,
+    traversal = { cpg =>
       val freeOfStructField = cpg
         .call("free")
         .where(

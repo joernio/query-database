@@ -23,7 +23,8 @@ object IntegerTruncations extends QueryBundle {
         |wide on many 64 bit platforms, and thus, this may result in a
         |truncation.
         |""".stripMargin,
-    score = 2, { cpg =>
+    score = 2,
+    traversal = { cpg =>
       cpg
         .call("strlen")
         .inAssignment

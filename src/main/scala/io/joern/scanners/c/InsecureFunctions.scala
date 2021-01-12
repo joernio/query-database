@@ -16,7 +16,8 @@ object InsecureFunctions extends QueryBundle {
         | Avoid gets() function as it can lead to reads beyond buffer boundary and cause
         | buffer overflows. Some secure alternatives are fgets() and gets_s().
         |""".stripMargin,
-    score = 8, { cpg =>
+    score = 8,
+    traversal = { cpg =>
       cpg.call("gets")
     }
   )
@@ -32,7 +33,8 @@ object InsecureFunctions extends QueryBundle {
         | functions as they can cause buffer overflows. Some secure alternatives are 
         | snprintf() and vsnprintf().
         |""".stripMargin,
-    score = 4, { cpg =>
+    score = 4,
+    traversal = { cpg =>
       cpg
         .call("printf")
         .whereNot(_.argument.order(1).isLiteral) ++
@@ -52,7 +54,8 @@ object InsecureFunctions extends QueryBundle {
         | Avoid scanf() function as it can lead to reads beyond buffer boundary and cause
         | buffer overflows. A secure alternative is fgets().
         |""".stripMargin,
-    score = 4, { cpg =>
+    score = 4,
+    traversal = { cpg =>
       cpg.call("scanf")
     }
   )
@@ -68,7 +71,8 @@ object InsecureFunctions extends QueryBundle {
         | causing non null-termianted strings leading to memory corruption.
         | A secure alternative is strcat_s().
         |""".stripMargin,
-    score = 4, { cpg =>
+    score = 4,
+    traversal = { cpg =>
       cpg.call("(strcat|strncat)")
     }
   )
@@ -85,7 +89,8 @@ object InsecureFunctions extends QueryBundle {
         | but does not null-termiante strings leading to memory corruption. A secure 
         | alternative (on BSD) is strlcpy().
         |""".stripMargin,
-    score = 4, { cpg =>
+    score = 4,
+    traversal = { cpg =>
       cpg.call("(strcpy|strncpy)")
     }
   )
@@ -101,7 +106,8 @@ object InsecureFunctions extends QueryBundle {
         | a null character after each token. This makes the original string unsafe.
         | Suggested alternative is strtok_r() with saveptr.
         |""".stripMargin,
-    score = 4, { cpg =>
+    score = 4,
+    traversal = { cpg =>
       cpg.call("strtok")
     }
   )
@@ -116,7 +122,8 @@ object InsecureFunctions extends QueryBundle {
         | Avoid the getwd() function, it does not check buffer lengths.
         | Use getcwd() instead, as it checks the buffer size.
         |""".stripMargin,
-    score = 4, { cpg =>
+    score = 4,
+    traversal = { cpg =>
       cpg.call("getwd")
     }
   )
