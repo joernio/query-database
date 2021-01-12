@@ -24,7 +24,7 @@ object HeapBasedOverflow extends QueryBundle {
     score = 4,
     traversal = { cpg =>
       val src = cpg
-        .call("malloc")
+        .call(".*malloc$")
         .where(_.argument(1).arithmetics)
         .l
 
