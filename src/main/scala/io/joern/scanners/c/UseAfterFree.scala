@@ -35,7 +35,7 @@ object UseAfterFree extends QueryBundle {
         )
         .whereNot(_.argument(1).isCall.argument(1).filter { struct =>
           struct.method.ast.isCall
-            .name("free")
+            .name(".*free$")
             .argument(1)
             .codeExact(struct.code)
             .nonEmpty
