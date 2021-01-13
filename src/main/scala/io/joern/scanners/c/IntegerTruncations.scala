@@ -24,12 +24,15 @@ object IntegerTruncations extends QueryBundle {
         |truncation.
         |""".stripMargin,
     score = 2,
+    docStartLine = sourcecode.Line(),
     traversal = { cpg =>
       cpg
         .call("strlen")
         .inAssignment
         .target
         .evalType("(g?)int")
-    }
+    },
+    docEndLine = sourcecode.Line(),
+    docFileName = sourcecode.FileName()
   )
 }

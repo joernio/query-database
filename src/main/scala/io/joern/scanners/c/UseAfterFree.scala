@@ -24,6 +24,7 @@ object UseAfterFree extends QueryBundle {
         | passed in structure will be used again.
         |""".stripMargin,
     score = 5.0,
+    docStartLine = sourcecode.Line(),
     traversal = { cpg =>
       val freeOfStructField = cpg
         .call("free")
@@ -46,7 +47,9 @@ object UseAfterFree extends QueryBundle {
         arg.method.methodReturn.reachableBy(arg).nonEmpty
       }
 
-    }
+    },
+    docEndLine = sourcecode.Line(),
+    docFileName = sourcecode.FileName()
   )
 
 }

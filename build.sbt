@@ -6,6 +6,7 @@ enablePlugins(JavaAppPackaging)
 enablePlugins(GitVersioning)
 
 libraryDependencies ++= Seq(
+  "com.lihaoyi" %% "sourcecode" % "0.1.9",
   "com.lihaoyi" %% "upickle" % "1.2.2",
   "com.github.pathikrit" %% "better-files"             % "3.8.0",
   "com.github.scopt" %% "scopt" % "3.7.1",
