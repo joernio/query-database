@@ -20,7 +20,7 @@ object UseAfterFree extends QueryBundle {
         | all paths to the exit, the field is reassigned. If any
         | caller now accesses the field, then it accesses memory that is no
         | longer allocated. We also check that the function does not free
-        | the entire structure, as in that case, it is unlikely that the
+        | or clear the entire structure, as in that case, it is unlikely that the
         | passed in structure will be used again.
         |""".stripMargin,
     score = 5.0,
@@ -36,7 +36,7 @@ object UseAfterFree extends QueryBundle {
         )
         .whereNot(_.argument(1).isCall.argument(1).filter { struct =>
           struct.method.ast.isCall
-            .name(".*free$")
+            .name(".*free$", "memset", "bzero")
             .argument(1)
             .codeExact(struct.code)
             .nonEmpty
