@@ -69,7 +69,7 @@ fi
 
 echo "Compiling (sbt createDistribution)..."
 pushd $SCRIPT_ABS_DIR
-rm lib || true
+rm -f lib
 sbt clean createDistribution
 popd
 
