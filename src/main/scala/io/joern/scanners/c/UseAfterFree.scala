@@ -1,6 +1,7 @@
 package io.joern.scanners.c
 
 import io.joern.scanners.Crew
+import io.shiftleft.codepropertygraph.generated.nodes._
 import io.shiftleft.console._
 import io.shiftleft.semanticcpg.language._
 import io.shiftleft.dataflowengineoss.language._
@@ -47,6 +48,66 @@ object UseAfterFree extends QueryBundle {
         arg.method.methodReturn.reachableBy(arg).nonEmpty
       }
 
+    },
+    docEndLine = sourcecode.Line(),
+    docFileName = sourcecode.FileName()
+  )
+
+  @q
+  def freeReturnedValue()(implicit context: EngineContext): Query = Query(
+    name = "free-returned-value",
+    author = Crew.malte,
+    title = "A value that is returned through a parameter is free'd in a path",
+    description =
+      """
+        |The function sets a field of a function parameter to a value of a local
+        |variable.
+        |This variable is then freed in some paths. Unless the value set in the
+        |function |parameter is overridden later on, the caller has access to the
+        |free'd memory, which is undefined behavior.
+        |
+        |Finds bugs like CVE-2019-18902.
+        |""".stripMargin,
+    score = 5.0,
+    traversal = { cpg =>
+      def outParams =
+        cpg.parameter
+          .typeFullName(".+\\*")
+          .whereNot(
+            _.referencingIdentifiers
+              .argumentIndex(1)
+              .inCall
+              .nameExact("<operator>.assignment", "<operator>.addressOf"))
+
+      def assignedValues =
+        outParams.referencingIdentifiers
+          .argumentIndex(1)
+          .inCall
+          .nameExact("<operator>.indirectFieldAccess",
+                     "<operator>.indirection",
+                     "<operator>.indirectIndexAccess")
+          .argumentIndex(1)
+          .inCall
+          .nameExact("<operator>.assignment")
+          .argument(2)
+          .isIdentifier
+
+      def freeAssigned =
+        assignedValues
+          .map(
+            id =>
+              (id,
+               id.refsTo
+                 .flatMap {
+                   case p: MethodParameterIn => p.referencingIdentifiers
+                   case v: Local             => v.referencingIdentifiers
+                 }
+                 .inCall
+                 .name("(.*_)?free")))
+
+      freeAssigned
+        .filter { case (id, freeCall) => freeCall.dominatedBy.exists(_ == id) }
+        .flatMap(_._1)
     },
     docEndLine = sourcecode.Line(),
     docFileName = sourcecode.FileName()
