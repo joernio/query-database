@@ -7,22 +7,29 @@ import io.shiftleft.semanticcpg.language._
 object RetvalChecks extends QueryBundle {
 
   @q
-  def uncheckedRead(): Query = Query(
-    name = "unchecked-read-recv",
+  def uncheckedReadRecvMalloc(): Query = Query(
+    name = "unchecked-read-recv-malloc",
     author = Crew.fabs,
-    title = "Unchecked read/recv",
+    title = "Unchecked read/recv/malloc",
     description =
       """
-      |The return value of a read/recv call is not checked directly and the
-      |variable its return value has been assigned to (if any) does not
+      |The return value of a read/recv/malloc call is not checked directly and
+      |the variable its return value has been assigned to (if any) does not
       |occur in any check within the caller.
       |""".stripMargin,
     score = 3.0,
     docStartLine = sourcecode.Line(),
     traversal = { cpg =>
+      implicit val noResolve: NoResolve.type = NoResolve
       val callsNotDirectlyChecked = cpg
-        .call("(read|recv)")
-        .whereNot(_.inAstMinusLeaf.isControlStructure)
+        .method("(read|recv|malloc)")
+        .callIn
+        .filterNot { y =>
+          val code = y.code
+          y.inAstMinusLeaf.isControlStructure.condition.code.exists { x =>
+            x.contains(code)
+          }
+        }
         .l
 
       callsNotDirectlyChecked.filterNot { call =>
