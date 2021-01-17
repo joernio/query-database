@@ -39,7 +39,7 @@ class RetvalChecksTests extends Suite {
 
   "should find unchecked read and not flag others" in {
     val results =
-      RetvalChecks.uncheckedRead()(cpg).flatMap(_.evidence).collect {
+      RetvalChecks.uncheckedReadRecvMalloc()(cpg).flatMap(_.evidence).collect {
         case call: nodes.Call => call.method.name
       }
     results.toSet shouldBe Set("unchecked_read", "checks_something_else")
