@@ -14,7 +14,7 @@ object RetvalChecks extends QueryBundle {
     description =
       """
       |The return value of a read/recv/malloc call is not checked directly and
-      |the variable its return value has been assigned to (if any) does not
+      |the variable it has been assigned to (if any) does not
       |occur in any check within the caller.
       |""".stripMargin,
     score = 3.0,
