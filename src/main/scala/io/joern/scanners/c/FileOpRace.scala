@@ -24,31 +24,71 @@ object FileOpRace extends QueryBundle {
     score = 3.0,
     traversal = { cpg =>
       {
+        val firstParam = Set(
+          "open",
+          "fopen",
+          "creat",
+          "access",
+          "chmod",
+          "readlink",
+          "chown",
+          "lchown",
+          "stat",
+          "lstat",
+          "unlink",
+          "rmdir",
+          "mkdir",
+          "mknod",
+          "mkfifo",
+          "chdir",
+          "link",
+          "rename"
+        )
+        val secondParam = Set(
+          "openat",
+          "fstatat",
+          "fchmodat",
+          "readlinkat",
+          "unlinkat",
+          "mkdirat",
+          "mknodat",
+          "mkfifoat",
+          "faccessat",
+          "link",
+          "rename",
+          "linkat",
+          "renameat"
+        )
+        val fourthParam = Set("linkat", "renameat")
 
-        def fileArgs(calls: Traversal[Call]) =
-          calls
-            .flatMap(c =>
-              c.name match {
-                case "open" | "fopen" | "creat" | "access" | "chmod" |
-                    "readlink" | "chown" | "lchown" | "stat" | "lstat" |
-                    "unlink" | "rmdir" | "mkdir" | "mknod" | "mkfifo" |
-                    "chdir" =>
-                  c.argument(1)
-                case "openat" | "fstatat" | "fchmodat" | "readlinkat" |
-                    "unlinkat" | "mkdirat" | "mknodat" | "mkfifoat" |
-                    "faccessat" =>
-                  c.argument(2)
-                case "link" | "rename" =>
-                  c.argument(1) ++ c.argument(2)
-                case "linkat" | "renameat" =>
-                  c.argument(2) ++ c.argument(4)
-                case _ => Traversal.empty
-            })
-            .whereNot(_.isLiteral)
+        val anyParam = firstParam ++ secondParam ++ fourthParam
 
-        fileArgs(cpg.call).flatMap(a =>
-          fileArgs(a.method.ast.isCall).filter(a2 =>
-            a != a2 && a.code == a2.code))
+        def fileCalls(calls: Traversal[Call]) =
+          calls.nameExact(anyParam.toSeq: _*)
+
+        def fileArgs(c: Call) = {
+          val res = Traversal.newBuilder[Expression]
+          // note some functions are in multiple setts because they take multiple paths
+          if (firstParam.contains(c.name)) {
+            res.addOne(c.argument(1))
+          }
+          if (secondParam.contains(c.name)) {
+            res.addOne(c.argument(2))
+          }
+          if (fourthParam.contains(c.name)) {
+            res.addOne(c.argument(4))
+          }
+          res.result().whereNot(_.isLiteral)
+        }
+
+        fileCalls(cpg.call)
+          .filter(call => {
+            val otherCalls = fileCalls(call.method.ast.isCall).filter(_ != call)
+            val argsForOtherCalls =
+              otherCalls.flatMap(c => fileArgs(c)).code.toSet
+
+            fileArgs(call).code.exists(arg => argsForOtherCalls.contains(arg))
+          })
       }
     }
   )
