@@ -1,6 +1,7 @@
 package io.joern.scanners.c
 
 import io.joern.scanners.Crew
+import io.shiftleft.codepropertygraph.generated.Operators
 import io.shiftleft.codepropertygraph.generated.nodes._
 import io.shiftleft.console._
 import io.shiftleft.semanticcpg.language._
@@ -77,18 +78,18 @@ object UseAfterFree extends QueryBundle {
             _.referencingIdentifiers
               .argumentIndex(1)
               .inCall
-              .nameExact("<operator>.assignment", "<operator>.addressOf"))
+              .nameExact(Operators.assignment, Operators.addressOf))
 
       def assignedValues =
         outParams.referencingIdentifiers
           .argumentIndex(1)
           .inCall
-          .nameExact("<operator>.indirectFieldAccess",
-                     "<operator>.indirection",
-                     "<operator>.indirectIndexAccess")
+          .nameExact(Operators.indirectFieldAccess,
+            Operators.indirection,
+            Operators.indirectIndexAccess)
           .argumentIndex(1)
           .inCall
-          .nameExact("<operator>.assignment")
+          .nameExact(Operators.assignment)
           .argument(2)
           .isIdentifier
 
