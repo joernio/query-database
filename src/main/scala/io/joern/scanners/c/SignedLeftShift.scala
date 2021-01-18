@@ -1,6 +1,7 @@
 package io.joern.scanners.c
 
 import io.joern.scanners._
+import io.shiftleft.codepropertygraph.generated.Operators
 import io.shiftleft.console._
 import io.shiftleft.semanticcpg.language._
 
@@ -20,7 +21,7 @@ object SignedLeftShift extends QueryBundle {
     docStartLine = sourcecode.Line(),
     traversal = { cpg =>
       cpg.call
-        .nameExact("<operator>.shiftLeft")
+        .nameExact(Operators.shiftLeft, Operators.assignmentShiftLeft)
         .where(_.argument(1).typ.fullNameExact("int", "long"))
         .not(_.and(_.argument(1).isLiteral, _.argument(2).isLiteral))
     },

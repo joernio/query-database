@@ -9,7 +9,7 @@ class SignedLeftShiftTests extends Suite {
   override val code =
     """
       void bad1(int val) {
-        val << 24;
+        val <<= 24;
       }
       void bad2(int val) {
         255 << val;
