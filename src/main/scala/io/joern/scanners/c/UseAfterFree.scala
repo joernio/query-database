@@ -85,8 +85,8 @@ object UseAfterFree extends QueryBundle {
           .argumentIndex(1)
           .inCall
           .nameExact(Operators.indirectFieldAccess,
-            Operators.indirection,
-            Operators.indirectIndexAccess)
+                     Operators.indirection,
+                     Operators.indirectIndexAccess)
           .argumentIndex(1)
           .inCall
           .nameExact(Operators.assignment)
