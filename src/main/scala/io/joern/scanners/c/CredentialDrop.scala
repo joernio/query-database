@@ -23,7 +23,8 @@ object CredentialDrop extends QueryBundle {
         |""".stripMargin,
     score = 2,
     traversal = { cpg =>
-      cpg.method("set(res|re|e|)uid")
+      cpg
+        .method("set(res|re|e|)uid")
         .callIn
         .whereNot(_.dominatedBy.isCall.name("set(res|re|e|)?gid"))
     }
@@ -42,7 +43,8 @@ object CredentialDrop extends QueryBundle {
         |""".stripMargin,
     score = 2,
     traversal = { cpg =>
-      cpg.method("set(res|re|e|)gid")
+      cpg
+        .method("set(res|re|e|)gid")
         .callIn
         .whereNot(_.dominatedBy.isCall.name("setgroups"))
     }
