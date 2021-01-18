@@ -35,8 +35,8 @@ object CredentialDrop extends QueryBundle {
     description =
       """
         |The set*gid system calls do not affect the ancillary groups a process belongs to.
-        |Changes to the group membership should therefore always be preceded by a call to setgroups,
-        |otherwise the process may still be secondary member of the group it tries to disavow.
+        |Changes to the group membership should therefore always be preceded by a call to setgroups.
+        |Otherwise the process may still be a secondary member of the group it tries to disavow.
         |""".stripMargin,
     score = 2,
     traversal = { cpg =>
