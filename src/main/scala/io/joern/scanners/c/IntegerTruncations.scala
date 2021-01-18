@@ -6,6 +6,8 @@ import io.shiftleft.console._
 
 object IntegerTruncations extends QueryBundle {
 
+  implicit val resolver: ICallResolver = NoResolve
+
   /**
     * Identify calls to `strlen` where return values are assigned
     * to variables of type `int`, potentially causing truncation
@@ -27,7 +29,8 @@ object IntegerTruncations extends QueryBundle {
     docStartLine = sourcecode.Line(),
     traversal = { cpg =>
       cpg
-        .call("strlen")
+        .method("strlen")
+        .callIn
         .inAssignment
         .target
         .evalType("(g?)int")

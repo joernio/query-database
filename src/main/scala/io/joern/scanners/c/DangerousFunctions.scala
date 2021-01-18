@@ -6,6 +6,8 @@ import io.shiftleft.console._
 
 object DangerousFunctions extends QueryBundle {
 
+  implicit val resolver: ICallResolver = NoResolve
+
   @q
   def getsUsed(): Query = Query(
     name = "call-to-gets",
@@ -20,7 +22,7 @@ object DangerousFunctions extends QueryBundle {
     score = 8,
     docStartLine = sourcecode.Line(),
     traversal = { cpg =>
-      cpg.call("gets")
+      cpg.method("gets").callIn
     },
     docEndLine = sourcecode.Line(),
     docFileName = sourcecode.FileName()
@@ -41,10 +43,12 @@ object DangerousFunctions extends QueryBundle {
     docStartLine = sourcecode.Line(),
     traversal = { cpg =>
       cpg
-        .call("printf")
+        .method("printf")
+        .callIn
         .whereNot(_.argument.order(1).isLiteral) ++
         cpg
-          .call("(sprintf|vsprintf)")
+          .method("(sprintf|vsprintf)")
+          .callIn
           .whereNot(_.argument.order(2).isLiteral)
     },
     docEndLine = sourcecode.Line(),
@@ -64,7 +68,7 @@ object DangerousFunctions extends QueryBundle {
     score = 4,
     docStartLine = sourcecode.Line(),
     traversal = { cpg =>
-      cpg.call("scanf")
+      cpg.method("scanf").callIn
     },
     docEndLine = sourcecode.Line(),
     docFileName = sourcecode.FileName()
@@ -84,7 +88,7 @@ object DangerousFunctions extends QueryBundle {
     score = 4,
     docStartLine = sourcecode.Line(),
     traversal = { cpg =>
-      cpg.call("(strcat|strncat)")
+      cpg.method("(strcat|strncat)").callIn
     },
     docEndLine = sourcecode.Line(),
     docFileName = sourcecode.FileName()
@@ -106,7 +110,7 @@ object DangerousFunctions extends QueryBundle {
     score = 4,
     docStartLine = sourcecode.Line(),
     traversal = { cpg =>
-      cpg.call("(strcpy|strncpy)")
+      cpg.method("(strcpy|strncpy)").callIn
     },
     docEndLine = sourcecode.Line(),
     docFileName = sourcecode.FileName()
@@ -127,7 +131,7 @@ object DangerousFunctions extends QueryBundle {
     score = 4,
     docStartLine = sourcecode.Line(),
     traversal = { cpg =>
-      cpg.call("strtok")
+      cpg.method("strtok").callIn
     },
     docEndLine = sourcecode.Line(),
     docFileName = sourcecode.FileName()
@@ -146,7 +150,7 @@ object DangerousFunctions extends QueryBundle {
     score = 4,
     docStartLine = sourcecode.Line(),
     traversal = { cpg =>
-      cpg.call("getwd")
+      cpg.method("getwd").callIn
     },
     docEndLine = sourcecode.Line(),
     docFileName = sourcecode.FileName()

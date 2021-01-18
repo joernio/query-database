@@ -6,6 +6,8 @@ import io.shiftleft.semanticcpg.language._
 
 object CredentialDrop extends QueryBundle {
 
+  implicit val resolver: ICallResolver = NoResolve
+
   @q
   def userCredDrop(): Query = Query(
     name = "setuid-without-setgid",
@@ -21,8 +23,9 @@ object CredentialDrop extends QueryBundle {
         |""".stripMargin,
     score = 2,
     traversal = { cpg =>
-      cpg.call
-        .name("set(res|re|e|)uid")
+      cpg
+        .method("set(res|re|e|)uid")
+        .callIn
         .whereNot(_.dominatedBy.isCall.name("set(res|re|e|)?gid"))
     }
   )
@@ -40,8 +43,9 @@ object CredentialDrop extends QueryBundle {
         |""".stripMargin,
     score = 2,
     traversal = { cpg =>
-      cpg.call
-        .name("set(res|re|e|)gid")
+      cpg
+        .method("set(res|re|e|)gid")
+        .callIn
         .whereNot(_.dominatedBy.isCall.name("setgroups"))
     }
   )

@@ -8,6 +8,8 @@ import io.shiftleft.dataflowengineoss.queryengine.EngineContext
 
 object UseAfterFree extends QueryBundle {
 
+  implicit val resolver: ICallResolver = NoResolve
+
   @q
   def freeFieldNoReassign()(implicit context: EngineContext): Query = Query(
     name = "free-field-no-reassign",
@@ -27,7 +29,8 @@ object UseAfterFree extends QueryBundle {
     docStartLine = sourcecode.Line(),
     traversal = { cpg =>
       val freeOfStructField = cpg
-        .call("free")
+        .method("free")
+        .callIn
         .where(
           _.argument(1)
             .isCallTo("<operator>.*[fF]ieldAccess.*")
