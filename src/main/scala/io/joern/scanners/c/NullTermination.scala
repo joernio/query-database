@@ -8,6 +8,8 @@ import io.shiftleft.dataflowengineoss.queryengine.EngineContext
 
 object NullTermination extends QueryBundle {
 
+  implicit val resolver: ICallResolver = NoResolve
+
   @q
   def strncpyNoNullTerm()(implicit engineContext: EngineContext): Query =
     Query(
@@ -25,9 +27,10 @@ object NullTermination extends QueryBundle {
       score = 4,
       docStartLine = sourcecode.Line(),
       traversal = { cpg =>
-        val allocations = cpg.call.name(".*malloc$").argument(1).l
+        val allocations = cpg.method(".*malloc$").callIn.argument(1).l
         cpg
-          .call("strncpy")
+          .method("strncpy")
+          .callIn
           .map { c =>
             (c.method, c.argument(1), c.argument(3))
           }

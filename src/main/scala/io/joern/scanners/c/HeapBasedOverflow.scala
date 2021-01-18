@@ -8,6 +8,8 @@ import io.shiftleft.console._
 
 object HeapBasedOverflow extends QueryBundle {
 
+  implicit val resolver: ICallResolver = NoResolve
+
   /**
     * Find calls to malloc where the first argument contains an arithmetic expression,
     * the allocated buffer flows into memcpy as the first argument, and the third
@@ -25,12 +27,14 @@ object HeapBasedOverflow extends QueryBundle {
     docStartLine = sourcecode.Line(),
     traversal = { cpg =>
       val src = cpg
-        .call(".*malloc$")
+        .method(".*malloc$")
+        .callIn
         .where(_.argument(1).arithmetics)
         .l
 
       cpg
-        .call("memcpy")
+        .method("memcpy")
+        .callIn
         .l
         .filter { memcpyCall =>
           memcpyCall
