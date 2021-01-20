@@ -7,6 +7,7 @@ import io.shiftleft.console._
 import io.shiftleft.semanticcpg.language._
 import io.shiftleft.dataflowengineoss.language._
 import io.shiftleft.dataflowengineoss.queryengine.EngineContext
+import overflowdb.traversal.Traversal
 
 object UseAfterFree extends QueryBundle {
 
@@ -112,6 +113,43 @@ object UseAfterFree extends QueryBundle {
       freeAssigned
         .filter { case (id, freeCall) => freeCall.dominatedBy.exists(_ == id) }
         .flatMap(_._1)
+    },
+    docEndLine = sourcecode.Line(),
+    docFileName = sourcecode.FileName()
+  )
+
+  @q
+  def freePostDominatesUsage()(implicit context: EngineContext): Query = Query(
+    name = "free-follows-value-reuse",
+    author = Crew.malte,
+    title = "A value that is free'd is reused without reassignment.",
+    description = """
+        |A value is used after being free'd in a path that leads to it
+        |without reassignment.
+        |
+        |Modeled after CVE-2019-18903.
+        |""".stripMargin,
+    score = 5.0,
+    traversal = { cpg =>
+      cpg.method
+        .name("(.*_)?free")
+        .filter(_.parameter.size == 1)
+        .callIn
+        .where(_.argument(1).isIdentifier)
+        .flatMap(f => {
+          val freedIdentifierCode = f.argument(1).code
+          val postDom = f.postDominatedBy.toSet
+
+          val assignedPostDom = postDom.isIdentifier
+            .where(_.inAssignment)
+            .codeExact(freedIdentifierCode)
+            .flatMap(id => id ++ id.postDominatedBy)
+
+          postDom
+            .removedAll(assignedPostDom)
+            .isIdentifier
+            .codeExact(freedIdentifierCode)
+        })
     },
     docEndLine = sourcecode.Line(),
     docFileName = sourcecode.FileName()
