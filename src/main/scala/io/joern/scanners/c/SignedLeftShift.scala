@@ -23,7 +23,7 @@ object SignedLeftShift extends QueryBundle {
       cpg.call
         .nameExact(Operators.shiftLeft, Operators.assignmentShiftLeft)
         .where(_.argument(1).typ.fullNameExact("int", "long"))
-        .not(_.and(_.argument(1).isLiteral, _.argument(2).isLiteral))
+        .filterNot(_.argument.isLiteral.size == 2) // assume such constant values produces a correct result
     },
     docEndLine = sourcecode.Line(),
     docFileName = sourcecode.FileName()

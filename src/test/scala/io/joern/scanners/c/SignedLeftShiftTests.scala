@@ -14,6 +14,9 @@ class SignedLeftShiftTests extends Suite {
       void bad2(int val) {
         255 << val;
       }
+      void bad3(int val) {
+        val << val;
+      }
 
       void good(unsigned int val) {
         255 << 24; // we ignore signed shift with two literals
@@ -27,7 +30,7 @@ class SignedLeftShiftTests extends Suite {
       case c: nodes.Call =>
         c.method.name
       case _ => fail
-    }.toSet shouldBe Set("bad1", "bad2")
+    }.toSet shouldBe Set("bad1", "bad2", "bad3")
   }
 
 }
