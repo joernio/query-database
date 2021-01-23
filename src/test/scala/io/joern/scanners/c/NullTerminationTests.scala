@@ -40,7 +40,7 @@ class NullTerminationTests extends Suite {
       case List(x: nodes.Expression) =>
         x.method.name shouldBe "bad"
       case _ =>
-        fail
+        fail()
     }
   }
 
