@@ -24,9 +24,9 @@ class IntegerTruncationsTests extends Suite {
       case List(result) =>
         result.evidence match {
           case List(x: nodes.Identifier) => x.method.name shouldBe "vulnerable"
-          case _                         => fail
+          case _                         => fail()
         }
-      case _ => fail
+      case _ => fail()
     }
   }
 

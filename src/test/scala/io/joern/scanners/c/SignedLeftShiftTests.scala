@@ -26,11 +26,15 @@ class SignedLeftShiftTests extends Suite {
     """
 
   "find signed left shift" in {
-    SignedLeftShift.signedLeftShift()(cpg).flatMap(_.evidence).map{
-      case c: nodes.Call =>
-        c.method.name
-      case _ => fail
-    }.toSet shouldBe Set("bad1", "bad2", "bad3")
+    SignedLeftShift
+      .signedLeftShift()(cpg)
+      .flatMap(_.evidence)
+      .map {
+        case c: nodes.Call =>
+          c.method.name
+        case _ => fail()
+      }
+      .toSet shouldBe Set("bad1", "bad2", "bad3")
   }
 
 }

@@ -28,8 +28,20 @@ class CredentialDropTests extends Suite {
     """
 
   "strict order of credential dropping function calls should be observed" in {
-    CredentialDrop.userCredDrop()(cpg).flatMap(_.evidence).cast[nodes.Call].method.name.toSet shouldBe Set("bad1", "bad3")
-    CredentialDrop.groupCredDrop()(cpg).flatMap(_.evidence).cast[nodes.Call].method.name.toSet shouldBe Set("bad2")
+    CredentialDrop
+      .userCredDrop()(cpg)
+      .flatMap(_.evidence)
+      .cast[nodes.Call]
+      .method
+      .name
+      .toSet shouldBe Set("bad1", "bad3")
+    CredentialDrop
+      .groupCredDrop()(cpg)
+      .flatMap(_.evidence)
+      .cast[nodes.Call]
+      .method
+      .name
+      .toSet shouldBe Set("bad2")
   }
 
 }

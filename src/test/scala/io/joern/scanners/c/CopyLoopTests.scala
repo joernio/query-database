@@ -28,7 +28,7 @@ class CopyLoopTests extends Suite {
     CopyLoops.isCopyLoop()(cpg).map(_.evidence) match {
       case List(List(expr: nodes.Expression)) =>
         expr.method.name shouldBe "index_into_dst_array"
-      case _ => fail
+      case _ => fail()
     }
   }
 

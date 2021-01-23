@@ -77,7 +77,7 @@ class DangerousFunctionsTests extends Suite {
     DangerousFunctions.getsUsed()(cpg).map(_.evidence) match {
       case List(List(expr: nodes.Expression)) =>
         expr.method.name shouldBe "insecure_gets"
-      case _ => fail
+      case _ => fail()
     }
   }
 
@@ -96,7 +96,7 @@ class DangerousFunctionsTests extends Suite {
     DangerousFunctions.scanfUsed()(cpg).map(_.evidence) match {
       case List(List(expr: nodes.Expression)) =>
         expr.method.name shouldBe "insecure_scanf"
-      case _ => fail
+      case _ => fail()
     }
   }
 
@@ -104,7 +104,7 @@ class DangerousFunctionsTests extends Suite {
     DangerousFunctions.strcatUsed()(cpg).map(_.evidence) match {
       case List(List(expr: nodes.Expression)) =>
         expr.method.name shouldBe "insecure_strncat_strncpy"
-      case _ => fail
+      case _ => fail()
     }
   }
 
@@ -112,7 +112,7 @@ class DangerousFunctionsTests extends Suite {
     DangerousFunctions.strcpyUsed()(cpg).map(_.evidence) match {
       case List(List(expr: nodes.Expression)) =>
         expr.method.name shouldBe "insecure_strncat_strncpy"
-      case _ => fail
+      case _ => fail()
     }
   }
 
@@ -120,7 +120,7 @@ class DangerousFunctionsTests extends Suite {
     DangerousFunctions.strtokUsed()(cpg).map(_.evidence) match {
       case List(List(expr: nodes.Expression)) =>
         expr.method.name shouldBe "insecure_strtok"
-      case _ => fail
+      case _ => fail()
     }
   }
 
@@ -128,7 +128,7 @@ class DangerousFunctionsTests extends Suite {
     DangerousFunctions.getwdUsed()(cpg).map(_.evidence) match {
       case List(List(expr: nodes.Expression)) =>
         expr.method.name shouldBe "insecure_getwd"
-      case _ => fail
+      case _ => fail()
     }
   }
 

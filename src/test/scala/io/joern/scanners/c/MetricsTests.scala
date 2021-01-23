@@ -72,7 +72,7 @@ class MetricsTests extends Suite {
     Metrics.tooManyParameters(4)(cpg).map(_.evidence) match {
       case List(List(method: nodes.Method)) =>
         method.name shouldBe "too_many_params"
-      case _ => fail
+      case _ => fail()
     }
   }
 
@@ -80,7 +80,7 @@ class MetricsTests extends Suite {
     Metrics.tooHighComplexity(4)(cpg).map(_.evidence) match {
       case List(List(method: nodes.Method)) =>
         method.name shouldBe "high_cyclomatic_complexity"
-      case _ => fail
+      case _ => fail()
     }
   }
 
@@ -88,7 +88,7 @@ class MetricsTests extends Suite {
     Metrics.tooLong(13)(cpg).map(_.evidence) match {
       case List(List(method: nodes.Method)) =>
         method.name shouldBe "func_with_many_lines"
-      case _ => fail
+      case _ => fail()
     }
   }
 
@@ -96,7 +96,7 @@ class MetricsTests extends Suite {
     Metrics.multipleReturns()(cpg).map(_.evidence) match {
       case List(List(method: nodes.Method)) =>
         method.name shouldBe "func_with_multiple_returns"
-      case _ => fail
+      case _ => fail()
     }
   }
 
@@ -104,7 +104,7 @@ class MetricsTests extends Suite {
     Metrics.tooManyLoops(3)(cpg).map(_.evidence) match {
       case List(List(method: nodes.Method)) =>
         method.name shouldBe "high_number_of_loops"
-      case _ => fail
+      case _ => fail()
     }
   }
 
@@ -112,7 +112,7 @@ class MetricsTests extends Suite {
     Metrics.tooNested(2)(cpg).map(_.evidence) match {
       case List(List(method: nodes.Method)) =>
         method.name shouldBe "func_with_nesting_level_of_3"
-      case _ => fail
+      case _ => fail()
     }
   }
 
