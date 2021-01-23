@@ -36,7 +36,8 @@ Universal / mappings := (Universal / mappings).value.filterNot {
     path.contains("io.circe") ||
     path.contains("net.java.dev") ||
     path.contains("com.github.javaparser") ||
-    path.contains("org.javassist")
+    path.contains("org.javassist") ||
+    path.contains("com.lihaoyi.ammonite")
 }
 
 sources in (Compile,doc) := Seq.empty
