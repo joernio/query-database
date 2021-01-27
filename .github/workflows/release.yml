@@ -20,7 +20,8 @@ jobs:
       - run: sbt scalafmtCheck test stage
       - run: sbt ciReleaseTagNextVersion createDistribution
       - run: sha512sum ./querydb.zip > ./querydb.zip.sha512
-      - run: ./target/universal/stage/bin/batteries
+      - run: ./install.sh
+      - run: ./joern-scan --dump || echo "{}" > /tmp/querydb.json
       - run: cp /tmp/querydb.json .
       - name: Export ENV vars
         run:

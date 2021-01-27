@@ -20,6 +20,26 @@ libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "3.1.1" % Test
 )
 
+// We exclude a few jars that the main joern distribution already includes
+Universal / mappings := (Universal / mappings).value.filterNot {
+   case (_, path) => path.contains("org.scala") ||
+    path.contains("net.sf.trove4") ||
+    path.contains("com.google.guava") ||
+    path.contains("org.apache.logging") ||
+    path.contains("com.google.protobuf") ||
+    path.contains("com.lihaoyi.u") ||
+    path.contains("io.shiftleft") ||
+    path.contains("org.typelevel") ||
+    path.contains("io.undertow") ||
+    path.contains("com.chuusai") ||
+    path.contains("io.get-coursier") ||
+    path.contains("io.circe") ||
+    path.contains("net.java.dev") ||
+    path.contains("com.github.javaparser") ||
+    path.contains("org.javassist") ||
+    path.contains("com.lihaoyi.ammonite")
+}
+
 sources in (Compile,doc) := Seq.empty
 publishArtifact in (Compile, packageDoc) := false
 
@@ -29,27 +49,7 @@ createDistribution := {
   val pkgBin = (Universal/packageBin).value
   val dstArchive = "./querydb.zip"
   IO.copy(
-    List((pkgBin, file(dstArchive))).filter {
-      case (_,x) =>
-        val path = x.getPath
-          path.contains("org.scala") ||
-          path.contains("net.sf.trove4") ||
-          path.contains("com.google.guava") ||
-          path.contains("org.apache.logging") ||
-          path.contains("com.google.protobuf") ||
-          path.contains("com.lihaoyi.u") ||
-          path.contains("io.shiftleft") ||
-          path.contains("org.typelevel") ||
-          path.contains("io.undertow") ||
-          path.contains("com.chuusai") ||
-          path.contains("io.get-coursier") ||
-          path.contains("io.circe") ||
-          path.contains("net.java.dev") ||
-          path.contains("com.github.javaparser") ||
-          path.contains("org.javassist") ||
-          path.contains("com.lihaoyi.ammonite")
-    }
-    ,
+    List((pkgBin, file(dstArchive))),
     CopyOptions(overwrite = true, preserveLastModified = true, preserveExecutable = true)
   )
   println(s"created distribution - resulting files: $dstArchive")
