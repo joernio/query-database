@@ -21,7 +21,7 @@ jobs:
       - run: sbt ciReleaseTagNextVersion createDistribution
       - run: sha512sum ./querydb.zip > ./querydb.zip.sha512
       - run: ./install.sh
-      - run: ./joern-scan --dump || touch querydb.json
+      - run: ./joern-scan --dump || touch /tmp/querydb.json
       - run: cp /tmp/querydb.json .
       - name: Export ENV vars
         run:
