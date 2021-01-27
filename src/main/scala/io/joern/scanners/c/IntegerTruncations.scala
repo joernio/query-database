@@ -3,6 +3,7 @@ package io.joern.scanners.c
 import io.joern.scanners._
 import io.shiftleft.semanticcpg.language._
 import io.shiftleft.console._
+import io.shiftleft.macros.QueryMacros._
 
 object IntegerTruncations extends QueryBundle {
 
@@ -14,28 +15,24 @@ object IntegerTruncations extends QueryBundle {
     * on 64 bit platforms.
     * */
   @q
-  def strlenAssignmentTruncations(): Query = Query(
-    name = "strlen-truncation",
-    author = Crew.fabs,
-    title = "Truncation in assignment involving `strlen` call",
-    description =
+  def strlenAssignmentTruncations(): Query =
+    queryInit(
+      "strlen-truncation",
+      Crew.fabs,
+      "Truncation in assignment involving `strlen` call",
       """
         |The return value of `strlen` is stored in a variable that is known
         |to be of type `int` as opposed to `size_t`. `int` is only 32 bit
         |wide on many 64 bit platforms, and thus, this may result in a
         |truncation.
         |""".stripMargin,
-    score = 2,
-    docStartLine = sourcecode.Line(),
-    traversal = { cpg =>
-      cpg
-        .method("strlen")
-        .callIn
-        .inAssignment
-        .target
-        .evalType("(g?)int")
-    },
-    docEndLine = sourcecode.Line(),
-    docFileName = sourcecode.FileName()
-  )
+      2, { cpg =>
+        cpg
+          .method("strlen")
+          .callIn
+          .inAssignment
+          .target
+          .evalType("(g?)int")
+      },
+    ).asInstanceOf[Query]
 }
