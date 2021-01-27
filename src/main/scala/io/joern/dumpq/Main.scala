@@ -14,7 +14,8 @@ object Main extends App {
 
   def dumpQueries(): Unit = {
     implicit val engineContext: EngineContext = EngineContext(Semantics.empty)
-    implicit val formats: AnyRef with Formats = Serialization.formats(NoTypeHints)
+    implicit val formats: AnyRef with Formats =
+      Serialization.formats(NoTypeHints)
     val queryDb = new QueryDatabase(new JoernDefaultArgumentProvider(0))
     // TODO allow specifying file from the outside and make this portable
     val outFileName = "/tmp/querydb.json"
@@ -26,9 +27,14 @@ object Main extends App {
     println(s"Queries written to: $outFileName")
   }
 
-  class JoernDefaultArgumentProvider(maxCallDepth: Int)(implicit context: EngineContext) extends DefaultArgumentProvider {
+  class JoernDefaultArgumentProvider(maxCallDepth: Int)(
+      implicit context: EngineContext)
+      extends DefaultArgumentProvider {
 
-    override def defaultArgument(method: MethodSymbol, im: InstanceMirror, x: Symbol, i: Int): Option[Any] = {
+    override def defaultArgument(method: MethodSymbol,
+                                 im: InstanceMirror,
+                                 x: Symbol,
+                                 i: Int): Option[Any] = {
       if (x.typeSignature.toString.endsWith("EngineContext")) {
         Some(context.copy(config = EngineConfig(maxCallDepth = maxCallDepth)))
       } else {
