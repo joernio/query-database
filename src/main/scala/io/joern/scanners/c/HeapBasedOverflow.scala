@@ -5,6 +5,7 @@ import io.shiftleft.dataflowengineoss.queryengine.EngineContext
 import io.shiftleft.semanticcpg.language._
 import io.shiftleft.dataflowengineoss.language._
 import io.shiftleft.console._
+import io.shiftleft.macros.QueryMacros._
 
 object HeapBasedOverflow extends QueryBundle {
 
@@ -18,35 +19,33 @@ object HeapBasedOverflow extends QueryBundle {
     * buffer overflow in VLC's MP4 demuxer (CVE-2014-9626).
     * */
   @q
-  def mallocMemcpyIntOverflow()(implicit context: EngineContext): Query = Query(
-    name = "malloc-memcpy-int-overflow",
-    author = Crew.fabs,
-    title = "Dangerous copy-operation into heap-allocated buffer",
-    description = "-",
-    score = 4,
-    docStartLine = sourcecode.Line(),
-    traversal = { cpg =>
-      val src = cpg
-        .method(".*malloc$")
-        .callIn
-        .where(_.argument(1).arithmetics)
-        .l
+  def mallocMemcpyIntOverflow()(implicit context: EngineContext): Query =
+    queryInit(
+      "malloc-memcpy-int-overflow",
+      Crew.fabs,
+      "Dangerous copy-operation into heap-allocated buffer",
+      "-",
+      4, { cpg =>
+        val src = cpg
+          .method(".*malloc$")
+          .callIn
+          .where(_.argument(1).arithmetics)
+          .l
 
-      cpg
-        .method("memcpy")
-        .callIn
-        .l
-        .filter { memcpyCall =>
-          memcpyCall
-            .argument(1)
-            .reachableBy(src)
-            .where(_.inAssignment.target.codeExact(memcpyCall.argument(1).code))
-            .whereNot(_.argument(1).codeExact(memcpyCall.argument(3).code))
-            .hasNext
-        }
-    },
-    docEndLine = sourcecode.Line(),
-    docFileName = sourcecode.FileName()
-  )
+        cpg
+          .method("memcpy")
+          .callIn
+          .l
+          .filter { memcpyCall =>
+            memcpyCall
+              .argument(1)
+              .reachableBy(src)
+              .where(
+                _.inAssignment.target.codeExact(memcpyCall.argument(1).code))
+              .whereNot(_.argument(1).codeExact(memcpyCall.argument(3).code))
+              .hasNext
+          }
+      },
+    ).asInstanceOf[Query]
 
 }

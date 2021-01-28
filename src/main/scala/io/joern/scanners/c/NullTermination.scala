@@ -5,6 +5,7 @@ import io.shiftleft.semanticcpg.language._
 import io.shiftleft.dataflowengineoss.language._
 import io.shiftleft.console.{Query, QueryBundle, q}
 import io.shiftleft.dataflowengineoss.queryengine.EngineContext
+import io.shiftleft.macros.QueryMacros._
 
 object NullTermination extends QueryBundle {
 
@@ -12,11 +13,11 @@ object NullTermination extends QueryBundle {
 
   @q
   def strncpyNoNullTerm()(implicit engineContext: EngineContext): Query =
-    Query(
-      name = "strncpy-no-null-term",
-      author = Crew.fabs,
-      title = "strncpy is used and no null termination is nearby",
-      description = """
+    queryInit(
+      "strncpy-no-null-term",
+      Crew.fabs,
+      "strncpy is used and no null termination is nearby",
+      """
         | Upon calling `strncpy` with a source string that is larger
         | than the destination buffer, the destination buffer is not
         | null-terminated by `strncpy` and there is no explicit
@@ -24,9 +25,7 @@ object NullTermination extends QueryBundle {
         | buffer size is at least 1 larger than the size passed
         | to `strncpy`.
         |""".stripMargin,
-      score = 4,
-      docStartLine = sourcecode.Line(),
-      traversal = { cpg =>
+      4, { cpg =>
         val allocations = cpg.method(".*malloc$").callIn.argument(1).l
         cpg
           .method("strncpy")
@@ -46,8 +45,6 @@ object NullTermination extends QueryBundle {
           }
           .map(_._2)
       },
-      docEndLine = sourcecode.Line(),
-      docFileName = sourcecode.FileName()
-    )
+    ).asInstanceOf[Query]
 
 }
