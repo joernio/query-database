@@ -25,33 +25,39 @@ publishArtifact in (Compile, packageDoc) := false
 
 lazy val createDistribution = taskKey[Unit]("Create binary distribution of extension")
 createDistribution := {
-  (Universal/packageZipTarball).value
   val pkgBin = (Universal/packageBin).value
-  val dstArchive = "./querydb.zip"
+  val tmpDstArchive = "/tmp/querydb.zip"
+  val dstArchive = "querydb.zip"
   IO.copy(
-    List((pkgBin, file(dstArchive))).filter {
-      case (_,x) =>
-        val path = x.getPath
-          path.contains("org.scala") ||
-          path.contains("net.sf.trove4") ||
-          path.contains("com.google.guava") ||
-          path.contains("org.apache.logging") ||
-          path.contains("com.google.protobuf") ||
-          path.contains("com.lihaoyi.u") ||
-          path.contains("io.shiftleft") ||
-          path.contains("org.typelevel") ||
-          path.contains("io.undertow") ||
-          path.contains("com.chuusai") ||
-          path.contains("io.get-coursier") ||
-          path.contains("io.circe") ||
-          path.contains("net.java.dev") ||
-          path.contains("com.github.javaparser") ||
-          path.contains("org.javassist") ||
-          path.contains("com.lihaoyi.ammonite")
-    }
-    ,
+    List((pkgBin, file(tmpDstArchive))),
     CopyOptions(overwrite = true, preserveLastModified = true, preserveExecutable = true)
   )
+
+  val f = better.files.File(dstArchive)
+  better.files.File.usingTemporaryDirectory("querydb") { dir =>
+    better.files.File(tmpDstArchive).unzipTo(dir)
+    dir.listRecursively.filter{ x => val name = x.toString
+        name.contains("org.scala") ||
+        name.contains("net.sf.trove4") ||
+        name.contains("com.google.guava") ||
+        name.contains("org.apache.logging") ||
+        name.contains("com.google.protobuf") ||
+        name.contains("com.lihaoyi.u") ||
+        name.contains("io.shiftleft") ||
+        name.contains("org.typelevel") ||
+        name.contains("io.undertow") ||
+        name.contains("com.chuusai") ||
+        name.contains("io.get-coursier") ||
+        name.contains("io.circe") ||
+        name.contains("net.java.dev") ||
+        name.contains("com.github.javaparser") ||
+        name.contains("org.javassist") ||
+        name.contains("com.lihaoyi.ammonite")
+    }.foreach(x => x.delete())
+    dir.zipTo(f)
+    better.files.File(tmpDstArchive).delete()
+  }
+
   println(s"created distribution - resulting files: $dstArchive")
 }
 
