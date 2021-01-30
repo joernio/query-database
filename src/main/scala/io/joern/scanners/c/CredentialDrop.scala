@@ -28,7 +28,7 @@ object CredentialDrop extends QueryBundle {
           .callIn
           .whereNot(_.dominatedBy.isCall.name("set(res|re|e|)?gid"))
       }
-    ).asInstanceOf[Query]
+    )
 
   @q
   def groupCredDrop(): Query =
@@ -47,6 +47,6 @@ object CredentialDrop extends QueryBundle {
           .callIn
           .whereNot(_.dominatedBy.isCall.name("setgroups"))
       }
-    ).asInstanceOf[Query]
+    )
 
 }

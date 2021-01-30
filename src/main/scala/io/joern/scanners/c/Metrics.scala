@@ -17,7 +17,7 @@ object Metrics extends QueryBundle {
       1.0, { cpg =>
         cpg.method.internal.filter(_.parameter.size > n)
       },
-    ).asInstanceOf[Query]
+    )
 
   @q
   def tooHighComplexity(n: Int = 4): Query =
@@ -29,7 +29,7 @@ object Metrics extends QueryBundle {
       1.0, { cpg =>
         cpg.method.internal.filter(_.controlStructure.size > n)
       },
-    ).asInstanceOf[Query]
+    )
 
   @q
   def tooLong(n: Int = 1000): Query =
@@ -41,7 +41,7 @@ object Metrics extends QueryBundle {
       1.0, { cpg =>
         cpg.method.internal.filter(_.numberOfLines > n)
       },
-    ).asInstanceOf[Query]
+    )
 
   @q
   def multipleReturns(): Query =
@@ -53,7 +53,7 @@ object Metrics extends QueryBundle {
       1.0, { cpg =>
         cpg.method.internal.filter(_.ast.isReturn.l.size > 1)
       },
-    ).asInstanceOf[Query]
+    )
 
   @q
   def tooManyLoops(n: Int = 4): Query =
@@ -69,7 +69,7 @@ object Metrics extends QueryBundle {
               .parserTypeName("(For|Do|While).*")
               .size > n)
       },
-    ).asInstanceOf[Query]
+    )
 
   @q
   def tooNested(n: Int = 3): Query =
@@ -81,6 +81,6 @@ object Metrics extends QueryBundle {
       1.0, { cpg =>
         cpg.method.internal.filter(_.depth(_.isControlStructure) > n)
       },
-    ).asInstanceOf[Query]
+    )
 
 }

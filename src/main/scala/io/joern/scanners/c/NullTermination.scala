@@ -45,6 +45,6 @@ object NullTermination extends QueryBundle {
           }
           .map(_._2)
       },
-    ).asInstanceOf[Query]
+    )
 
 }
