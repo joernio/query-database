@@ -7,6 +7,7 @@ import io.shiftleft.console._
 import io.shiftleft.semanticcpg.language._
 import io.shiftleft.dataflowengineoss.language._
 import io.shiftleft.dataflowengineoss.queryengine.EngineContext
+import io.shiftleft.dataflowengineoss.semanticsloader.Semantics
 import io.shiftleft.macros.QueryMacros._
 import overflowdb.traversal.Traversal
 
@@ -29,27 +30,51 @@ object UseAfterFree extends QueryBundle {
         | or clear the entire structure, as in that case, it is unlikely that the
         | passed in structure will be used again.
         |""".stripMargin,
-      5.0, { cpg =>
-        val freeOfStructField = cpg
-          .method("free")
+      4.0, { cpg =>
+        val freeWrapper = cpg
+          .method("k?free")
           .callIn
-          .where(
-            _.argument(1)
-              .isCallTo("<operator>.*[fF]ieldAccess.*")
-              .filter(x =>
-                x.method.parameter.name.toSet.contains(x.argument(1).code))
-          )
-          .whereNot(_.argument(1).isCall.argument(1).filter { struct =>
+          .flatMap { x =>
+            x.method.parameter
+              .nameExact(x.argument(1).code)
+              .map(y => (x.method, y.order))
+              .l
+          }
+          .l
+
+        val freeAndItsWrappers = freeWrapper ++ cpg
+          .method("k?free")
+          .map(x => (x, new Integer(1)))
+
+        // Arguments that are passed to free-like functions and free'd by them
+        val args = freeAndItsWrappers.flatMap {
+          case (method, argIndex) =>
+            method.callIn.argument(argIndex).l
+        }
+
+        val freeOfStructField = Traversal(args)
+        // ensure that a field of an arg is free'd, e.g., free(ptr->foo)
+          .where(_.isCallTo("<operator>.*[fF]ieldAccess.*")
+            .filter(x =>
+              x.method.parameter.name.toSet.contains(x.argument(1).code)))
+          // Ensure that there isn't a call to `free(ptr)`
+          .whereNot(_.isCall.argument(1).filter { struct =>
             struct.method.ast.isCall
-              .name(".*free$", "memset", "bzero")
+            // TODO ... or any other free-like function
+              .name("k?free$", "memset", "bzero")
               .argument(1)
               .codeExact(struct.code)
               .nonEmpty
           })
           .l
 
-        freeOfStructField.argument(1).filter { arg =>
-          arg.method.methodReturn.reachableBy(arg).nonEmpty
+        // Ensure that free reaches return, that is, there is no
+        // `ptr->foo = NULL` after the free
+        freeOfStructField.filter { arg =>
+          implicit val s: Semantics = context.semantics
+          arg.method.methodReturn.ddgInPathElem.exists { p =>
+            p.node == arg && p.outEdgeLabel == arg.code
+          }
         }
       },
     )
