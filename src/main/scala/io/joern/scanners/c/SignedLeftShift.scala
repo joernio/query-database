@@ -24,6 +24,6 @@ object SignedLeftShift extends QueryBundle {
           .where(_.argument(1).typ.fullNameExact("int", "long"))
           .filterNot(_.argument.isLiteral.size == 2) // assume such constant values produces a correct result
       },
-    ).asInstanceOf[Query]
+    )
 
 }

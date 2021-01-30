@@ -52,7 +52,7 @@ object UseAfterFree extends QueryBundle {
           arg.method.methodReturn.reachableBy(arg).nonEmpty
         }
       },
-    ).asInstanceOf[Query]
+    )
 
   @q
   def freeReturnedValue()(implicit context: EngineContext): Query =
@@ -111,7 +111,7 @@ object UseAfterFree extends QueryBundle {
           }
           .flatMap(_._1)
       },
-    ).asInstanceOf[Query]
+    )
 
   @q
   def freePostDominatesUsage()(implicit context: EngineContext): Query =
@@ -146,6 +146,6 @@ object UseAfterFree extends QueryBundle {
               .codeExact(freedIdentifierCode)
           })
       },
-    ).asInstanceOf[Query]
+    )
 
 }

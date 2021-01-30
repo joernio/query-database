@@ -36,6 +36,6 @@ object CopyLoops extends QueryBundle {
           }
           .map(_._1)
       },
-    ).asInstanceOf[Query]
+    )
 
 }

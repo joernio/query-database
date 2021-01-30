@@ -38,6 +38,6 @@ object RetvalChecks extends QueryBundle {
           (targets & checkedVars).nonEmpty
         }
       },
-    ).asInstanceOf[Query]
+    )
 
 }

@@ -23,7 +23,7 @@ object DangerousFunctions extends QueryBundle {
       8, { cpg =>
         cpg.method("gets").callIn
       },
-    ).asInstanceOf[Query]
+    )
 
   @q
   def argvUsedInPrintf(): Query =
@@ -46,7 +46,7 @@ object DangerousFunctions extends QueryBundle {
             .callIn
             .whereNot(_.argument.order(2).isLiteral)
       },
-    ).asInstanceOf[Query]
+    )
 
   @q
   def scanfUsed(): Query =
@@ -61,7 +61,7 @@ object DangerousFunctions extends QueryBundle {
       4, { cpg =>
         cpg.method("scanf").callIn
       },
-    ).asInstanceOf[Query]
+    )
 
   @q
   def strcatUsed(): Query =
@@ -77,7 +77,7 @@ object DangerousFunctions extends QueryBundle {
       4, { cpg =>
         cpg.method("(strcat|strncat)").callIn
       },
-    ).asInstanceOf[Query]
+    )
 
   @q
   def strcpyUsed(): Query =
@@ -95,7 +95,7 @@ object DangerousFunctions extends QueryBundle {
       4, { cpg =>
         cpg.method("(strcpy|strncpy)").callIn
       },
-    ).asInstanceOf[Query]
+    )
 
   @q
   def strtokUsed(): Query =
@@ -112,7 +112,7 @@ object DangerousFunctions extends QueryBundle {
       4, { cpg =>
         cpg.method("strtok").callIn
       },
-    ).asInstanceOf[Query]
+    )
 
   @q
   def getwdUsed(): Query =
@@ -127,6 +127,6 @@ object DangerousFunctions extends QueryBundle {
       4, { cpg =>
         cpg.method("getwd").callIn
       },
-    ).asInstanceOf[Query]
+    )
 
 }

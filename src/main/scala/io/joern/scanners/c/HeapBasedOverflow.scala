@@ -46,6 +46,6 @@ object HeapBasedOverflow extends QueryBundle {
               .hasNext
           }
       },
-    ).asInstanceOf[Query]
+    )
 
 }
