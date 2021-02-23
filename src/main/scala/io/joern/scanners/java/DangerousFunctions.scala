@@ -10,7 +10,7 @@ object DangerousFunctions extends QueryBundle {
   implicit val resolver: ICallResolver = NoResolve
 
   @q
-  def getsUsed(): Query =
+  def execUsed(): Query =
     queryInit(
       "call-to-exec",
       Crew.niko,
