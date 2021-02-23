@@ -20,7 +20,9 @@ object DangerousFunctions extends QueryBundle {
         | could result in a potential remote code execution.
         |""".stripMargin,
       8, { cpg =>
-        cpg.method("java.lang.Runtime.exec:java.lang.Process(java.lang.String)").callIn
+        cpg
+          .method("java.lang.Runtime.exec:java.lang.Process(java.lang.String)")
+          .callIn
       },
     )
 }
