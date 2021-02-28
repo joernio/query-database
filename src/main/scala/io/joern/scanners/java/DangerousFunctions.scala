@@ -21,7 +21,7 @@ object DangerousFunctions extends QueryBundle {
         |""".stripMargin,
       8, { cpg =>
         cpg
-          .method("java.lang.Runtime.exec:java.lang.Process(java.lang.String)")
+          .method("java.lang.Runtime.exec")
           .callIn
       },
     )
