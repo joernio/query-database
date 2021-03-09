@@ -17,7 +17,7 @@ object Metrics extends QueryBundle {
       1.0, { cpg =>
         cpg.method.internal.filter(_.parameter.size > n)
       },
-      List()
+      List(QueryTags.metrics)
     )
 
   @q
@@ -30,7 +30,7 @@ object Metrics extends QueryBundle {
       1.0, { cpg =>
         cpg.method.internal.filter(_.controlStructure.size > n)
       },
-      List()
+      List(QueryTags.metrics)
     )
 
   @q
@@ -43,7 +43,7 @@ object Metrics extends QueryBundle {
       1.0, { cpg =>
         cpg.method.internal.filter(_.numberOfLines > n)
       },
-      List()
+      List(QueryTags.metrics)
     )
 
   @q
@@ -56,7 +56,7 @@ object Metrics extends QueryBundle {
       1.0, { cpg =>
         cpg.method.internal.filter(_.ast.isReturn.l.size > 1)
       },
-      List()
+      List(QueryTags.metrics)
     )
 
   @q
@@ -73,7 +73,7 @@ object Metrics extends QueryBundle {
               .parserTypeName("(For|Do|While).*")
               .size > n)
       },
-      List()
+      List(QueryTags.metrics)
     )
 
   @q
@@ -86,7 +86,7 @@ object Metrics extends QueryBundle {
       1.0, { cpg =>
         cpg.method.internal.filter(_.depth(_.isControlStructure) > n)
       },
-      List()
+      List(QueryTags.metrics)
     )
 
 }

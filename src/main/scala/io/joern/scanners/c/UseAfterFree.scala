@@ -1,6 +1,6 @@
 package io.joern.scanners.c
 
-import io.joern.scanners.Crew
+import io.joern.scanners.{Crew, QueryTags}
 import io.shiftleft.codepropertygraph.generated.Operators
 import io.shiftleft.codepropertygraph.generated.nodes._
 import io.shiftleft.console._
@@ -8,7 +8,6 @@ import io.shiftleft.semanticcpg.language._
 import io.shiftleft.dataflowengineoss.language._
 import io.shiftleft.dataflowengineoss.queryengine.EngineContext
 import io.shiftleft.macros.QueryMacros._
-import overflowdb.traversal.Traversal
 
 object UseAfterFree extends QueryBundle {
 
@@ -52,7 +51,7 @@ object UseAfterFree extends QueryBundle {
           arg.method.methodReturn.reachableBy(arg).nonEmpty
         }
       },
-      List()
+      List(QueryTags.uaf)
     )
 
   @q
@@ -112,7 +111,7 @@ object UseAfterFree extends QueryBundle {
           }
           .flatMap(_._1)
       },
-      List()
+      List(QueryTags.uaf)
     )
 
   @q
@@ -148,7 +147,7 @@ object UseAfterFree extends QueryBundle {
               .codeExact(freedIdentifierCode)
           })
       },
-      List()
+      List(QueryTags.uaf)
     )
 
 }

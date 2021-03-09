@@ -28,7 +28,7 @@ object CredentialDrop extends QueryBundle {
           .callIn
           .whereNot(_.dominatedBy.isCall.name("set(res|re|e|)?gid"))
       },
-      List()
+      List(QueryTags.setxid)
     )
 
   @q
@@ -48,7 +48,7 @@ object CredentialDrop extends QueryBundle {
           .callIn
           .whereNot(_.dominatedBy.isCall.name("setgroups"))
       },
-      List()
+      List(QueryTags.setxid)
     )
 
 }
