@@ -52,6 +52,7 @@ object UseAfterFree extends QueryBundle {
           arg.method.methodReturn.reachableBy(arg).nonEmpty
         }
       },
+      List()
     )
 
   @q
@@ -111,6 +112,7 @@ object UseAfterFree extends QueryBundle {
           }
           .flatMap(_._1)
       },
+      List()
     )
 
   @q
@@ -146,6 +148,7 @@ object UseAfterFree extends QueryBundle {
               .codeExact(freedIdentifierCode)
           })
       },
+      List()
     )
 
 }

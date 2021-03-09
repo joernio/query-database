@@ -23,6 +23,7 @@ object DangerousFunctions extends QueryBundle {
       8, { cpg =>
         cpg.method("gets").callIn
       },
+      List()
     )
 
   @q
@@ -46,6 +47,7 @@ object DangerousFunctions extends QueryBundle {
             .callIn
             .whereNot(_.argument.order(2).isLiteral)
       },
+      List()
     )
 
   @q
@@ -61,6 +63,7 @@ object DangerousFunctions extends QueryBundle {
       4, { cpg =>
         cpg.method("scanf").callIn
       },
+      List()
     )
 
   @q
@@ -77,6 +80,7 @@ object DangerousFunctions extends QueryBundle {
       4, { cpg =>
         cpg.method("(strcat|strncat)").callIn
       },
+      List()
     )
 
   @q
@@ -95,6 +99,7 @@ object DangerousFunctions extends QueryBundle {
       4, { cpg =>
         cpg.method("(strcpy|strncpy)").callIn
       },
+      List()
     )
 
   @q
@@ -112,6 +117,7 @@ object DangerousFunctions extends QueryBundle {
       4, { cpg =>
         cpg.method("strtok").callIn
       },
+      List()
     )
 
   @q
@@ -127,6 +133,7 @@ object DangerousFunctions extends QueryBundle {
       4, { cpg =>
         cpg.method("getwd").callIn
       },
+      List()
     )
 
 }
