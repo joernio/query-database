@@ -38,6 +38,7 @@ object RetvalChecks extends QueryBundle {
           (targets & checkedVars).nonEmpty
         }
       },
+      List()
     )
 
 }
