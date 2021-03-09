@@ -46,7 +46,7 @@ object HeapBasedOverflow extends QueryBundle {
               .hasNext
           }
       },
-      List()
+      List(QueryTags.integers)
     )
 
 }
