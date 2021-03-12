@@ -24,6 +24,6 @@ object DangerousFunctions extends QueryBundle {
           .method("java.lang.Runtime.exec")
           .callIn
       },
-      List()
+      List(QueryTags.badfn)
     )
 }
