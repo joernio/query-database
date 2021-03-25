@@ -11,7 +11,7 @@ object DangerousFunctions extends QueryBundle {
 
   @q
   def getsUsed(): Query =
-    queryInit(
+    Query.make(
       "call-to-gets",
       Crew.suchakra,
       "Dangerous function gets() used",
@@ -28,7 +28,7 @@ object DangerousFunctions extends QueryBundle {
 
   @q
   def argvUsedInPrintf(): Query =
-    queryInit(
+    Query.make(
       "format-controlled-printf",
       Crew.suchakra,
       "Non-constant format string passed to printf/sprintf/vsprintf",
@@ -52,7 +52,7 @@ object DangerousFunctions extends QueryBundle {
 
   @q
   def scanfUsed(): Query =
-    queryInit(
+    Query.make(
       "call-to-scanf",
       Crew.suchakra,
       "Insecure function scanf() used",
@@ -68,7 +68,7 @@ object DangerousFunctions extends QueryBundle {
 
   @q
   def strcatUsed(): Query =
-    queryInit(
+    Query.make(
       "call-to-strcat",
       Crew.suchakra,
       "Dangerous functions `strcat` or `strncat` used",
@@ -85,7 +85,7 @@ object DangerousFunctions extends QueryBundle {
 
   @q
   def strcpyUsed(): Query =
-    queryInit(
+    Query.make(
       "call-to-strcpy",
       Crew.suchakra,
       "Dangerous functions `strcpy` or `strncpy` used",
@@ -104,7 +104,7 @@ object DangerousFunctions extends QueryBundle {
 
   @q
   def strtokUsed(): Query =
-    queryInit(
+    Query.make(
       "call-to-strtok",
       Crew.suchakra,
       "Dangerous function strtok() used",
@@ -122,7 +122,7 @@ object DangerousFunctions extends QueryBundle {
 
   @q
   def getwdUsed(): Query =
-    queryInit(
+    Query.make(
       "call-to-getwd",
       Crew.claudiu,
       "Dangerous function getwd() used",

@@ -13,7 +13,7 @@ object NullTermination extends QueryBundle {
 
   @q
   def strncpyNoNullTerm()(implicit engineContext: EngineContext): Query =
-    queryInit(
+    Query.make(
       "strncpy-no-null-term",
       Crew.fabs,
       "strncpy is used and no null termination is nearby",

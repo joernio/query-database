@@ -9,7 +9,7 @@ object RetvalChecks extends QueryBundle {
 
   @q
   def uncheckedReadRecvMalloc(): Query =
-    queryInit(
+    Query.make(
       "unchecked-read-recv-malloc",
       Crew.fabs,
       "Unchecked read/recv/malloc",

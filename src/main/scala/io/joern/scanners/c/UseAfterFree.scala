@@ -15,7 +15,7 @@ object UseAfterFree extends QueryBundle {
 
   @q
   def freeFieldNoReassign()(implicit context: EngineContext): Query =
-    queryInit(
+    Query.make(
       "free-field-no-reassign",
       Crew.fabs,
       "A field of a parameter is free'd and not reassigned on all paths",
@@ -56,7 +56,7 @@ object UseAfterFree extends QueryBundle {
 
   @q
   def freeReturnedValue()(implicit context: EngineContext): Query =
-    queryInit(
+    Query.make(
       "free-returned-value",
       Crew.malte,
       "A value that is returned through a parameter is free'd in a path",
@@ -116,7 +116,7 @@ object UseAfterFree extends QueryBundle {
 
   @q
   def freePostDominatesUsage()(implicit context: EngineContext): Query =
-    queryInit(
+    Query.make(
       "free-follows-value-reuse",
       Crew.malte,
       "A value that is free'd is reused without reassignment.",

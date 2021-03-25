@@ -16,24 +16,24 @@ object IntegerTruncations extends QueryBundle {
     * */
   @q
   def strlenAssignmentTruncations(): Query =
-    queryInit(
-      "strlen-truncation",
-      Crew.fabs,
-      "Truncation in assignment involving `strlen` call",
-      """
+    Query.make(
+      name = "strlen-truncation",
+      author = Crew.fabs,
+      title = "Truncation in assignment involving `strlen` call",
+      description = """
         |The return value of `strlen` is stored in a variable that is known
         |to be of type `int` as opposed to `size_t`. `int` is only 32 bit
         |wide on many 64 bit platforms, and thus, this may result in a
         |truncation.
         |""".stripMargin,
-      2, { cpg =>
+      score = 2, withStrRep({ cpg =>
         cpg
           .method("strlen")
           .callIn
           .inAssignment
           .target
           .evalType("(g?)int")
-      },
-      List(QueryTags.integers)
+      }),
+      tags = List(QueryTags.integers)
     )
 }

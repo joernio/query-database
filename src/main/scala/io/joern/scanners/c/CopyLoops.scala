@@ -9,7 +9,7 @@ object CopyLoops extends QueryBundle {
 
   @q
   def isCopyLoop(): Query =
-    queryInit(
+    Query.make(
       "copy-loop",
       Crew.fabs,
       "Copy loop detected",

@@ -11,7 +11,7 @@ object CredentialDrop extends QueryBundle {
 
   @q
   def userCredDrop(): Query =
-    queryInit(
+    Query.make(
       "setuid-without-setgid",
       Crew.malte,
       "Process user ID is changed without changing groups first",
@@ -33,7 +33,7 @@ object CredentialDrop extends QueryBundle {
 
   @q
   def groupCredDrop(): Query =
-    queryInit(
+    Query.make(
       "setgid-without-setgroups",
       Crew.malte,
       "Process group membership is changed without setting ancillary groups first",

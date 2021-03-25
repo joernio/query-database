@@ -11,7 +11,7 @@ object DangerousFunctions extends QueryBundle {
 
   @q
   def execUsed(): Query =
-    queryInit(
+    Query.make(
       "call-to-exec",
       Crew.niko,
       "Dangerous function 'java.lang.Runtime.exec:java.lang.Process(java.lang.String)' used",

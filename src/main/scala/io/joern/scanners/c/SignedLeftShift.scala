@@ -10,7 +10,7 @@ object SignedLeftShift extends QueryBundle {
 
   @q
   def signedLeftShift(): Query =
-    queryInit(
+    Query.make(
       "signed-left-shift",
       Crew.malte,
       "Signed Shift May Cause Undefined Behavior",

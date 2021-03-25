@@ -9,7 +9,7 @@ object Metrics extends QueryBundle {
 
   @q
   def tooManyParameters(n: Int = 4): Query =
-    queryInit(
+    Query.make(
       "too-many-params",
       Crew.fabs,
       s"Number of parameters larger than $n",
@@ -22,7 +22,7 @@ object Metrics extends QueryBundle {
 
   @q
   def tooHighComplexity(n: Int = 4): Query =
-    queryInit(
+    Query.make(
       "too-high-complexity",
       Crew.fabs,
       s"Cyclomatic complexity higher than $n",
@@ -35,7 +35,7 @@ object Metrics extends QueryBundle {
 
   @q
   def tooLong(n: Int = 1000): Query =
-    queryInit(
+    Query.make(
       "too-long",
       Crew.fabs,
       s"More than $n lines",
@@ -48,7 +48,7 @@ object Metrics extends QueryBundle {
 
   @q
   def multipleReturns(): Query =
-    queryInit(
+    Query.make(
       "multiple-returns",
       Crew.fabs,
       s"Multiple returns",
@@ -61,7 +61,7 @@ object Metrics extends QueryBundle {
 
   @q
   def tooManyLoops(n: Int = 4): Query =
-    queryInit(
+    Query.make(
       "too-many-loops",
       Crew.fabs,
       s"More than $n loops",
@@ -78,7 +78,7 @@ object Metrics extends QueryBundle {
 
   @q
   def tooNested(n: Int = 3): Query =
-    queryInit(
+    Query.make(
       "too-nested",
       Crew.fabs,
       s"Nesting level higher than $n",
