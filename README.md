@@ -70,7 +70,8 @@ object Metrics extends QueryBundle {
       author = Crew.fabs,
       title = s"Number of parameters larger than $n",
       description = s"This query identifies functions with more than $n formal parameters",
-      score = 1.0, withStrRep({ cpg =>
+      score = 1.0,
+      withStrRep({ cpg =>
         cpg.method.internal.filter(_.parameter.size > n)
       }),
       tags = List(QueryTags.metrics)
@@ -83,7 +84,8 @@ object Metrics extends QueryBundle {
       author = Crew.fabs,
       title = s"Cyclomatic complexity higher than $n",
       description = s"This query identifies functions with a cyclomatic complexity higher than $n",
-      score = 1.0, withStrRep({ cpg =>
+      score = 1.0,
+      withStrRep({ cpg =>
         cpg.method.internal.filter(_.controlStructure.size > n)
       }),
       tags = List(QueryTags.metrics)

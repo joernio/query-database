@@ -13,12 +13,14 @@ object RetvalChecks extends QueryBundle {
       name = "unchecked-read-recv-malloc",
       author = Crew.fabs,
       title = "Unchecked read/recv/malloc",
-      description = """
+      description =
+        """
       |The return value of a read/recv/malloc call is not checked directly and
       |the variable it has been assigned to (if any) does not
       |occur in any check within the caller.
       |""".stripMargin,
-      score = 3.0, withStrRep({ cpg =>
+      score = 3.0,
+      withStrRep({ cpg =>
         implicit val noResolve: NoResolve.type = NoResolve
         val callsNotDirectlyChecked = cpg
           .method("(read|recv|malloc)")

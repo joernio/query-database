@@ -19,7 +19,8 @@ object UseAfterFree extends QueryBundle {
       name = "free-field-no-reassign",
       author = Crew.fabs,
       title = "A field of a parameter is free'd and not reassigned on all paths",
-      description = """
+      description =
+        """
         | The function is able to modify a field of a structure passed in by
         | the caller. It frees this field and does not guarantee that on
         | all paths to the exit, the field is reassigned. If any
@@ -28,7 +29,8 @@ object UseAfterFree extends QueryBundle {
         | or clear the entire structure, as in that case, it is unlikely that the
         | passed in structure will be used again.
         |""".stripMargin,
-      score = 5.0, withStrRep({ cpg =>
+      score = 5.0,
+      withStrRep({ cpg =>
         val freeOfStructField = cpg
           .method("free")
           .callIn
@@ -60,7 +62,8 @@ object UseAfterFree extends QueryBundle {
       name = "free-returned-value",
       author = Crew.malte,
       title = "A value that is returned through a parameter is free'd in a path",
-      description = """
+      description =
+        """
         |The function sets a field of a function parameter to a value of a local
         |variable.
         |This variable is then freed in some paths. Unless the value set in the
@@ -69,7 +72,8 @@ object UseAfterFree extends QueryBundle {
         |
         |Finds bugs like CVE-2019-18902.
         |""".stripMargin,
-      score = 5.0, withStrRep({ cpg =>
+      score = 5.0,
+      withStrRep({ cpg =>
         def outParams =
           cpg.parameter
             .typeFullName(".+\\*")
@@ -120,13 +124,15 @@ object UseAfterFree extends QueryBundle {
       name = "free-follows-value-reuse",
       author = Crew.malte,
       title = "A value that is free'd is reused without reassignment.",
-      description = """
+      description =
+        """
         |A value is used after being free'd in a path that leads to it
         |without reassignment.
         |
         |Modeled after CVE-2019-18903.
         |""".stripMargin,
-      score = 5.0, withStrRep({ cpg =>
+      score = 5.0,
+      withStrRep({ cpg =>
         cpg.method
           .name("(.*_)?free")
           .filter(_.parameter.size == 1)

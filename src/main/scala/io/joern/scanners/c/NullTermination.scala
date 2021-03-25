@@ -25,7 +25,8 @@ object NullTermination extends QueryBundle {
         | buffer size is at least 1 larger than the size passed
         | to `strncpy`.
         |""".stripMargin,
-      score = 4, withStrRep({ cpg =>
+      score = 4,
+      withStrRep({ cpg =>
         val allocations = cpg.method(".*malloc$").callIn.argument(1).l
         cpg
           .method("strncpy")
