@@ -10,83 +10,83 @@ object Metrics extends QueryBundle {
   @q
   def tooManyParameters(n: Int = 4): Query =
     Query.make(
-      "too-many-params",
-      Crew.fabs,
-      s"Number of parameters larger than $n",
-      s"This query identifies functions with more than $n formal parameters",
-      1.0, { cpg =>
+      name = "too-many-params",
+      author = Crew.fabs,
+      title = s"Number of parameters larger than $n",
+      description = s"This query identifies functions with more than $n formal parameters",
+      score = 1.0, withStrRep({ cpg =>
         cpg.method.internal.filter(_.parameter.size > n)
-      },
-      List(QueryTags.metrics)
+      }),
+      tags = List(QueryTags.metrics)
     )
 
   @q
   def tooHighComplexity(n: Int = 4): Query =
     Query.make(
-      "too-high-complexity",
-      Crew.fabs,
-      s"Cyclomatic complexity higher than $n",
-      s"This query identifies functions with a cyclomatic complexity higher than $n",
-      1.0, { cpg =>
+      name = "too-high-complexity",
+      author = Crew.fabs,
+      title = s"Cyclomatic complexity higher than $n",
+      description = s"This query identifies functions with a cyclomatic complexity higher than $n",
+      score = 1.0, withStrRep({ cpg =>
         cpg.method.internal.filter(_.controlStructure.size > n)
-      },
-      List(QueryTags.metrics)
+      }),
+      tags = List(QueryTags.metrics)
     )
 
   @q
   def tooLong(n: Int = 1000): Query =
     Query.make(
-      "too-long",
-      Crew.fabs,
-      s"More than $n lines",
-      s"This query identifies functions that are more than $n lines long",
-      1.0, { cpg =>
+      name = "too-long",
+      author = Crew.fabs,
+      title = s"More than $n lines",
+      description = s"This query identifies functions that are more than $n lines long",
+      score = 1.0, withStrRep({ cpg =>
         cpg.method.internal.filter(_.numberOfLines > n)
-      },
-      List(QueryTags.metrics)
+      }),
+      tags = List(QueryTags.metrics)
     )
 
   @q
   def multipleReturns(): Query =
     Query.make(
-      "multiple-returns",
-      Crew.fabs,
-      s"Multiple returns",
-      "This query identifies functions with more than one return",
-      1.0, { cpg =>
+      name = "multiple-returns",
+      author = Crew.fabs,
+      title = s"Multiple returns",
+      description = "This query identifies functions with more than one return",
+      score = 1.0, withStrRep({ cpg =>
         cpg.method.internal.filter(_.ast.isReturn.l.size > 1)
-      },
-      List(QueryTags.metrics)
+      }),
+      tags = List(QueryTags.metrics)
     )
 
   @q
   def tooManyLoops(n: Int = 4): Query =
     Query.make(
-      "too-many-loops",
-      Crew.fabs,
-      s"More than $n loops",
-      s"This query identifies functions with more than $n loops",
-      1.0, { cpg =>
+      name = "too-many-loops",
+      author = Crew.fabs,
+      title = s"More than $n loops",
+      description = s"This query identifies functions with more than $n loops",
+      score = 1.0, withStrRep({ cpg =>
         cpg.method.internal
           .filter(
             _.ast.isControlStructure
               .parserTypeName("(For|Do|While).*")
               .size > n)
-      },
-      List(QueryTags.metrics)
+      }),
+      tags = List(QueryTags.metrics)
     )
 
   @q
   def tooNested(n: Int = 3): Query =
     Query.make(
-      "too-nested",
-      Crew.fabs,
-      s"Nesting level higher than $n",
-      s"This query identifies functions with a nesting level higher than $n",
-      1.0, { cpg =>
+      name = "too-nested",
+      author = Crew.fabs,
+      title = s"Nesting level higher than $n",
+      description = s"This query identifies functions with a nesting level higher than $n",
+      score = 1.0, withStrRep({ cpg =>
         cpg.method.internal.filter(_.depth(_.isControlStructure) > n)
-      },
-      List(QueryTags.metrics)
+      }),
+      tags = List(QueryTags.metrics)
     )
 
 }

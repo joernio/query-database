@@ -21,11 +21,11 @@ object HeapBasedOverflow extends QueryBundle {
   @q
   def mallocMemcpyIntOverflow()(implicit context: EngineContext): Query =
     Query.make(
-      "malloc-memcpy-int-overflow",
-      Crew.fabs,
-      "Dangerous copy-operation into heap-allocated buffer",
-      "-",
-      4, { cpg =>
+      name = "malloc-memcpy-int-overflow",
+      author = Crew.fabs,
+      title = "Dangerous copy-operation into heap-allocated buffer",
+      description = "-",
+      score = 4, withStrRep({ cpg =>
         val src = cpg
           .method(".*malloc$")
           .callIn
@@ -45,8 +45,8 @@ object HeapBasedOverflow extends QueryBundle {
               .whereNot(_.argument(1).codeExact(memcpyCall.argument(3).code))
               .hasNext
           }
-      },
-      List(QueryTags.integers)
+      }),
+      tags = List(QueryTags.integers)
     )
 
 }

@@ -16,10 +16,10 @@ object UseAfterFree extends QueryBundle {
   @q
   def freeFieldNoReassign()(implicit context: EngineContext): Query =
     Query.make(
-      "free-field-no-reassign",
-      Crew.fabs,
-      "A field of a parameter is free'd and not reassigned on all paths",
-      """
+      name = "free-field-no-reassign",
+      author = Crew.fabs,
+      title = "A field of a parameter is free'd and not reassigned on all paths",
+      description = """
         | The function is able to modify a field of a structure passed in by
         | the caller. It frees this field and does not guarantee that on
         | all paths to the exit, the field is reassigned. If any
@@ -28,7 +28,7 @@ object UseAfterFree extends QueryBundle {
         | or clear the entire structure, as in that case, it is unlikely that the
         | passed in structure will be used again.
         |""".stripMargin,
-      5.0, { cpg =>
+      score = 5.0, withStrRep({ cpg =>
         val freeOfStructField = cpg
           .method("free")
           .callIn
@@ -50,17 +50,17 @@ object UseAfterFree extends QueryBundle {
         freeOfStructField.argument(1).filter { arg =>
           arg.method.methodReturn.reachableBy(arg).nonEmpty
         }
-      },
-      List(QueryTags.uaf)
+      }),
+      tags = List(QueryTags.uaf)
     )
 
   @q
   def freeReturnedValue()(implicit context: EngineContext): Query =
     Query.make(
-      "free-returned-value",
-      Crew.malte,
-      "A value that is returned through a parameter is free'd in a path",
-      """
+      name = "free-returned-value",
+      author = Crew.malte,
+      title = "A value that is returned through a parameter is free'd in a path",
+      description = """
         |The function sets a field of a function parameter to a value of a local
         |variable.
         |This variable is then freed in some paths. Unless the value set in the
@@ -69,7 +69,7 @@ object UseAfterFree extends QueryBundle {
         |
         |Finds bugs like CVE-2019-18902.
         |""".stripMargin,
-      5.0, { cpg =>
+      score = 5.0, withStrRep({ cpg =>
         def outParams =
           cpg.parameter
             .typeFullName(".+\\*")
@@ -110,23 +110,23 @@ object UseAfterFree extends QueryBundle {
             case (id, freeCall) => freeCall.dominatedBy.exists(_ == id)
           }
           .flatMap(_._1)
-      },
-      List(QueryTags.uaf)
+      }),
+      tags = List(QueryTags.uaf)
     )
 
   @q
   def freePostDominatesUsage()(implicit context: EngineContext): Query =
     Query.make(
-      "free-follows-value-reuse",
-      Crew.malte,
-      "A value that is free'd is reused without reassignment.",
-      """
+      name = "free-follows-value-reuse",
+      author = Crew.malte,
+      title = "A value that is free'd is reused without reassignment.",
+      description = """
         |A value is used after being free'd in a path that leads to it
         |without reassignment.
         |
         |Modeled after CVE-2019-18903.
         |""".stripMargin,
-      5.0, { cpg =>
+      score = 5.0, withStrRep({ cpg =>
         cpg.method
           .name("(.*_)?free")
           .filter(_.parameter.size == 1)
@@ -146,8 +146,8 @@ object UseAfterFree extends QueryBundle {
               .isIdentifier
               .codeExact(freedIdentifierCode)
           })
-      },
-      List(QueryTags.uaf)
+      }),
+      tags = List(QueryTags.uaf)
     )
 
 }

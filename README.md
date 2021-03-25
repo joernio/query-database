@@ -64,25 +64,30 @@ as an example:
 object Metrics extends QueryBundle {
 
   @q
-  def tooManyParameters(n: Int = 4): Query = Query(
-    name = "too-many-parameters",
-    title = s"Number of parameters larger than $n",
-    description =
-      s"This query identifies functions with more than $n formal parameters",
-    score = 2.0, traversal = { cpg =>
-      cpg.method.filter(_.parameter.size > n)
-    }
-  )
+  def tooManyParameters(n: Int = 4): Query =
+    Query.make(
+      name = "too-many-params",
+      author = Crew.fabs,
+      title = s"Number of parameters larger than $n",
+      description = s"This query identifies functions with more than $n formal parameters",
+      score = 1.0, withStrRep({ cpg =>
+        cpg.method.internal.filter(_.parameter.size > n)
+      }),
+      tags = List(QueryTags.metrics)
+    )
 
   @q
-  def tooHighComplexity(n: Int = 4): Query = Query(
-    title = s"Cyclomatic complexity higher than $n",
-    description =
-      s"This query identifies functions with a cyclomatic complexity higher than $n",
-    score = 2.0, traversal = { cpg =>
-      cpg.method.filter(_.controlStructure.size > n)
-    }
-  )
+  def tooHighComplexity(n: Int = 4): Query =
+    Query.make(
+      name = "too-high-complexity",
+      author = Crew.fabs,
+      title = s"Cyclomatic complexity higher than $n",
+      description = s"This query identifies functions with a cyclomatic complexity higher than $n",
+      score = 1.0, withStrRep({ cpg =>
+        cpg.method.internal.filter(_.controlStructure.size > n)
+      }),
+      tags = List(QueryTags.metrics)
+    )
   ...
 }
 ```

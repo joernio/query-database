@@ -10,15 +10,15 @@ object RetvalChecks extends QueryBundle {
   @q
   def uncheckedReadRecvMalloc(): Query =
     Query.make(
-      "unchecked-read-recv-malloc",
-      Crew.fabs,
-      "Unchecked read/recv/malloc",
-      """
+      name = "unchecked-read-recv-malloc",
+      author = Crew.fabs,
+      title = "Unchecked read/recv/malloc",
+      description = """
       |The return value of a read/recv/malloc call is not checked directly and
       |the variable it has been assigned to (if any) does not
       |occur in any check within the caller.
       |""".stripMargin,
-      3.0, { cpg =>
+      score = 3.0, withStrRep({ cpg =>
         implicit val noResolve: NoResolve.type = NoResolve
         val callsNotDirectlyChecked = cpg
           .method("(read|recv|malloc)")
@@ -37,8 +37,7 @@ object RetvalChecks extends QueryBundle {
           val targets = call.inAssignment.target.code.toSet
           (targets & checkedVars).nonEmpty
         }
-      },
-      List()
+      }),
     )
 
 }

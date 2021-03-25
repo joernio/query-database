@@ -12,18 +12,18 @@ object DangerousFunctions extends QueryBundle {
   @q
   def execUsed(): Query =
     Query.make(
-      "call-to-exec",
-      Crew.niko,
-      "Dangerous function 'java.lang.Runtime.exec:java.lang.Process(java.lang.String)' used",
-      """
+      name = "call-to-exec",
+      author = Crew.niko,
+      title = "Dangerous function 'java.lang.Runtime.exec:java.lang.Process(java.lang.String)' used",
+      description = """
         | A call to the function `java.lang.Runtime.exec:java.lang.Process(java.lang.String)` 
         | could result in a potential remote code execution.
         |""".stripMargin,
-      8, { cpg =>
+      score = 8, withStrRep({ cpg =>
         cpg
           .method("java.lang.Runtime.exec")
           .callIn
-      },
-      List(QueryTags.badfn)
+      }),
+      tags = List(QueryTags.badfn)
     )
 }
