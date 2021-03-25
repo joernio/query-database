@@ -9,17 +9,19 @@ object CopyLoops extends QueryBundle {
 
   @q
   def isCopyLoop(): Query =
-    queryInit(
-      "copy-loop",
-      Crew.fabs,
-      "Copy loop detected",
-      """
+    Query.make(
+      name = "copy-loop",
+      author = Crew.fabs,
+      title = "Copy loop detected",
+      description =
+        """
         |For (buf, indices) pairs, determine those inside control structures (for, while, if ...)
         |where any of the calls made outside of the body (block) are Inc operations. Determine
         |the first argument of that Inc operation and check if they are used as indices for
         |the write operation into the buffer.
         |""".stripMargin,
-      2, { cpg =>
+      score = 2,
+      withStrRep({ cpg =>
         cpg.assignment.target.isArrayAccess
           .map { access =>
             (access.array, access.subscripts.code.toSet)
@@ -35,8 +37,7 @@ object CopyLoops extends QueryBundle {
               (incIdentifiers & subscripts).nonEmpty
           }
           .map(_._1)
-      },
-      List()
+      }),
     )
 
 }
