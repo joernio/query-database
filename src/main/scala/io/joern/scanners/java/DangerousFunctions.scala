@@ -23,9 +23,11 @@ object DangerousFunctions extends QueryBundle {
         |""".stripMargin,
       score = 8,
       withStrRep({ cpg =>
+        // format: off
         cpg.
           method("java.lang.Runtime.exec").
           callIn
+        // format: on
       }),
       tags = List(QueryTags.badfn)
     )

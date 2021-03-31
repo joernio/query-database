@@ -23,7 +23,9 @@ object DangerousFunctions extends QueryBundle {
         |""".stripMargin,
       score = 8,
       withStrRep({ cpg =>
+        // format: off
         cpg.method("gets").callIn
+        // format: on
       }),
       tags = List(QueryTags.badfn)
     )
@@ -42,14 +44,16 @@ object DangerousFunctions extends QueryBundle {
         |""".stripMargin,
       score = 4,
       withStrRep({ cpg =>
-        cpg
-          .method("printf")
-          .callIn
-          .whereNot(_.argument.order(1).isLiteral) ++
-          cpg
-            .method("(sprintf|vsprintf)")
-            .callIn
-            .whereNot(_.argument.order(2).isLiteral)
+        // format: off
+        cpg.
+          method("printf").
+          callIn.
+          whereNot(_.argument.order(1).isLiteral) ++
+          cpg.
+            method("(sprintf|vsprintf)").
+            callIn.
+            whereNot(_.argument.order(2).isLiteral)
+        // format: on
       }),
       tags = List(QueryTags.badfn)
     )
@@ -67,7 +71,9 @@ object DangerousFunctions extends QueryBundle {
         |""".stripMargin,
       score = 4,
       withStrRep({ cpg =>
+        // format: off
         cpg.method("scanf").callIn
+        // format: on
       }),
       tags = List(QueryTags.badfn)
     )
@@ -86,7 +92,9 @@ object DangerousFunctions extends QueryBundle {
         |""".stripMargin,
       score = 4,
       withStrRep({ cpg =>
+        // format: off
         cpg.method("(strcat|strncat)").callIn
+        // format: on
       }),
       tags = List(QueryTags.badfn)
     )
@@ -107,7 +115,9 @@ object DangerousFunctions extends QueryBundle {
         |""".stripMargin,
       score = 4,
       withStrRep({ cpg =>
+        // format: off
         cpg.method("(strcpy|strncpy)").callIn
+        // format: on
       }),
       tags = List(QueryTags.badfn)
     )
@@ -127,7 +137,9 @@ object DangerousFunctions extends QueryBundle {
         |""".stripMargin,
       score = 4,
       withStrRep({ cpg =>
+        // format: off
         cpg.method("strtok").callIn
+        // format: on
       }),
       tags = List(QueryTags.badfn)
     )
@@ -145,7 +157,9 @@ object DangerousFunctions extends QueryBundle {
         |""".stripMargin,
       score = 4,
       withStrRep({ cpg =>
+        // format: off
         cpg.method("getwd").callIn
+        // format: on
       }),
       tags = List(QueryTags.badfn)
     )
