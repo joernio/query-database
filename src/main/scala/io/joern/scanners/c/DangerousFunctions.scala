@@ -45,14 +45,9 @@ object DangerousFunctions extends QueryBundle {
       score = 4,
       withStrRep({ cpg =>
         // format: off
-        cpg.
-          method("printf").
-          callIn.
-          whereNot(_.argument.order(1).isLiteral) ++
-          cpg.
-            method("(sprintf|vsprintf)").
-            callIn.
-            whereNot(_.argument.order(2).isLiteral)
+        val printfFns = cpg.method("printf").callIn.whereNot(_.argument.order(1).isLiteral)
+        val sprintsFns = cpg.method("(sprintf|vsprintf)").callIn.whereNot(_.argument.order(2).isLiteral)
+        (printfFns ++ sprintsFns)
         // format: on
       }),
       tags = List(QueryTags.badfn)
