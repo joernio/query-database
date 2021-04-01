@@ -22,21 +22,22 @@ object CopyLoops extends QueryBundle {
         |""".stripMargin,
       score = 2,
       withStrRep({ cpg =>
-        cpg.assignment.target.isArrayAccess
-          .map { access =>
+        // format: off
+        cpg.assignment.target.isArrayAccess.
+          map { access =>
             (access.array, access.subscripts.code.toSet)
-          }
-          .filter {
+          }.
+          filter {
             case (buf, subscripts) =>
-              val incIdentifiers = buf.inAst.isControlStructure.astChildren
-                .filterNot(_.isBlock)
-                .assignments
-                .target
-                .code
-                .toSet
+              val incIdentifiers = buf.inAst.isControlStructure.astChildren.
+                filterNot(_.isBlock).
+                assignments.
+                target.
+                code.
+                toSet
               (incIdentifiers & subscripts).nonEmpty
-          }
-          .map(_._1)
+          }.map(_._1)
+        // format: on
       }),
     )
 
