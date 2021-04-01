@@ -4,6 +4,7 @@ object QueryTags {
 
   val alloc = "alloc"
   val badfn = "badfn"
+  val badimpl = "badimpl"
   val setxid = "setxid"
   val metrics = "metrics"
   val uaf = "uaf"
