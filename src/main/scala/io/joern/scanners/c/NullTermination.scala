@@ -29,13 +29,13 @@ object NullTermination extends QueryBundle {
       withStrRep({ cpg =>
         // format: off
         val allocations = cpg.method(".*malloc$").callIn.argument(1).l
-        cpg
-          .method("strncpy")
-          .callIn
-          .map { c =>
+        cpg.
+          method("strncpy").
+          callIn.
+          map { c =>
             (c.method, c.argument(1), c.argument(3))
-          }
-          .filter {
+          }.
+          filter {
             case (method, dst, size) =>
               dst.reachableBy(allocations).codeExact(size.code).nonEmpty &&
                 method.assignments.
