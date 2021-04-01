@@ -7,6 +7,7 @@ object QueryTags {
   val setxid = "setxid"
   val metrics = "metrics"
   val uaf = "uaf"
+  val xss = "xss"
 
   val integers = "integers"
   val strings = "strings"
