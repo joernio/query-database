@@ -27,7 +27,7 @@ object CredentialDrop extends QueryBundle {
       withStrRep({ cpg =>
         // format: off
         cpg.
-          method("set(res|re|e|)uid").
+          method("(?i)set(res|re|e|)uid").
           callIn.
           whereNot(_.dominatedBy.isCall.name("set(res|re|e|)?gid"))
         // format: on
@@ -52,7 +52,7 @@ object CredentialDrop extends QueryBundle {
       withStrRep({ cpg =>
         // format: off
         cpg.
-          method("set(res|re|e|)gid").
+          method("(?i)set(res|re|e|)gid").
           callIn.
           whereNot(_.dominatedBy.isCall.name("setgroups"))
         // format: on
