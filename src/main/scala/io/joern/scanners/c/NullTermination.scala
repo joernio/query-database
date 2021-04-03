@@ -30,7 +30,7 @@ object NullTermination extends QueryBundle {
         // format: off
         val allocations = cpg.method(".*malloc$").callIn.argument(1).l
         cpg.
-          method("strncpy").
+          method("(?i)strncpy").
           callIn.
           map { c =>
             (c.method, c.argument(1), c.argument(3))
