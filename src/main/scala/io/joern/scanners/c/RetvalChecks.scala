@@ -24,7 +24,7 @@ object RetvalChecks extends QueryBundle {
         // format: off
         implicit val noResolve: NoResolve.type = NoResolve
         val callsNotDirectlyChecked = cpg.
-          method("(read|recv|malloc)").
+          method("(?i)(read|recv|malloc)").
           callIn.
           filterNot { y =>
             val code = y.code

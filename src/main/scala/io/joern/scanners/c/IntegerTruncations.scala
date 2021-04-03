@@ -31,7 +31,8 @@ object IntegerTruncations extends QueryBundle {
       withStrRep({ cpg =>
         // format: off
         cpg.
-          method("strlen").
+          method.
+          name("(?i)strlen").
           callIn.
           inAssignment.
           target.

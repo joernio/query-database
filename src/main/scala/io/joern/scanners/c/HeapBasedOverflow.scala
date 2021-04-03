@@ -34,7 +34,7 @@ object HeapBasedOverflow extends QueryBundle {
           where(_.argument(1).arithmetics).l
 
         cpg.
-          method("memcpy").
+          method("(?i)memcpy").
           callIn.l.
           filter { memcpyCall =>
             memcpyCall.
