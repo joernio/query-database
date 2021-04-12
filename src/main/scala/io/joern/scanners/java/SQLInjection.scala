@@ -33,10 +33,10 @@ object SQLInjection extends QueryBundle {
               "org.springframework.web.servlet.ModelAndView"))
             .parameter
 
-        def sinks = cpg.method.name("query").parameter.order(1)
+        def sink = cpg.method.name("query").parameter.order(1)
 
         // sinks where the first argument is reachable by a source
-        sinks.reachableBy(source).l
+        sink.reachableBy(source).l
       }),
       tags = List(QueryTags.sqli, QueryTags.sqlInjection)
     )
