@@ -35,7 +35,6 @@ object SQLInjection extends QueryBundle {
 
         def sink = cpg.method.name("query").parameter.order(1)
 
-        // sinks where the first argument is reachable by a source
         sink.reachableBy(source).l
       }),
       tags = List(QueryTags.sqlInjection)

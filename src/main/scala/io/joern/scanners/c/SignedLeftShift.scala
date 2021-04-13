@@ -24,7 +24,7 @@ object SignedLeftShift extends QueryBundle {
         cpg.call
           .nameExact(Operators.shiftLeft, Operators.assignmentShiftLeft)
           .where(_.argument(1).typ.fullNameExact("int", "long"))
-          .filterNot(_.argument.isLiteral.size == 2) // assume such constant values produces a correct result
+          .filterNot(_.argument.isLiteral.size == 2)
       }),
     )
 

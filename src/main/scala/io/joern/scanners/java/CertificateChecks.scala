@@ -54,10 +54,10 @@ object CertificateChecks extends QueryBundle {
           .cfgFirst
           .flatMap(skipPrologue)
           .filter {
-            case lit: nodes.Literal => // return true:
+            case lit: nodes.Literal =>
               lit.code == "1" && lit.cfgNext
                 .forall(_.isInstanceOf[nodes.Return])
-            case _: nodes.Return => true // void return
+            case _: nodes.Return => true
             case _               => false
           }
       }),
