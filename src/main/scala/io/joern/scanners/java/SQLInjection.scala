@@ -38,6 +38,6 @@ object SQLInjection extends QueryBundle {
         // sinks where the first argument is reachable by a source
         sink.reachableBy(source).l
       }),
-      tags = List(QueryTags.sqli, QueryTags.sqlInjection)
+      tags = List(QueryTags.sqlInjection)
     )
 }
