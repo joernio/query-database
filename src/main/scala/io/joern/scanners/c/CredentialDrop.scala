@@ -25,12 +25,10 @@ object CredentialDrop extends QueryBundle {
         |""".stripMargin,
       score = 2,
       withStrRep({ cpg =>
-        // format: off
-        cpg.
-          method("(?i)set(res|re|e|)uid").
-          callIn.
-          whereNot(_.dominatedBy.isCall.name("set(res|re|e|)?gid"))
-        // format: on
+        cpg
+          .method("(?i)set(res|re|e|)uid")
+          .callIn
+          .whereNot(_.dominatedBy.isCall.name("set(res|re|e|)?gid"))
       }),
       tags = List(QueryTags.setxid)
     )
@@ -50,12 +48,10 @@ object CredentialDrop extends QueryBundle {
         |""".stripMargin,
       score = 2,
       withStrRep({ cpg =>
-        // format: off
-        cpg.
-          method("(?i)set(res|re|e|)gid").
-          callIn.
-          whereNot(_.dominatedBy.isCall.name("setgroups"))
-        // format: on
+        cpg
+          .method("(?i)set(res|re|e|)gid")
+          .callIn
+          .whereNot(_.dominatedBy.isCall.name("setgroups"))
       }),
       tags = List(QueryTags.setxid)
     )

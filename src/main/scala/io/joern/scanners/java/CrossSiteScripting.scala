@@ -39,14 +39,12 @@ object CrossSiteScripting extends QueryBundle {
           )
 
         def sinks =
-          // format: off
           // write operations where 'this' (argument 0) is a responseWriter
-          cpg.call.
-            methodFullNameExact(
+          cpg.call
+            .methodFullNameExact(
               "java.io.PrintWriter.println:void(java.lang.String)"
-            ).
-            where(_.argument(0).reachableBy(responseWriter))
-          // format: on
+            )
+            .where(_.argument(0).reachableBy(responseWriter))
 
         // sinks where the first argument is reachable by a source
         sinks.where(_.argument(1).reachableBy(source))

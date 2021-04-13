@@ -31,28 +31,27 @@ object UseAfterFree extends QueryBundle {
         |""".stripMargin,
       score = 5.0,
       withStrRep({ cpg =>
-        // format: off
-        val freeOfStructField = cpg.
-          method("free").
-          callIn.
-          where(
-            _.argument(1).
-              isCallTo("<operator>.*[fF]ieldAccess.*").
-              filter(x =>
+        val freeOfStructField = cpg
+          .method("free")
+          .callIn
+          .where(
+            _.argument(1)
+              .isCallTo("<operator>.*[fF]ieldAccess.*")
+              .filter(x =>
                 x.method.parameter.name.toSet.contains(x.argument(1).code))
-          ).
-          whereNot(_.argument(1).isCall.argument(1).filter { struct =>
-            struct.method.ast.isCall.
-              name(".*free$", "memset", "bzero").
-              argument(1).
-              codeExact(struct.code).
-              nonEmpty
-          }).l
+          )
+          .whereNot(_.argument(1).isCall.argument(1).filter { struct =>
+            struct.method.ast.isCall
+              .name(".*free$", "memset", "bzero")
+              .argument(1)
+              .codeExact(struct.code)
+              .nonEmpty
+          })
+          .l
 
         freeOfStructField.argument(1).filter { arg =>
           arg.method.methodReturn.reachableBy(arg).nonEmpty
         }
-        // format: on
       }),
       tags = List(QueryTags.uaf)
     )
@@ -75,48 +74,45 @@ object UseAfterFree extends QueryBundle {
         |""".stripMargin,
       score = 5.0,
       withStrRep({ cpg =>
-        // format: off
         def outParams =
-          cpg.parameter.
-            typeFullName(".+\\*").
-            whereNot(
-              _.referencingIdentifiers.
-                argumentIndex(1).
-                inCall.
-                nameExact(Operators.assignment, Operators.addressOf))
+          cpg.parameter
+            .typeFullName(".+\\*")
+            .whereNot(
+              _.referencingIdentifiers
+                .argumentIndex(1)
+                .inCall
+                .nameExact(Operators.assignment, Operators.addressOf))
 
         def assignedValues =
-          outParams.referencingIdentifiers.
-            argumentIndex(1).
-            inCall.
-            nameExact(Operators.indirectFieldAccess,
-                      Operators.indirection,
-                      Operators.indirectIndexAccess).
-            argumentIndex(1).
-            inCall.
-            nameExact(Operators.assignment).
-            argument(2).
-            isIdentifier
+          outParams.referencingIdentifiers
+            .argumentIndex(1)
+            .inCall
+            .nameExact(Operators.indirectFieldAccess,
+                       Operators.indirection,
+                       Operators.indirectIndexAccess)
+            .argumentIndex(1)
+            .inCall
+            .nameExact(Operators.assignment)
+            .argument(2)
+            .isIdentifier
 
         def freeAssigned =
-          assignedValues.
-            map(
-              id =>
-                (id,
-                 id.refsTo.
-                   flatMap {
-                     case p: MethodParameterIn => p.referencingIdentifiers
-                     case v: Local             => v.referencingIdentifiers
-                   }.
-                   inCall.
-                   name("(.*_)?free")))
+          assignedValues.map(
+            id =>
+              (id,
+               id.refsTo
+                 .flatMap {
+                   case p: MethodParameterIn => p.referencingIdentifiers
+                   case v: Local             => v.referencingIdentifiers
+                 }
+                 .inCall
+                 .name("(.*_)?free")))
 
-        freeAssigned.
-          filter {
+        freeAssigned
+          .filter {
             case (id, freeCall) => freeCall.dominatedBy.exists(_ == id)
-          }.
-          flatMap(_._1)
-        // format: on
+          }
+          .flatMap(_._1)
       }),
       tags = List(QueryTags.uaf)
     )
@@ -136,27 +132,25 @@ object UseAfterFree extends QueryBundle {
         |""".stripMargin,
       score = 5.0,
       withStrRep({ cpg =>
-        // format: off
-        cpg.method.
-          name("(.*_)?free").
-          filter(_.parameter.size == 1).
-          callIn.
-          where(_.argument(1).isIdentifier).
-          flatMap(f => {
+        cpg.method
+          .name("(.*_)?free")
+          .filter(_.parameter.size == 1)
+          .callIn
+          .where(_.argument(1).isIdentifier)
+          .flatMap(f => {
             val freedIdentifierCode = f.argument(1).code
             val postDom = f.postDominatedBy.toSet
 
-            val assignedPostDom = postDom.isIdentifier.
-              where(_.inAssignment).
-              codeExact(freedIdentifierCode).
-              flatMap(id => id ++ id.postDominatedBy)
+            val assignedPostDom = postDom.isIdentifier
+              .where(_.inAssignment)
+              .codeExact(freedIdentifierCode)
+              .flatMap(id => id ++ id.postDominatedBy)
 
-            postDom.
-              removedAll(assignedPostDom).
-              isIdentifier.
-              codeExact(freedIdentifierCode)
+            postDom
+              .removedAll(assignedPostDom)
+              .isIdentifier
+              .codeExact(freedIdentifierCode)
           })
-        // format: on
       }),
       tags = List(QueryTags.uaf)
     )

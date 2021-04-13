@@ -29,15 +29,12 @@ object IntegerTruncations extends QueryBundle {
         |""".stripMargin,
       score = 2,
       withStrRep({ cpg =>
-        // format: off
-        cpg.
-          method.
-          name("(?i)strlen").
-          callIn.
-          inAssignment.
-          target.
-          evalType("(g?)int")
-        // format: on
+        cpg.method
+          .name("(?i)strlen")
+          .callIn
+          .inAssignment
+          .target
+          .evalType("(g?)int")
       }),
       tags = List(QueryTags.integers)
     )

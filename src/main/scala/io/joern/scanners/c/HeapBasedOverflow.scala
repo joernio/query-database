@@ -27,25 +27,17 @@ object HeapBasedOverflow extends QueryBundle {
       description = "-",
       score = 4,
       withStrRep({ cpg =>
-        // format: off
-        val src = cpg.
-          method(".*malloc$").
-          callIn.
-          where(_.argument(1).arithmetics).l
+        val src =
+          cpg.method(".*malloc$").callIn.where(_.argument(1).arithmetics).l
 
-        cpg.
-          method("(?i)memcpy").
-          callIn.l.
-          filter { memcpyCall =>
-            memcpyCall.
-              argument(1).
-              reachableBy(src).
-              where(
-                _.inAssignment.target.codeExact(memcpyCall.argument(1).code)).
-              whereNot(_.argument(1).codeExact(memcpyCall.argument(3).code)).
-              hasNext
-          }
-        // format: on
+        cpg.method("(?i)memcpy").callIn.l.filter { memcpyCall =>
+          memcpyCall
+            .argument(1)
+            .reachableBy(src)
+            .where(_.inAssignment.target.codeExact(memcpyCall.argument(1).code))
+            .whereNot(_.argument(1).codeExact(memcpyCall.argument(3).code))
+            .hasNext
+        }
       }),
       tags = List(QueryTags.integers)
     )
