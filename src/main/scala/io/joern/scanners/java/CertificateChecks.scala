@@ -48,20 +48,18 @@ object CertificateChecks extends QueryBundle {
         def skipPrologue(node: nodes.CfgNode): Traversal[nodes.CfgNode] =
           node.repeat(_.cfgNext)(_.until(_.filter(!isPrologue(_))))
 
-        // format: off
-        cpg.method.
-          nameExact(validators.keys.toSeq: _*).
-          signatureExact(validators.values.toSeq: _*).
-          cfgFirst.
-          flatMap(skipPrologue).
-          filter {
-            case lit: nodes.Literal => // return true:
+        cpg.method
+          .nameExact(validators.keys.toSeq: _*)
+          .signatureExact(validators.values.toSeq: _*)
+          .cfgFirst
+          .flatMap(skipPrologue)
+          .filter {
+            case lit: nodes.Literal =>
               lit.code == "1" && lit.cfgNext
                 .forall(_.isInstanceOf[nodes.Return])
-            case _: nodes.Return => true // void return
+            case _: nodes.Return => true
             case _               => false
           }
-        // format: on
       }),
       tags = List(QueryTags.badimpl)
     )

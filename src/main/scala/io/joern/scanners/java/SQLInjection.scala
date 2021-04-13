@@ -15,7 +15,7 @@ object SQLInjection extends QueryBundle {
   @q
   def sqlInjection()(implicit context: EngineContext): Query =
     Query.make(
-      name = "SQL injection",
+      name = "sql-injection",
       author = Crew.niko,
       title =
         "SQL injection: A parameter is used in an insecure database API call.",
@@ -35,7 +35,6 @@ object SQLInjection extends QueryBundle {
 
         def sink = cpg.method.name("query").parameter.order(1)
 
-        // sinks where the first argument is reachable by a source
         sink.reachableBy(source).l
       }),
       tags = List(QueryTags.sqlInjection)

@@ -21,13 +21,10 @@ object SignedLeftShift extends QueryBundle {
         |""".stripMargin,
       score = 2,
       withStrRep({ cpg =>
-        // format: off
-        cpg.
-          call.
-          nameExact(Operators.shiftLeft, Operators.assignmentShiftLeft).
-          where(_.argument(1).typ.fullNameExact("int", "long")).
-          filterNot(_.argument.isLiteral.size == 2) // assume such constant values produces a correct result
-        // format: on
+        cpg.call
+          .nameExact(Operators.shiftLeft, Operators.assignmentShiftLeft)
+          .where(_.argument(1).typ.fullNameExact("int", "long"))
+          .filterNot(_.argument.isLiteral.size == 2)
       }),
     )
 

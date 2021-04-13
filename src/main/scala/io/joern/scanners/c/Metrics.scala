@@ -17,9 +17,7 @@ object Metrics extends QueryBundle {
         s"This query identifies functions with more than $n formal parameters",
       score = 1.0,
       withStrRep({ cpg =>
-        // format: off
         cpg.method.internal.filter(_.parameter.size > n)
-        // format: on
       }),
       tags = List(QueryTags.metrics)
     )
@@ -34,9 +32,7 @@ object Metrics extends QueryBundle {
         s"This query identifies functions with a cyclomatic complexity higher than $n",
       score = 1.0,
       withStrRep({ cpg =>
-        // format: off
         cpg.method.internal.filter(_.controlStructure.size > n)
-        // format: on
       }),
       tags = List(QueryTags.metrics)
     )
@@ -51,9 +47,7 @@ object Metrics extends QueryBundle {
         s"This query identifies functions that are more than $n lines long",
       score = 1.0,
       withStrRep({ cpg =>
-        // format: off
         cpg.method.internal.filter(_.numberOfLines > n)
-        // format: on
       }),
       tags = List(QueryTags.metrics)
     )
@@ -67,9 +61,7 @@ object Metrics extends QueryBundle {
       description = "This query identifies functions with more than one return",
       score = 1.0,
       withStrRep({ cpg =>
-        // format: off
         cpg.method.internal.filter(_.ast.isReturn.l.size > 1)
-        // format: on
       }),
       tags = List(QueryTags.metrics)
     )
@@ -83,13 +75,11 @@ object Metrics extends QueryBundle {
       description = s"This query identifies functions with more than $n loops",
       score = 1.0,
       withStrRep({ cpg =>
-        // format: off
         cpg.method.internal
           .filter(
             _.ast.isControlStructure
               .parserTypeName("(For|Do|While).*")
               .size > n)
-        // format: on
       }),
       tags = List(QueryTags.metrics)
     )
@@ -104,9 +94,7 @@ object Metrics extends QueryBundle {
         s"This query identifies functions with a nesting level higher than $n",
       score = 1.0,
       withStrRep({ cpg =>
-        // format: off
         cpg.method.internal.filter(_.depth(_.isControlStructure) > n)
-        // format: on
       }),
       tags = List(QueryTags.metrics)
     )

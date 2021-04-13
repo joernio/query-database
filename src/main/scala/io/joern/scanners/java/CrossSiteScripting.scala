@@ -27,28 +27,22 @@ object CrossSiteScripting extends QueryBundle {
       score = 8,
       withStrRep({ cpg =>
         def source =
-          // the value returned by the call to getParameter is attacker-controlled
           cpg.call.methodFullNameExact(
             "javax.servlet.http.HttpServletRequest.getParameter:java.lang.String(java.lang.String)"
           )
 
         def responseWriter =
-          // writers that go towards http responses
           cpg.call.methodFullNameExact(
             "javax.servlet.http.HttpServletResponse.getWriter:java.io.PrintWriter()"
           )
 
         def sinks =
-          // format: off
-          // write operations where 'this' (argument 0) is a responseWriter
-          cpg.call.
-            methodFullNameExact(
+          cpg.call
+            .methodFullNameExact(
               "java.io.PrintWriter.println:void(java.lang.String)"
-            ).
-            where(_.argument(0).reachableBy(responseWriter))
-          // format: on
+            )
+            .where(_.argument(0).reachableBy(responseWriter))
 
-        // sinks where the first argument is reachable by a source
         sinks.where(_.argument(1).reachableBy(source))
       }),
       tags = List(QueryTags.xss)

@@ -21,17 +21,17 @@ object RetvalChecks extends QueryBundle {
       |""".stripMargin,
       score = 3.0,
       withStrRep({ cpg =>
-        // format: off
         implicit val noResolve: NoResolve.type = NoResolve
-        val callsNotDirectlyChecked = cpg.
-          method("(?i)(read|recv|malloc)").
-          callIn.
-          filterNot { y =>
+        val callsNotDirectlyChecked = cpg
+          .method("(?i)(read|recv|malloc)")
+          .callIn
+          .filterNot { y =>
             val code = y.code
             y.inAstMinusLeaf.isControlStructure.condition.code.exists { x =>
               x.contains(code)
             }
-          }.l
+          }
+          .l
 
         callsNotDirectlyChecked.filterNot { call =>
           val inConditions = call.method.controlStructure.condition.ast.l;
@@ -39,7 +39,6 @@ object RetvalChecks extends QueryBundle {
           val targets = call.inAssignment.target.code.toSet
           (targets & checkedVars).nonEmpty
         }
-        // format: on
       }),
     )
 
