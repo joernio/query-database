@@ -25,7 +25,7 @@ object DangerousFunctions extends QueryBundle {
       withStrRep({ cpg =>
         cpg.method("(?i)gets").callIn
       }),
-      tags = List(QueryTags.badfn)
+      tags = List(QueryTags.badfn, QueryTags.default)
     )
 
   @q
@@ -52,7 +52,7 @@ object DangerousFunctions extends QueryBundle {
           .whereNot(_.argument.order(2).isLiteral)
         (printfFns ++ sprintsFns)
       }),
-      tags = List(QueryTags.badfn)
+      tags = List(QueryTags.badfn, QueryTags.default)
     )
 
   @q
@@ -70,7 +70,7 @@ object DangerousFunctions extends QueryBundle {
       withStrRep({ cpg =>
         cpg.method("(?i)scanf").callIn
       }),
-      tags = List(QueryTags.badfn)
+      tags = List(QueryTags.badfn, QueryTags.default)
     )
 
   @q
@@ -89,7 +89,7 @@ object DangerousFunctions extends QueryBundle {
       withStrRep({ cpg =>
         cpg.method("(?i)(strcat|strncat)").callIn
       }),
-      tags = List(QueryTags.badfn)
+      tags = List(QueryTags.badfn, QueryTags.default)
     )
 
   @q
@@ -110,7 +110,7 @@ object DangerousFunctions extends QueryBundle {
       withStrRep({ cpg =>
         cpg.method("(?i)(strcpy|strncpy)").callIn
       }),
-      tags = List(QueryTags.badfn)
+      tags = List(QueryTags.badfn, QueryTags.default)
     )
 
   @q
@@ -130,7 +130,7 @@ object DangerousFunctions extends QueryBundle {
       withStrRep({ cpg =>
         cpg.method("(?i)strtok").callIn
       }),
-      tags = List(QueryTags.badfn)
+      tags = List(QueryTags.badfn, QueryTags.default)
     )
 
   @q
@@ -148,7 +148,7 @@ object DangerousFunctions extends QueryBundle {
       withStrRep({ cpg =>
         cpg.method("(?i)getwd").callIn
       }),
-      tags = List(QueryTags.badfn)
+      tags = List(QueryTags.badfn, QueryTags.default)
     )
 
 }

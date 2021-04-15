@@ -61,6 +61,6 @@ object CertificateChecks extends QueryBundle {
             case _               => false
           }
       }),
-      tags = List(QueryTags.badimpl)
+      tags = List(QueryTags.badimpl, QueryTags.default)
     )
 }

@@ -36,6 +36,6 @@ object IntegerTruncations extends QueryBundle {
           .target
           .evalType("(g?)int")
       }),
-      tags = List(QueryTags.integers)
+      tags = List(QueryTags.integers, QueryTags.default)
     )
 }

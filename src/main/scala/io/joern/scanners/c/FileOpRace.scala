@@ -1,6 +1,6 @@
 package io.joern.scanners.c
 
-import io.joern.scanners.Crew
+import io.joern.scanners.{Crew, QueryTags}
 import io.shiftleft.codepropertygraph.generated.nodes._
 import io.shiftleft.console._
 import io.shiftleft.semanticcpg.language._
@@ -22,6 +22,7 @@ object FileOpRace extends QueryBundle {
         |Use file operations based on file descriptor/pointer/handles instead of paths to avoid this issue.
         |""".stripMargin,
     score = 3.0,
+    tags = List(QueryTags.raceCondition, QueryTags.default),
     traversal = { cpg =>
       {
         val firstParam = Set(

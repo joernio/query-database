@@ -53,7 +53,7 @@ object UseAfterFree extends QueryBundle {
           arg.method.methodReturn.reachableBy(arg).nonEmpty
         }
       }),
-      tags = List(QueryTags.uaf)
+      tags = List(QueryTags.uaf, QueryTags.default)
     )
 
   @q
