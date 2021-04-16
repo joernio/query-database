@@ -15,5 +15,5 @@ object QueryTags {
 
   val integers = "integers"
   val strings = "strings"
-  val sqlInjection = "SQL injection"
+  val sqlInjection = "sql-injection"
 }
