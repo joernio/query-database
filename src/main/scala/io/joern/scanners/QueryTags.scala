@@ -2,6 +2,9 @@ package io.joern.scanners
 
 object QueryTags {
 
+  val default = "default"
+
+  val raceCondition = "race-condition"
   val alloc = "alloc"
   val badfn = "badfn"
   val badimpl = "badimpl"

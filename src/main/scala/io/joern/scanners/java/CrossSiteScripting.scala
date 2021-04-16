@@ -45,6 +45,6 @@ object CrossSiteScripting extends QueryBundle {
 
         sinks.where(_.argument(1).reachableBy(source))
       }),
-      tags = List(QueryTags.xss)
+      tags = List(QueryTags.xss, QueryTags.default)
     )
 }

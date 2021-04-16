@@ -25,6 +25,6 @@ object DangerousFunctions extends QueryBundle {
       withStrRep({ cpg =>
         cpg.method("java.lang.Runtime.exec").callIn
       }),
-      tags = List(QueryTags.badfn)
+      tags = List(QueryTags.badfn, QueryTags.default)
     )
 }

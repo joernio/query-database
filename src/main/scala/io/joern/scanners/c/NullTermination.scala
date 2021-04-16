@@ -46,7 +46,7 @@ object NullTermination extends QueryBundle {
           }
           .map(_._2)
       }),
-      tags = List(QueryTags.strings)
+      tags = List(QueryTags.strings, QueryTags.default)
     )
 
 }

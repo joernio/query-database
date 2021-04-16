@@ -1,6 +1,6 @@
 package io.joern.scanners.c
 
-import io.joern.scanners.Crew
+import io.joern.scanners.{Crew, QueryTags}
 import io.shiftleft.console._
 import io.shiftleft.macros.QueryMacros._
 import io.shiftleft.semanticcpg.language._
@@ -40,6 +40,7 @@ object RetvalChecks extends QueryBundle {
           (targets & checkedVars).nonEmpty
         }
       }),
+      tags = List(QueryTags.default)
     )
 
 }

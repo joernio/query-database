@@ -39,7 +39,7 @@ object HeapBasedOverflow extends QueryBundle {
             .hasNext
         }
       }),
-      tags = List(QueryTags.integers)
+      tags = List(QueryTags.integers, QueryTags.default)
     )
 
 }
