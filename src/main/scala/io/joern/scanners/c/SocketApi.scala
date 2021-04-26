@@ -23,10 +23,13 @@ object SocketApi extends QueryBundle {
           | transmitted.
           |""".stripMargin,
       score = 2.0,
-       withStrRep({ cpg =>
-         implicit val noResolve: NoResolve.type = NoResolve
-        cpg.method("send").filter(_.parameter.size == 4)
-          .callIn.returnValueNotChecked
+      withStrRep({ cpg =>
+        implicit val noResolve: NoResolve.type = NoResolve
+        cpg
+          .method("send")
+          .filter(_.parameter.size == 4)
+          .callIn
+          .returnValueNotChecked
       }),
       tags = List(QueryTags.default, QueryTags.posix)
     )
