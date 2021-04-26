@@ -4,6 +4,8 @@ object QueryTags {
 
   val default = "default"
 
+  val posix = "posix"
+
   val raceCondition = "race-condition"
   val alloc = "alloc"
   val badfn = "badfn"

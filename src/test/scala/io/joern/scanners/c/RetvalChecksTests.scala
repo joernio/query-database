@@ -34,6 +34,9 @@ class RetvalChecksTests extends Suite {
       | }
       |}
       |
+      |int notCheckedButDirectlyReturned() {
+      | return read(fd, buf, sizeof(buf));
+      |}
       |
       |""".stripMargin
 
