@@ -70,7 +70,7 @@ object DangerousFunctions extends QueryBundle {
       withStrRep({ cpg =>
         cpg.method("(?i)scanf").callIn
       }),
-      tags = List(QueryTags.badfn, QueryTags.default)
+      tags = List(QueryTags.badfn)
     )
 
   @q
@@ -89,7 +89,7 @@ object DangerousFunctions extends QueryBundle {
       withStrRep({ cpg =>
         cpg.method("(?i)(strcat|strncat)").callIn
       }),
-      tags = List(QueryTags.badfn, QueryTags.default)
+      tags = List(QueryTags.badfn)
     )
 
   @q
@@ -110,7 +110,7 @@ object DangerousFunctions extends QueryBundle {
       withStrRep({ cpg =>
         cpg.method("(?i)(strcpy|strncpy)").callIn
       }),
-      tags = List(QueryTags.badfn, QueryTags.default)
+      tags = List(QueryTags.badfn)
     )
 
   @q
