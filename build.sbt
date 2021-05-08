@@ -20,8 +20,8 @@ libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "3.1.1" % Test
 )
 
-sources in (Compile,doc) := Seq.empty
-publishArtifact in (Compile, packageDoc) := false
+Compile/doc/sources := Seq.empty
+Compile/packageDoc/publishArtifact := false
 
 lazy val createDistribution = taskKey[Unit]("Create binary distribution of extension")
 createDistribution := {
