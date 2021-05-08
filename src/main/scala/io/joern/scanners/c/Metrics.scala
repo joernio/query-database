@@ -19,7 +19,17 @@ object Metrics extends QueryBundle {
       withStrRep({ cpg =>
         cpg.method.internal.filter(_.parameter.size > n)
       }),
-      tags = List(QueryTags.metrics)
+      tags = List(QueryTags.metrics),
+      codeExamples = CodeExamples(
+        List("""
+          |
+          |int too_many_params(int a, int b, int c, int d, int e) {
+          |
+          |}
+          |
+          |""".stripMargin),
+        List()
+      )
     )
 
   @q
@@ -34,7 +44,26 @@ object Metrics extends QueryBundle {
       withStrRep({ cpg =>
         cpg.method.internal.filter(_.controlStructure.size > n)
       }),
-      tags = List(QueryTags.metrics)
+      tags = List(QueryTags.metrics),
+      codeExamples = CodeExamples(
+        List("""
+          |
+          |int high_cyclomatic_complexity(int x) {
+          |  while(true) {
+          |    for(int i = 0; i < 10; i++) {
+          |    }
+          |    if(foo()) {}
+          |  }
+          |  if (x > 10) {
+          |    for(int i = 0; i < 10; i++) {
+          |
+          |     }
+          |  }
+          |}
+          |
+          |""".stripMargin),
+        List()
+      )
     )
 
   @q
@@ -49,7 +78,28 @@ object Metrics extends QueryBundle {
       withStrRep({ cpg =>
         cpg.method.internal.filter(_.numberOfLines > n)
       }),
-      tags = List(QueryTags.metrics)
+      tags = List(QueryTags.metrics),
+      codeExamples = CodeExamples(
+        List("""
+          |
+          |int func_with_many_lines(int x) {
+          |  x++;
+          |  x++;
+          |  x++;
+          |  x++;
+          |  x++;
+          |  x++;
+          |  x++;
+          |  x++;
+          |  x++;
+          |  x++;
+          |  x++;
+          |  x++;
+          |}
+          |
+          |""".stripMargin),
+        List()
+      )
     )
 
   @q
@@ -63,7 +113,21 @@ object Metrics extends QueryBundle {
       withStrRep({ cpg =>
         cpg.method.internal.filter(_.ast.isReturn.l.size > 1)
       }),
-      tags = List(QueryTags.metrics)
+      tags = List(QueryTags.metrics),
+      codeExamples = CodeExamples(
+        List("""
+          |
+          |int func_with_multiple_returns (int x) {
+          |  if (x > 10) {
+          |    return 0;
+          |  } else {
+          |    return 1;
+          |  }
+          |}
+          |
+          |""".stripMargin),
+        List()
+      )
     )
 
   @q
@@ -81,7 +145,23 @@ object Metrics extends QueryBundle {
               .parserTypeName("(For|Do|While).*")
               .size > n)
       }),
-      tags = List(QueryTags.metrics)
+      tags = List(QueryTags.metrics),
+      codeExamples = CodeExamples(
+        List("""
+          |
+          |int high_number_of_loops () {
+          |  for(int i = 0; i < 10; i++){
+          |  }
+          |  int j = 0;
+          |  do {
+          |    j++
+          |  } while(j < 10);
+          |  while(foo()) {}
+          |  while(bar()){}
+          |}
+          |""".stripMargin),
+        List()
+      )
     )
 
   @q
@@ -96,7 +176,22 @@ object Metrics extends QueryBundle {
       withStrRep({ cpg =>
         cpg.method.internal.filter(_.depth(_.isControlStructure) > n)
       }),
-      tags = List(QueryTags.metrics)
+      tags = List(QueryTags.metrics),
+      codeExamples = CodeExamples(
+        List("""
+          |
+          |int func_with_nesting_level_of_3(int foo, int bar) {
+          |  if (foo > 10) {
+          |    if (bar > foo) {
+          |      for(int i = 0; i < bar ;i++) {
+          |
+          |      }
+          |    }
+          |  }
+          |}
+          |
+          |""".stripMargin),
+        List()
+      )
     )
-
 }

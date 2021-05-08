@@ -38,6 +38,27 @@ object CopyLoops extends QueryBundle {
           }
           .map(_._1)
       }),
+      codeExamples = CodeExamples(
+        List("""
+          |
+          |int index_into_dst_array (char *dst, char *src, int offset) {
+          |  for(i = 0; i < strlen(src); i++) {
+          |    dst[i + + j*8 + offset] = src[i];
+          |  }
+          |}
+          |
+          |""".stripMargin),
+        List("""
+          |
+          |// We do not want to detect this one because the
+          |// index only specifies where to read from
+          |int index_into_src_array() {
+          |  for(i = 0; i < strlen(src); i++) {
+          |    dst[k] = src[i];
+          |  }
+          |}
+          |
+          |""".stripMargin)
+      )
     )
-
 }

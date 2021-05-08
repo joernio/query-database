@@ -33,5 +33,4 @@ object SocketApi extends QueryBundle {
       }),
       tags = List(QueryTags.default, QueryTags.posix)
     )
-
 }

@@ -5,10 +5,12 @@ import io.shiftleft.dataflowengineoss.queryengine.EngineContext
 import io.shiftleft.semanticcpg.language._
 import io.shiftleft.dataflowengineoss.language._
 import io.shiftleft.console._
+import io.shiftleft.dataflowengineoss.semanticsloader.Semantics
 import io.shiftleft.macros.QueryMacros._
 
 object HeapBasedOverflow extends QueryBundle {
 
+  implicit val engineContext: EngineContext = EngineContext(Semantics.empty)
   implicit val resolver: ICallResolver = NoResolve
 
   /**
@@ -19,7 +21,7 @@ object HeapBasedOverflow extends QueryBundle {
     * buffer overflow in VLC's MP4 demuxer (CVE-2014-9626).
     * */
   @q
-  def mallocMemcpyIntOverflow()(implicit context: EngineContext): Query =
+  def mallocMemcpyIntOverflow(): Query =
     Query.make(
       name = "malloc-memcpy-int-overflow",
       author = Crew.fabs,
@@ -39,7 +41,30 @@ object HeapBasedOverflow extends QueryBundle {
             .hasNext
         }
       }),
-      tags = List(QueryTags.integers, QueryTags.default)
+      tags = List(QueryTags.integers, QueryTags.default),
+      codeExamples = CodeExamples(
+        List("""
+          |
+          |int vulnerable(size_t len, char *src) {
+          |  char *dst = malloc(len + 8);
+          |  memcpy(dst, src, len + 7);
+          |}
+          |
+          |""".stripMargin),
+        List("""
+          |
+          |int non_vulnerable(size_t len, char *src) {
+          | char *dst = malloc(len + 8);
+          | memcpy(dst, src,len + 8);
+          |}
+          |
+          |int non_vulnerable2(size_t len, char *src) {
+          | char *dst = malloc( some_size );
+          | assert(dst);
+          | memcpy(dst, src, some_size );
+          |}
+          |
+          |""".stripMargin)
+      )
     )
-
 }

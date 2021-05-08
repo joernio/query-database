@@ -5,14 +5,16 @@ import io.shiftleft.semanticcpg.language._
 import io.shiftleft.dataflowengineoss.language._
 import io.shiftleft.console._
 import io.shiftleft.dataflowengineoss.queryengine.EngineContext
+import io.shiftleft.dataflowengineoss.semanticsloader.Semantics
 import io.shiftleft.macros.QueryMacros._
 
 object NullTermination extends QueryBundle {
 
+  implicit val engineContext: EngineContext = EngineContext(Semantics.empty)
   implicit val resolver: ICallResolver = NoResolve
 
   @q
-  def strncpyNoNullTerm()(implicit engineContext: EngineContext): Query =
+  def strncpyNoNullTerm(): Query =
     Query.make(
       name = "strncpy-no-null-term",
       author = Crew.fabs,
@@ -46,7 +48,37 @@ object NullTermination extends QueryBundle {
           }
           .map(_._2)
       }),
-      tags = List(QueryTags.strings, QueryTags.default)
+      tags = List(QueryTags.strings, QueryTags.default),
+      codeExamples = CodeExamples(
+        List("""
+          |
+          |// If src points to a string that is at least `asize` long,
+          |// then `ptr` will not be null-terminated after the `strncpy`
+          |// call.
+          |int bad() {
+          |  char *ptr = malloc(asize);
+          |  strncpy(ptr, src, asize);
+          |}
+          |
+          |""".stripMargin),
+        List("""
+          |
+          |// Null-termination is ensured if we can only copy
+          |// less than `asize + 1` into the buffer
+          |int good() {
+          |  char *ptr = malloc(asize + 1);
+          |  strncpy(ptr, src, asize);
+          |}
+          |
+          | // Null-termination is also ensured if it is performed
+          | // explicitly
+          |int alsogood() {
+          |  char *ptr = malloc(asize);
+          |  strncpy(ptr, src, asize);
+          |  ptr[asize -1] = '\0';
+          |}
+          |
+          |""".stripMargin)
+      )
     )
-
 }

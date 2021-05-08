@@ -5,49 +5,12 @@ import io.shiftleft.console.scan._
 import io.shiftleft.semanticcpg.language._
 import overflowdb.traversal.iterableToTraversal
 
-class UseAfterFreePostUsage extends Suite {
+class UseAfterFreePostUsage extends QueryTestSuite {
 
-  override val code =
-    """
-      |void *bad() {
-      |  void *x = NULL;
-      |  if (cond)
-      |    free(x);
-      |  return x;
-      |}
-      |
-      |void *false_negative() {
-      |  void *x = NULL;
-      |  if (cond) {
-      |    free(x);
-      |    if (cond2)
-      |      return x; // not post-dominated by free call
-      |    x = NULL;
-      |  }
-      |  return x;
-      |}
-      |
-      |void *false_positive() {
-      |  void *x = NULL;
-      |  free(x);
-      |  if (cond)
-      |    x = NULL;
-      |  else
-      |    x = NULL;
-      |  return x;
-      |}
-      |
-      |void *good() {
-      |  void *x = NULL;
-      |  if (cond)
-      |    free(x);
-      |  x = NULL;
-      |  return x;
-      |}
-      |""".stripMargin
+  override def queryBundle = UseAfterFree
 
   "should flag functions `bad` and `false_positive` only" in {
-    val x = UseAfterFree.freePostDominatesUsage()
+    val x = queryBundle.freePostDominatesUsage()
     x(cpg)
       .flatMap(_.evidence)
       .cast[nodes.Identifier]

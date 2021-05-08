@@ -2,40 +2,17 @@ package io.joern.scanners.c
 
 import io.shiftleft.codepropertygraph.generated.nodes
 import io.shiftleft.console.scan._
+import io.shiftleft.dataflowengineoss.queryengine.EngineContext
+import io.shiftleft.dataflowengineoss.semanticsloader.Semantics
 import io.shiftleft.semanticcpg.language._
 import overflowdb.traversal.iterableToTraversal
+import io.shiftleft.dataflowengineoss.semanticsloader.{Parser, Semantics}
 
-class UseAfterFreeReturnTests extends Suite {
-
-  override val code =
-    """
-      |void good1(a_struct_type *a_struct) {
-      |  void *x = NULL, *y = NULL;
-      |  a_struct->foo = x;
-      |  free(y);
-      |}
-      |
-      |void good2(a_struct_type *a_struct) {
-      |  void *x = NULL;
-      |  free(a_struct->foo);
-      |  a_struct->foo = x;
-      |}
-      |
-      |void bad(a_struct_type *a_struct) {
-      |  void *x = NULL;
-      |  a_struct->foo = x;
-      |  free(x);
-      |}
-      |
-      |void bad_not_covered(a_struct_type *a_struct) {
-      |  void *x = NULL;
-      |  a_struct->foo = x;
-      |  free(a_struct->foo);
-      |}
-      |""".stripMargin
+class UseAfterFreeReturnTests extends QueryTestSuite {
+  override def queryBundle = UseAfterFree
 
   "should flag `bad` function only" in {
-    val x = UseAfterFree.freeReturnedValue()
+    val x = queryBundle.freeReturnedValue()
     x(cpg)
       .flatMap(_.evidence)
       .cast[nodes.Identifier]
