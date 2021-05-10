@@ -30,7 +30,30 @@ object CredentialDrop extends QueryBundle {
           .callIn
           .whereNot(_.dominatedBy.isCall.name("set(res|re|e|)?gid"))
       }),
-      tags = List(QueryTags.setxid, QueryTags.default)
+      tags = List(QueryTags.setxid, QueryTags.default),
+      codeExamples = CodeExamples(
+        List("""
+          |
+          |void good() {
+          |  setgroups();
+          |  setresgid();
+          |  setresuid();
+          |}
+          |
+          |""".stripMargin),
+        List("""
+          |
+          |void bad1() {
+          |  setresuid();
+          |}
+          |
+          |void bad3() {
+          |  setgroups();
+          |  setresuid();
+          |}
+          |
+          |""".stripMargin)
+      )
     )
 
   @q
@@ -53,7 +76,25 @@ object CredentialDrop extends QueryBundle {
           .callIn
           .whereNot(_.dominatedBy.isCall.name("setgroups"))
       }),
-      tags = List(QueryTags.setxid, QueryTags.default)
+      tags = List(QueryTags.setxid, QueryTags.default),
+      codeExamples = CodeExamples(
+        List("""
+          |
+          |void good() {
+          |  setgroups();
+          |  setresgid();
+          |  setresuid();
+          |}
+          |
+          |""".stripMargin),
+        List("""
+          |
+          |void bad2() {
+          |  setresgid();
+          |  setresuid();
+          |}
+          |
+          |""".stripMargin)
+      )
     )
-
 }

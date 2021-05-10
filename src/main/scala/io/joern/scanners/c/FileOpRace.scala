@@ -91,7 +91,6 @@ object FileOpRace extends QueryBundle {
             fileArgs(call).code.exists(arg => argsForOtherCalls.contains(arg))
           })
       }),
-      tags = List(QueryTags.raceCondition, QueryTags.default),
+      tags = List(QueryTags.raceCondition, QueryTags.default)
     )
-
 }

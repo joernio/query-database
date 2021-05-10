@@ -28,7 +28,42 @@ object RetvalChecks extends QueryBundle {
           .callIn
           .returnValueNotChecked
       }),
-      tags = List(QueryTags.default)
+      tags = List(QueryTags.default),
+      codeExamples = CodeExamples(
+        List("""
+          |
+          |void unchecked_read() {
+          |  read(fd, buf, sizeof(buf));
+          |}
+          |
+          |void checks_something_else() {
+          |  int nbytes = read(fd, buf, sizeof(buf));
+          |  if( foo != sizeof(buf)) {
+          |
+          |  }
+          |}
+          |
+          |""".stripMargin),
+        List("""
+          |
+          |void checked_after_assignment() {
+          |  int nbytes = read(fd, buf, sizeof(buf));
+          |  if( nbytes != sizeof(buf)) {
+          |
+          |  }
+          |}
+          |
+          |void immediately_checked() {
+          |  if ( (read(fd, buf, sizeof(buf))) != sizeof(buf)) {
+          |
+          |  }
+          |}
+          |
+          |int notCheckedButDirectlyReturned() {
+          |  return read(fd, buf, sizeof(buf));
+          |}
+          |
+          |""".stripMargin)
+      )
     )
-
 }

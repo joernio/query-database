@@ -1,6 +1,12 @@
 package io.joern.scanners.c
 
-import io.shiftleft.console.{Query, QueryBundle, q}
+import io.shiftleft.console.{
+  CodeExamples,
+  Query,
+  QueryBundle,
+  TraversalWithStrRep,
+  q
+}
 import io.shiftleft.semanticcpg.language.{ICallResolver, NoResolve}
 import io.joern.scanners._
 import io.shiftleft.codepropertygraph.generated.nodes
@@ -8,7 +14,6 @@ import io.shiftleft.dataflowengineoss.queryengine.EngineContext
 import io.shiftleft.semanticcpg.language._
 import io.shiftleft.macros.QueryMacros._
 import io.shiftleft.semanticcpg.language.operatorextension._
-import io.shiftleft.console.TraversalWithStrRep
 import QueryLangExtensions._
 
 object MissingLengthCheck extends QueryBundle {

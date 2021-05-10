@@ -27,6 +27,30 @@ object SignedLeftShift extends QueryBundle {
           .filterNot(_.argument.isLiteral.size == 2)
       }),
       tags = List(QueryTags.integers, QueryTags.default),
+      codeExamples = CodeExamples(
+        List("""
+          |
+          |void bad1(int val) {
+          |  val <<= 24;
+          |}
+          |
+          |void bad2(int val) {
+          |  255 << val;
+          |}
+          |
+          |void bad3(int val) {
+          |  val << val;
+          |}
+          |""".stripMargin),
+        List("""
+          |
+          |void good(unsigned int val) {
+          |  255 << 24; // we ignore signed shift with two literals
+          |  val <<= 24;
+          |  val << val;
+          |}
+          |
+          |""".stripMargin)
+      )
     )
-
 }

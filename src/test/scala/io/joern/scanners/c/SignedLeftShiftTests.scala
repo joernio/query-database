@@ -4,29 +4,12 @@ import io.shiftleft.codepropertygraph.generated.nodes
 import io.shiftleft.console.scan._
 import io.shiftleft.semanticcpg.language._
 
-class SignedLeftShiftTests extends Suite {
+class SignedLeftShiftTests extends QueryTestSuite {
 
-  override val code =
-    """
-      void bad1(int val) {
-        val <<= 24;
-      }
-      void bad2(int val) {
-        255 << val;
-      }
-      void bad3(int val) {
-        val << val;
-      }
-
-      void good(unsigned int val) {
-        255 << 24; // we ignore signed shift with two literals
-        val <<= 24;
-        val << val;
-      }
-    """
+  override def queryBundle = SignedLeftShift
 
   "find signed left shift" in {
-    SignedLeftShift
+    queryBundle
       .signedLeftShift()(cpg)
       .flatMap(_.evidence)
       .map {

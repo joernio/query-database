@@ -25,7 +25,31 @@ object DangerousFunctions extends QueryBundle {
       withStrRep({ cpg =>
         cpg.method("(?i)gets").callIn
       }),
-      tags = List(QueryTags.badfn, QueryTags.default)
+      tags = List(QueryTags.badfn, QueryTags.default),
+      codeExamples = CodeExamples(
+        List("""
+            |
+            |int insecure_gets() {
+            |  char str[DST_BUFFER_SIZE];
+            |  gets(str);
+            |  printf("%s", str);
+            |  return 0;
+            |}
+            |
+            |""".stripMargin),
+        List("""
+            |
+            |int secure_gets() {
+            |  FILE *fp;
+            |  fp = fopen("file.txt" , "r");
+            |  char str[DST_BUFFER_SIZE];
+            |  fgets(str, DST_BUFFER_SIZE, fp);
+            |  printf("%s", str);
+            |  return 0;
+            |}
+            |
+            |""".stripMargin)
+      )
     )
 
   @q
@@ -52,7 +76,42 @@ object DangerousFunctions extends QueryBundle {
           .whereNot(_.argument.order(2).isLiteral)
         (printfFns ++ sprintsFns)
       }),
-      tags = List(QueryTags.badfn, QueryTags.default)
+      tags = List(QueryTags.badfn, QueryTags.default),
+      codeExamples = CodeExamples(
+        List(
+          """
+          |int insecure_printf() {
+          |  printf(argv[1], 4242);
+          |
+          |}
+          |""".stripMargin,
+          """
+          |
+          |int insecure_sprintf() {
+          |  char buffer [BUFF_SIZE];
+          |  sprintf(buffer, argv[2], 4242);
+          |}
+          |
+          |""".stripMargin
+        ),
+        List(
+          """
+          |
+          |int secure_printf() {
+          |  printf("Num: %d", 4242);
+          |}
+          |
+          |""".stripMargin,
+          """
+          |
+          |int secure_sprintf() {
+          |  char buffer [BUFF_SIZE];
+          |  snprintf(buffer, BUFF_SIZE, argv[2], 4242);
+          |}
+          |
+          |""".stripMargin
+        )
+      )
     )
 
   @q
@@ -70,7 +129,20 @@ object DangerousFunctions extends QueryBundle {
       withStrRep({ cpg =>
         cpg.method("(?i)scanf").callIn
       }),
-      tags = List(QueryTags.badfn)
+      tags = List(QueryTags.badfn),
+      codeExamples = CodeExamples(
+        List("""
+          |
+          |int insecure_scanf() {
+          |  char name[12];
+          |  scanf("%s", name);
+          |  printf("Hello %s!\n", name);
+          |  return 0
+          |}
+          |
+          |""".stripMargin),
+        List()
+      )
     )
 
   @q
@@ -89,7 +161,20 @@ object DangerousFunctions extends QueryBundle {
       withStrRep({ cpg =>
         cpg.method("(?i)(strcat|strncat)").callIn
       }),
-      tags = List(QueryTags.badfn)
+      tags = List(QueryTags.badfn),
+      codeExamples = CodeExamples(
+        List(
+          """
+          |
+          |int insecure_strncat() {
+          |  char buf[BUF_SIZE];
+          |  strncat(buf, another_buffer, BUF_SIZE - strlen(buf)); // remediation is (BUFF_SIZE - strlen(buf) - 1)
+          |  return 0
+          |}
+          |
+          |""".stripMargin),
+        List()
+      )
     )
 
   @q
@@ -110,7 +195,20 @@ object DangerousFunctions extends QueryBundle {
       withStrRep({ cpg =>
         cpg.method("(?i)(strcpy|strncpy)").callIn
       }),
-      tags = List(QueryTags.badfn)
+      tags = List(QueryTags.badfn),
+      codeExamples = CodeExamples(
+        List(
+          """
+          |
+          |int insecure_strncpy() {
+          |  char buf[BUF_SIZE];
+          |  strncpy(buf, default_value, BUF_SIZE); // remediation is (BUFF_SIZE - 1)
+          |  return 0
+          |}
+          |
+          |""".stripMargin),
+        List()
+      )
     )
 
   @q
@@ -130,7 +228,23 @@ object DangerousFunctions extends QueryBundle {
       withStrRep({ cpg =>
         cpg.method("(?i)strtok").callIn
       }),
-      tags = List(QueryTags.badfn, QueryTags.default)
+      tags = List(QueryTags.badfn, QueryTags.default),
+      codeExamples = CodeExamples(
+        List(
+          """
+          |
+          |int insecure_strtok() {
+          |  char *token;
+          |  char *path = getenv("PATH");
+          |  token = strtok(path, ":");
+          |  puts(token);
+          |  printf("PATH: %s\n", path); // original path string now has '/usr/bin\0' now and is insecure to use
+          |  return 0;
+          |}
+          |
+          |""".stripMargin),
+        List()
+      )
     )
 
   @q
@@ -148,7 +262,19 @@ object DangerousFunctions extends QueryBundle {
       withStrRep({ cpg =>
         cpg.method("(?i)getwd").callIn
       }),
-      tags = List(QueryTags.badfn, QueryTags.default)
+      tags = List(QueryTags.badfn, QueryTags.default),
+      codeExamples = CodeExamples(
+        List("""
+          |
+          |int insecure_getwd() {
+          |  char dir[12];
+          |  getwd(dir);
+          |  printf("Working directory:%s\n",dir);
+          |  return 0;
+          |}
+          |
+          |""".stripMargin),
+        List()
+      )
     )
-
 }

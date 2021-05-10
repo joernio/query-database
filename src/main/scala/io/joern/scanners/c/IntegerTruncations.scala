@@ -36,6 +36,24 @@ object IntegerTruncations extends QueryBundle {
           .target
           .evalType("(g?)int")
       }),
-      tags = List(QueryTags.integers, QueryTags.default)
+      tags = List(QueryTags.integers, QueryTags.default),
+      codeExamples = CodeExamples(
+        List("""
+          |
+          |int vulnerable(char *str) {
+          |  int len;
+          |  len = strlen(str);
+          |}
+          |
+          |""".stripMargin),
+        List("""
+          |
+          |int non_vulnerable(char *str) {
+          |  size_t len;
+          |  len = strlen(str);
+          |}
+          |
+          |""".stripMargin)
+      )
     )
 }
