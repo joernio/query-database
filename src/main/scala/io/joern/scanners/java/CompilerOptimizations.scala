@@ -30,19 +30,23 @@ object CompilerOptimizations extends QueryBundle {
       score = 1,
       withStrRep({ cpg =>
         cpg.assignment
-          // Determine which identifiers are assigned to exactly once
+        // Determine which identifiers are assigned to exactly once
           .groupBy(_.argument.order(1).code.l)
           .map { case (_, as: Traversal[Assignment]) => as.l }
           .filter(_.size == 1)
           .flatMap {
-            case as: List[Assignment] => Option(as.head.argument.head, as.head.argument.l.head.typ.l)
+            case as: List[Assignment] =>
+              Option(as.head.argument.head, as.head.argument.l.head.typ.l)
             case _ => Option.empty
           }
           // Filter only primitives
-          .filter { case (_: Identifier, ts: List[Type]) =>
-            ts.nonEmpty &&
-              ts.head.namespace.l.exists { x => x.name.contains("<global>") } &&
-              !ts.head.fullName.contains("[]")
+          .filter {
+            case (_: Identifier, ts: List[Type]) =>
+              ts.nonEmpty &&
+                ts.head.namespace.l.exists { x =>
+                  x.name.contains("<global>")
+                } &&
+                !ts.head.fullName.contains("[]")
           }
           .map { case (i: Identifier, _: List[Type]) => i }
       }),
