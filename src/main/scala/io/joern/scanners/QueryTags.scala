@@ -19,4 +19,5 @@ object QueryTags {
   val strings = "strings"
   val sqlInjection = "sql-injection"
   val compilerOptimization = "compiler-optimization"
+
 }
