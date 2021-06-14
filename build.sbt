@@ -1,6 +1,6 @@
 name := "batteries"
 ThisBuild/organization := "io.joern"
-ThisBuild/scalaVersion := "2.13.4"
+ThisBuild/scalaVersion := "2.13.6"
 
 enablePlugins(JavaAppPackaging)
 enablePlugins(GitVersioning)
