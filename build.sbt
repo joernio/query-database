@@ -1,6 +1,7 @@
 name := "batteries"
 ThisBuild/organization := "io.joern"
-ThisBuild/scalaVersion := "2.13.6"
+ThisBuild/scalaVersion := "2.13.5" 
+// don't upgrade to 2.13.6 until https://github.com/com-lihaoyi/Ammonite/issues/1182 is resolved
 
 enablePlugins(JavaAppPackaging)
 enablePlugins(GitVersioning)
