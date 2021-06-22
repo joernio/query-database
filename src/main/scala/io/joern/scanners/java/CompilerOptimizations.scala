@@ -55,7 +55,7 @@ object CompilerOptimizations extends QueryBundle {
             case _                              => Option.empty
           }
       }),
-      tags = List(QueryTags.compilerOptimization, QueryTags.default)
+      tags = List(QueryTags.compilerOptimization)
     )
 
 }
