@@ -3,6 +3,8 @@ ThisBuild/organization := "io.joern"
 ThisBuild/scalaVersion := "2.13.5" 
 // don't upgrade to 2.13.6 until https://github.com/com-lihaoyi/Ammonite/issues/1182 is resolved
 
+val cpgVersion = "1.3.212"
+
 enablePlugins(JavaAppPackaging)
 enablePlugins(GitVersioning)
 
@@ -12,12 +14,12 @@ libraryDependencies ++= Seq(
   "com.github.pathikrit" %% "better-files"             % "3.8.0",
   "com.github.scopt" %% "scopt" % "3.7.1",
   "org.apache.logging.log4j" % "log4j-slf4j-impl" % "2.13.3" % Runtime,
-  "io.shiftleft" %% "semanticcpg" % Versions.cpg,
-  "io.shiftleft" %% "console" % Versions.cpg,
-  "io.shiftleft" %% "dataflowengineoss" % Versions.cpg,
-  "io.shiftleft" %% "fuzzyc2cpg-tests" % Versions.cpg % Test classifier "tests",
-  "io.shiftleft" %% "semanticcpg-tests" % Versions.cpg % Test classifier "tests",
-  "io.shiftleft" %% "fuzzyc2cpg" % Versions.cpg % Test,
+  "io.shiftleft" %% "semanticcpg" % cpgVersion,
+  "io.shiftleft" %% "console" % cpgVersion,
+  "io.shiftleft" %% "dataflowengineoss" % cpgVersion,
+  "io.shiftleft" %% "fuzzyc2cpg-tests" % cpgVersion % Test classifier "tests",
+  "io.shiftleft" %% "semanticcpg-tests" % cpgVersion % Test classifier "tests",
+  "io.shiftleft" %% "fuzzyc2cpg" % cpgVersion % Test,
   "org.scalatest" %% "scalatest" % "3.1.1" % Test
 )
 
