@@ -198,6 +198,7 @@ object UseAfterFree extends QueryBundle {
           .where(_.argument(1).isIdentifier)
           .flatMap(f => {
             val freedIdentifierCode = f.argument(1).code
+            // TODO change to `toSetImmutable` after https://github.com/ShiftLeftSecurity/overflowdb/pull/201 is merged
             val postDom = f.postDominatedBy.toSet
 
             val assignedPostDom = postDom.isIdentifier
@@ -205,7 +206,8 @@ object UseAfterFree extends QueryBundle {
               .codeExact(freedIdentifierCode)
               .flatMap(id => id ++ id.postDominatedBy)
 
-            postDom
+            // TODO change back to just `postDom` after https://github.com/ShiftLeftSecurity/overflowdb/pull/201 is merged
+            postDom.toSet
               .removedAll(assignedPostDom)
               .isIdentifier
               .codeExact(freedIdentifierCode)
