@@ -40,7 +40,7 @@ object NullTermination extends QueryBundle {
             case (method, dst, size) =>
               dst.reachableBy(allocations).codeExact(size.code).nonEmpty &&
                 method.assignments
-                  .where(_.target.isArrayAccess.code(s"${dst.code}.*\\[.*"))
+                  .where(_.target.arrayAccess.code(s"${dst.code}.*\\[.*"))
                   .source
                   .isLiteral
                   .code(".*0.*")

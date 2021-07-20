@@ -25,7 +25,7 @@ object FileOpRace extends QueryBundle {
         |""".stripMargin,
       score = 3.0,
       withStrRep({ cpg =>
-        val operations: Map[String, Seq[Integer]] = Map(
+        val operations: Map[String, Seq[Int]] = Map(
           "access" -> Seq(1),
           "chdir" -> Seq(1),
           "chmod" -> Seq(1),
