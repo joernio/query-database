@@ -22,7 +22,7 @@ object CopyLoops extends QueryBundle {
         |""".stripMargin,
       score = 2,
       withStrRep({ cpg =>
-        cpg.assignment.target.isArrayAccess
+        cpg.assignment.target.arrayAccess
           .map { access =>
             (access.array, access.subscripts.code.toSet)
           }
