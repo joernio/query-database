@@ -34,21 +34,21 @@ object CredentialDrop extends QueryBundle {
       codeExamples = CodeExamples(
         List("""
           |
-          |void good() {
-          |  setgroups();
-          |  setresgid();
-          |  setresuid();
-          |}
-          |
-          |""".stripMargin),
-        List("""
-          |
           |void bad1() {
           |  setresuid();
           |}
           |
           |void bad3() {
           |  setgroups();
+          |  setresuid();
+          |}
+          |
+          |""".stripMargin),
+        List("""
+          |
+          |void good() {
+          |  setgroups();
+          |  setresgid();
           |  setresuid();
           |}
           |
@@ -80,8 +80,7 @@ object CredentialDrop extends QueryBundle {
       codeExamples = CodeExamples(
         List("""
           |
-          |void good() {
-          |  setgroups();
+          |void bad2() {
           |  setresgid();
           |  setresuid();
           |}
@@ -89,7 +88,8 @@ object CredentialDrop extends QueryBundle {
           |""".stripMargin),
         List("""
           |
-          |void bad2() {
+          |void good() {
+          |  setgroups();
           |  setresgid();
           |  setresuid();
           |}

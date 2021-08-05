@@ -28,7 +28,13 @@ object Metrics extends QueryBundle {
           |}
           |
           |""".stripMargin),
-        List()
+        List("""
+          |
+          |void good(int a, int b, int c, int d) {
+          |
+          |}
+          |
+          |""".stripMargin)
       )
     )
 
@@ -62,7 +68,14 @@ object Metrics extends QueryBundle {
           |}
           |
           |""".stripMargin),
-        List()
+        List("""
+          |
+          |void good(int x, int y) {
+          |    if (x > 0) {/* Stuff */ } else { /* Stuff */ }
+          |    if (y > 0) {/* Stuff */ } else { /* Stuff */ }
+          |}
+          |
+          |""".stripMargin)
       )
     )
 
@@ -98,7 +111,13 @@ object Metrics extends QueryBundle {
           |}
           |
           |""".stripMargin),
-        List()
+        List("""
+          |
+          |int func_with_few_lines(int x) {
+          |  x++;
+          |}
+          |
+          |""".stripMargin)
       )
     )
 
@@ -126,7 +145,13 @@ object Metrics extends QueryBundle {
           |}
           |
           |""".stripMargin),
-        List()
+        List("""
+          |
+          |int func_without_multiple_returns() {
+          |  return 0;
+          |}
+          |
+          |""".stripMargin)
       )
     )
 
@@ -160,7 +185,13 @@ object Metrics extends QueryBundle {
           |  while(bar()){}
           |}
           |""".stripMargin),
-        List()
+        List("""
+          |int not_many_loops() {
+          |  while (true) {
+          |    // Do something
+          |  }
+          |}
+          |""".stripMargin)
       )
     )
 
@@ -191,7 +222,15 @@ object Metrics extends QueryBundle {
           |}
           |
           |""".stripMargin),
-        List()
+        List("""
+          |
+          |int func_with_nesting_level_of_1(int foo) {
+          |  if (foo > 10) {
+          |    // Do something
+          |  }
+          |}
+          |
+          |""")
       )
     )
 }
