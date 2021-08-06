@@ -11,10 +11,8 @@ import QueryLangExtensions._
 
 object SocketApi extends QueryBundle {
 
-  implicit val engineContext: EngineContext = EngineContext(Semantics.empty)
-
   @q
-  def uncheckedSend(): Query =
+  def uncheckedSend()(implicit context: EngineContext): Query =
     Query.make(
       name = "socket-send",
       author = Crew.fabs,

@@ -11,10 +11,9 @@ import overflowdb.traversal.Traversal
 
 object FileOpRace extends QueryBundle {
 
-  implicit val engineContext: EngineContext = EngineContext(Semantics.empty)
-
   @q
-  def fileOperationRace(): Query =
+  def fileOperationRace()(implicit context: EngineContext): Query = {
+
     Query.make(
       name = "file-operation-race",
       author = Crew.malte,
@@ -95,4 +94,5 @@ object FileOpRace extends QueryBundle {
           |""".stripMargin)
       )
     )
+  }
 }
