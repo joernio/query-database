@@ -4,6 +4,7 @@ import io.joern.scanners.{Crew, QueryTags}
 import io.shiftleft.codepropertygraph.generated.nodes._
 import io.shiftleft.console._
 import io.shiftleft.dataflowengineoss.queryengine.EngineContext
+import io.shiftleft.dataflowengineoss.semanticsloader.Semantics
 import io.shiftleft.semanticcpg.language._
 import io.shiftleft.macros.QueryMacros._
 import overflowdb.traversal.Traversal
@@ -11,7 +12,8 @@ import overflowdb.traversal.Traversal
 object FileOpRace extends QueryBundle {
 
   @q
-  def fileOperationRace()(implicit context: EngineContext): Query =
+  def fileOperationRace()(implicit context: EngineContext): Query = {
+
     Query.make(
       name = "file-operation-race",
       author = Crew.malte,
@@ -54,7 +56,7 @@ object FileOpRace extends QueryBundle {
           "rmdir" -> Seq(1),
           "stat" -> Seq(1),
           "unlinkat" -> Seq(2),
-          "unlink" -> Seq(1),
+          "unlink" -> Seq(1)
         )
 
         def fileCalls(calls: Traversal[Call]) =
@@ -72,6 +74,25 @@ object FileOpRace extends QueryBundle {
             fileArgs(call).code.exists(arg => argsForOtherCalls.contains(arg))
           })
       }),
-      tags = List(QueryTags.raceCondition, QueryTags.default)
+      tags = List(QueryTags.raceCondition, QueryTags.default),
+      codeExamples = CodeExamples(
+        List("""
+          |
+          |void insecure_race(char *path) {
+          |    chmod(path, 0);
+          |    rename(path, "/some/new/path");
+          |}
+          |
+          |""".stripMargin),
+        List("""
+          |
+          |void secure_handle(char *path) {
+          |    FILE *file = fopen(path, "r");
+          |    fchown(fileno(file), 0, 0);
+          |}
+          |
+          |""".stripMargin)
+      )
     )
+  }
 }

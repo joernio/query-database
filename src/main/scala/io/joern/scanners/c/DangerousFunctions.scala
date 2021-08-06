@@ -28,27 +28,27 @@ object DangerousFunctions extends QueryBundle {
       tags = List(QueryTags.badfn, QueryTags.default),
       codeExamples = CodeExamples(
         List("""
-            |
-            |int insecure_gets() {
-            |  char str[DST_BUFFER_SIZE];
-            |  gets(str);
-            |  printf("%s", str);
-            |  return 0;
-            |}
-            |
-            |""".stripMargin),
+          |
+          |int insecure_gets() {
+          |  char str[DST_BUFFER_SIZE];
+          |  gets(str);
+          |  printf("%s", str);
+          |  return 0;
+          |}
+          |
+          |""".stripMargin),
         List("""
-            |
-            |int secure_gets() {
-            |  FILE *fp;
-            |  fp = fopen("file.txt" , "r");
-            |  char str[DST_BUFFER_SIZE];
-            |  fgets(str, DST_BUFFER_SIZE, fp);
-            |  printf("%s", str);
-            |  return 0;
-            |}
-            |
-            |""".stripMargin)
+          |
+          |int secure_gets() {
+          |  FILE *fp;
+          |  fp = fopen("file.txt" , "r");
+          |  char str[DST_BUFFER_SIZE];
+          |  fgets(str, DST_BUFFER_SIZE, fp);
+          |  printf("%s", str);
+          |  return 0;
+          |}
+          |
+          |""".stripMargin)
       )
     )
 
@@ -141,7 +141,13 @@ object DangerousFunctions extends QueryBundle {
           |}
           |
           |""".stripMargin),
-        List()
+        List("""
+          |
+          |void secure_fgets(char *buf, int size, FILE *stream) {
+          |    fgets(buf, size, stream);
+          |}
+          |
+          |""".stripMargin)
       )
     )
 
@@ -166,14 +172,28 @@ object DangerousFunctions extends QueryBundle {
         List(
           """
           |
+          |void insecure_strcat(char *dest, char *src) {
+          |    strcat(dest, src);
+          |}
+          |
+          |""".stripMargin,
+          """
+          |
           |int insecure_strncat() {
           |  char buf[BUF_SIZE];
           |  strncat(buf, another_buffer, BUF_SIZE - strlen(buf)); // remediation is (BUFF_SIZE - strlen(buf) - 1)
           |  return 0
           |}
           |
-          |""".stripMargin),
-        List()
+          |""".stripMargin
+        ),
+        List("""
+          |
+          |void secure_strcat_s(char *dest, rsize_t destsz, char *src) {
+          |    strcat_s(dest, destsz, src);
+          |}
+          |
+          |""".stripMargin)
       )
     )
 
@@ -200,14 +220,28 @@ object DangerousFunctions extends QueryBundle {
         List(
           """
           |
+          |void insecure_strcpy(char *dest, char *src) {
+          |    strcpy(dest, src);
+          |}
+          |
+          |""".stripMargin,
+          """
+          |
           |int insecure_strncpy() {
           |  char buf[BUF_SIZE];
           |  strncpy(buf, default_value, BUF_SIZE); // remediation is (BUFF_SIZE - 1)
           |  return 0
           |}
           |
-          |""".stripMargin),
-        List()
+          |""".stripMargin
+        ),
+        List("""
+          |
+          |void secure_strlcpy(char *dest, char *src, size_t size) {
+          |    strlcpy(dest, src, size);
+          |}
+          |
+          |""".stripMargin)
       )
     )
 
@@ -243,7 +277,13 @@ object DangerousFunctions extends QueryBundle {
           |}
           |
           |""".stripMargin),
-        List()
+        List("""
+          |
+          |void secure_strtok_r(char *src, char *delim, char **saveptr) {
+          |    strtok_r(src, delim, saveptr);
+          |}
+          |
+          |""".stripMargin)
       )
     )
 
@@ -274,7 +314,11 @@ object DangerousFunctions extends QueryBundle {
           |}
           |
           |""".stripMargin),
-        List()
+        List("""
+          |void secure_getcwd(char *buf, size_t len) {
+          |    getcwd(buf, len);
+          |}
+          |""")
       )
     )
 }

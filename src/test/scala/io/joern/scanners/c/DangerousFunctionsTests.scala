@@ -37,19 +37,27 @@ class DangerousFunctionsTests extends QueryTestSuite {
   }
 
   "find insecure strncat() function usage" in {
-    queryBundle.strcatUsed()(cpg).map(_.evidence) match {
-      case List(List(expr: nodes.Expression)) =>
-        expr.method.name shouldBe "insecure_strncat"
-      case _ => fail()
-    }
+    val results =
+      queryBundle.strcatUsed()(cpg)
+      .flatMap(_.evidence)
+      .collect { case x: nodes.Call => x }
+      .method
+      .name
+      .toSet
+
+    results shouldBe Set("insecure_strcat", "insecure_strncat")
   }
 
   "find insecure strncpy() function usage" in {
-    queryBundle.strcpyUsed()(cpg).map(_.evidence) match {
-      case List(List(expr: nodes.Expression)) =>
-        expr.method.name shouldBe "insecure_strncpy"
-      case _ => fail()
-    }
+    val results =
+      queryBundle.strcpyUsed()(cpg)
+      .flatMap(_.evidence)
+      .collect { case x: nodes.Call => x }
+      .method
+      .name
+      .toSet
+
+    results shouldBe Set("insecure_strcpy", "insecure_strncpy")
   }
 
   "find insecure strtok() function usage" in {

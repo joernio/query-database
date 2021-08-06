@@ -38,6 +38,7 @@ object CopyLoops extends QueryBundle {
           }
           .map(_._1)
       }),
+      tags = List(QueryTags.default),
       codeExamples = CodeExamples(
         List("""
           |
