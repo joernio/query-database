@@ -27,8 +27,7 @@ object DangerousFunctions extends QueryBundle {
       }),
       tags = List(QueryTags.badfn, QueryTags.default),
       codeExamples = CodeExamples(
-        List(
-          """
+        List("""
           |
           |int insecure_gets() {
           |  char str[DST_BUFFER_SIZE];
@@ -38,8 +37,7 @@ object DangerousFunctions extends QueryBundle {
           |}
           |
           |""".stripMargin),
-        List(
-          """
+        List("""
           |
           |int secure_gets() {
           |  FILE *fp;
@@ -133,8 +131,7 @@ object DangerousFunctions extends QueryBundle {
       }),
       tags = List(QueryTags.badfn),
       codeExamples = CodeExamples(
-        List(
-          """
+        List("""
           |
           |int insecure_scanf() {
           |  char name[12];
@@ -144,8 +141,7 @@ object DangerousFunctions extends QueryBundle {
           |}
           |
           |""".stripMargin),
-        List(
-          """
+        List("""
           |
           |void secure_fgets(char *buf, int size, FILE *stream) {
           |    fgets(buf, size, stream);
@@ -189,9 +185,9 @@ object DangerousFunctions extends QueryBundle {
           |  return 0
           |}
           |
-          |""".stripMargin),
-        List(
-          """
+          |""".stripMargin
+        ),
+        List("""
           |
           |void secure_strcat_s(char *dest, rsize_t destsz, char *src) {
           |    strcat_s(dest, destsz, src);
@@ -237,9 +233,9 @@ object DangerousFunctions extends QueryBundle {
           |  return 0
           |}
           |
-          |""".stripMargin),
-        List(
-          """
+          |""".stripMargin
+        ),
+        List("""
           |
           |void secure_strlcpy(char *dest, char *src, size_t size) {
           |    strlcpy(dest, src, size);
@@ -281,8 +277,7 @@ object DangerousFunctions extends QueryBundle {
           |}
           |
           |""".stripMargin),
-        List(
-          """
+        List("""
           |
           |void secure_strtok_r(char *src, char *delim, char **saveptr) {
           |    strtok_r(src, delim, saveptr);

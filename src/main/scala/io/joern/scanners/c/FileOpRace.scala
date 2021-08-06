@@ -77,8 +77,7 @@ object FileOpRace extends QueryBundle {
       }),
       tags = List(QueryTags.raceCondition, QueryTags.default),
       codeExamples = CodeExamples(
-        List(
-          """
+        List("""
           |
           |void insecure_race(char *path) {
           |    chmod(path, 0);
@@ -86,8 +85,7 @@ object FileOpRace extends QueryBundle {
           |}
           |
           |""".stripMargin),
-        List(
-          """
+        List("""
           |
           |void secure_handle(char *path) {
           |    FILE *file = fopen(path, "r");

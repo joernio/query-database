@@ -64,8 +64,8 @@ object SocketApi extends QueryBundle {
           |    }
           |}
           |
-          |""".stripMargin)
+          |""".stripMargin
+        )
       )
-
     )
 }
