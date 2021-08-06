@@ -1,28 +1,40 @@
 package io.joern.scanners.c
 
-import io.shiftleft.codepropertygraph.generated.nodes
-import io.shiftleft.console.{CodeExamples, Query, QueryBundle, QueryDatabase}
-import io.shiftleft.semanticcpg.language._
-import io.shiftleft.console.scan._
-import io.shiftleft.codepropertygraph.Cpg
+import io.shiftleft.console.{DefaultArgumentProvider, Query, QueryBundle, QueryDatabase}
 import io.shiftleft.dataflowengineoss.queryengine.EngineContext
-import io.shiftleft.dataflowengineoss.semanticsloader.Semantics
-
 import io.shiftleft.dataflowengineoss.semanticsloader.{Parser, Semantics}
 
-import scala.annotation.unused
 import scala.reflect.runtime.universe._
-import scala.reflect.runtime.{universe => ru}
-
 
 object EmptyBundle extends QueryBundle {}
 
+class QDBArgumentProvider(maxCallDepth: Int)  extends DefaultArgumentProvider {
+  def testSemanticsFilename = "src/test/resources/default.semantics"
+
+  override def defaultArgument(method: MethodSymbol, im: InstanceMirror, x: Symbol, i: Int): Option[Any] = {
+    if (x.typeSignature.toString.endsWith("EngineContext")) {
+      val newsemantics = Semantics.fromList(new Parser().parseFile(testSemanticsFilename))
+      val engineContext = EngineContext(newsemantics)
+      engineContext.config.maxCallDepth = maxCallDepth
+      Some(engineContext)
+    } else {
+      super.defaultArgument(method, im, x, i)
+    }
+  }
+}
+
 class QueryTestSuite extends Suite {
+  val argumentProvider = new QDBArgumentProvider(3)
+
+  override def beforeAll(): Unit = {
+    semanticsFilename =  argumentProvider.testSemanticsFilename
+    super.beforeAll()
+  }
 
   def queryBundle: QueryBundle = EmptyBundle
 
   def allQueries: List[Query] = {
-    new QueryDatabase().queriesInBundle(queryBundle.getClass)
+    new QueryDatabase(defaultArgumentProvider = argumentProvider).queriesInBundle(queryBundle.getClass)
   }
 
   def concatedQueryCodeExamples: String =
