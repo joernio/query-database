@@ -31,13 +31,9 @@ class SocketApiTests extends QueryTestSuite {
       |""".stripMargin
 
   "should flag function `return_not_checked` only" in {
-    val queries = queryBundle.uncheckedSend()
-    val results = queries(cpg)
-      .flatMap(_.evidence)
-      .collect { case x: nodes.Call => x }
-      .method
-      .name
-      .toSet
+    val query = queryBundle.uncheckedSend()
+    val results = findMatchingCalls(query)
+
     results shouldBe Set("return_not_checked")
   }
 

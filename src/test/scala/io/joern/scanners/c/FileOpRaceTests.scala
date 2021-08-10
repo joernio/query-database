@@ -9,13 +9,9 @@ class FileOpRaceTests extends QueryTestSuite {
   override def queryBundle = FileOpRace
 
   "should flag function `insecure_race` only" in {
-    val queries = queryBundle.fileOperationRace()
-    val results = queries(cpg)
-      .flatMap(_.evidence)
-      .collect { case x: nodes.Call => x }
-      .method
-      .name
-      .toSet
+    val query = queryBundle.fileOperationRace()
+    val results = findMatchingCalls(query)
+
     results shouldBe Set("insecure_race")
   }
 

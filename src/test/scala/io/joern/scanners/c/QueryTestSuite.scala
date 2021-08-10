@@ -1,8 +1,13 @@
 package io.joern.scanners.c
 
+import io.shiftleft.codepropertygraph.generated.nodes
+import io.shiftleft.codepropertygraph.generated.nodes.Expression
 import io.shiftleft.console.{DefaultArgumentProvider, Query, QueryBundle, QueryDatabase}
+import io.shiftleft.console.scan._
+import io.shiftleft.semanticcpg.language._
 import io.shiftleft.dataflowengineoss.queryengine.EngineContext
 import io.shiftleft.dataflowengineoss.semanticsloader.{Parser, Semantics}
+import overflowdb.{Node, NodeRef}
 
 import scala.reflect.runtime.universe._
 
@@ -48,6 +53,18 @@ class QueryTestSuite extends Suite {
             .negative
             .mkString("\n"))
   }.mkString("\n")
+
+  /**
+    * Used for tests that match names of vulnerable functions
+    */
+  def findMatchingCalls(query: Query): Set[String] = {
+    query(cpg)
+      .flatMap(_.evidence)
+      .collect { case call: nodes.Call => call }
+      .method
+      .name
+      .toSetImmutable
+  }
 
   override val code = concatedQueryCodeExamples
 }

@@ -9,22 +9,17 @@ class CredentialDropTests extends QueryTestSuite {
 
   override def queryBundle = CredentialDrop
 
-  "strict order of credential dropping function calls should be observed" in {
-    queryBundle
-      .userCredDrop()(cpg)
-      .flatMap(_.evidence)
-      .cast[nodes.Call]
-      .method
-      .name
-      .toSet shouldBe Set("bad1", "bad3")
+  "find cases where user changes are not preceded by calls to set*gid and setgroups" in {
+    val query = queryBundle.userCredDrop()
+    val results = findMatchingCalls(query)
 
-    queryBundle
-      .groupCredDrop()(cpg)
-      .flatMap(_.evidence)
-      .cast[nodes.Call]
-      .method
-      .name
-      .toSet shouldBe Set("bad2")
+    results shouldBe Set("bad1", "bad3")
   }
 
+  "find cases where group membership changes are not preceded by a call to setgroups" in {
+    val query = queryBundle.groupCredDrop()
+    val results = findMatchingCalls(query)
+
+    results shouldBe Set("bad2")
+  }
 }

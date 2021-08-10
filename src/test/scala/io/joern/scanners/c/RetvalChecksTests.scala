@@ -9,11 +9,10 @@ class RetvalChecksTests extends QueryTestSuite {
   override def queryBundle = RetvalChecks
 
   "should find unchecked read and not flag others" in {
-    val results =
-      queryBundle.uncheckedReadRecvMalloc()(cpg).flatMap(_.evidence).collect {
-        case call: nodes.Call => call.method.name
-      }
-    results.toSet shouldBe Set("unchecked_read", "checks_something_else")
+    val query = queryBundle.uncheckedReadRecvMalloc()
+    val results = findMatchingCalls(query)
+
+    results shouldBe Set("unchecked_read", "checks_something_else")
   }
 
 }
