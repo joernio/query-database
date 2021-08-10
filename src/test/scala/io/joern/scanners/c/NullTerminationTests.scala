@@ -19,13 +19,6 @@ class NullTerminationTests extends QueryTestSuite {
       .toSetImmutable
 
     results shouldBe Set("bad")
-//    val query = queryBundle.strncpyNoNullTerm()
-//    query(cpg).flatMap(_.evidence) match {
-//      case List(x: nodes.Expression) =>
-//        x.method.name shouldBe "bad"
-//      case _ =>
-//        fail()
-//    }
   }
 
 }
