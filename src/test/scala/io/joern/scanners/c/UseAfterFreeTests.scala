@@ -31,10 +31,9 @@ class UseAfterFreeTests extends QueryTestSuite {
 
 
   "should flag `bad` function only" in {
-    val x = queryBundle.freeFieldNoReassign()
-    x(cpg)
-      .flatMap(_.evidence)
-      .collect { case call: nodes.Call => call.method.name }
-      .toSet shouldBe Set("bad")
+    val query = queryBundle.freeFieldNoReassign()
+    val results = findMatchingCalls(query)
+
+    results shouldBe Set("bad")
   }
 }

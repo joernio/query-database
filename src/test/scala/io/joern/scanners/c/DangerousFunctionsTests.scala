@@ -9,70 +9,51 @@ class DangerousFunctionsTests extends QueryTestSuite {
   override def queryBundle = DangerousFunctions
 
   "find insecure gets() function usage" in {
-    queryBundle.getsUsed()(cpg).map(_.evidence) match {
-      case List(List(expr: nodes.Expression)) =>{
-        expr.method.name shouldBe "insecure_gets"
-      }
-      case _ => fail()
-    }
+    val query = queryBundle.getsUsed()
+    val results = findMatchingCalls(query)
+
+    results shouldBe (Set("insecure_gets"))
   }
 
   "find insecure printf() function usage" in {
-    val results =
-      queryBundle.argvUsedInPrintf()(cpg)
-      .flatMap(_.evidence)
-      .collect { case x: nodes.Call => x }
-      .method
-      .name
-      .toSet
+    val query = queryBundle.argvUsedInPrintf()
+    val results = findMatchingCalls(query)
+
     results shouldBe Set("insecure_sprintf", "insecure_printf")
   }
 
   "find insecure scanf() function usage" in {
-    queryBundle.scanfUsed()(cpg).map(_.evidence) match {
-      case List(List(expr: nodes.Expression)) =>
-        expr.method.name shouldBe "insecure_scanf"
-      case _ => fail()
-    }
+    val query = queryBundle.scanfUsed()
+    val results = findMatchingCalls(query)
+
+    results shouldBe Set("insecure_scanf")
   }
 
   "find insecure strncat() function usage" in {
-    val results =
-      queryBundle.strcatUsed()(cpg)
-      .flatMap(_.evidence)
-      .collect { case x: nodes.Call => x }
-      .method
-      .name
-      .toSet
+    val query = queryBundle.strcatUsed()
+    val results = findMatchingCalls(query)
 
     results shouldBe Set("insecure_strcat", "insecure_strncat")
   }
 
   "find insecure strncpy() function usage" in {
-    val results =
-      queryBundle.strcpyUsed()(cpg)
-      .flatMap(_.evidence)
-      .collect { case x: nodes.Call => x }
-      .method
-      .name
-      .toSet
+    val query = queryBundle.strcpyUsed()
+    val results = findMatchingCalls(query)
 
     results shouldBe Set("insecure_strcpy", "insecure_strncpy")
   }
 
   "find insecure strtok() function usage" in {
-    queryBundle.strtokUsed()(cpg).map(_.evidence) match {
-      case List(List(expr: nodes.Expression)) =>
-        expr.method.name shouldBe "insecure_strtok"
-      case _ => fail()
-    }
+    val query = queryBundle.strtokUsed()
+    val results = findMatchingCalls(query)
+
+    results shouldBe Set("insecure_strtok")
   }
 
   "find insecure getwd() function usage" in {
-    queryBundle.getwdUsed()(cpg).map(_.evidence) match {
-      case List(List(expr: nodes.Expression)) =>
-        expr.method.name shouldBe "insecure_getwd"
-      case _ => fail()
-    }
+    val query = queryBundle.getwdUsed()
+    val results = findMatchingCalls(query)
+
+    results shouldBe Set("insecure_getwd")
   }
 }
