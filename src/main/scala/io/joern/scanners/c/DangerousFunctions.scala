@@ -318,7 +318,7 @@ object DangerousFunctions extends QueryBundle {
           |void secure_getcwd(char *buf, size_t len) {
           |    getcwd(buf, len);
           |}
-          |""")
+          |""".stripMargin)
       )
     )
 }

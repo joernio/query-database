@@ -167,7 +167,7 @@ object Metrics extends QueryBundle {
         cpg.method.internal
           .filter(
             _.ast.isControlStructure
-              .parserTypeName("(For|Do|While).*")
+              .controlStructureType("(FOR|DO|WHILE)")
               .size > n)
       }),
       tags = List(QueryTags.metrics),
@@ -230,7 +230,7 @@ object Metrics extends QueryBundle {
           |  }
           |}
           |
-          |""")
+          |""".stripMargin)
       )
     )
 }
