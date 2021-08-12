@@ -18,8 +18,10 @@ libraryDependencies ++= Seq(
   "io.shiftleft" %% "console" % cpgVersion,
   "io.shiftleft" %% "dataflowengineoss" % cpgVersion,
   "io.shiftleft" %% "fuzzyc2cpg-tests" % cpgVersion % Test classifier "tests",
+  "io.shiftleft" %% "c2cpg-tests" % cpgVersion % Test classifier "tests",
   "io.shiftleft" %% "semanticcpg-tests" % cpgVersion % Test classifier "tests",
   "io.shiftleft" %% "fuzzyc2cpg" % cpgVersion % Test,
+  "io.shiftleft" %% "c2cpg" % cpgVersion % Test,
   "org.scalatest" %% "scalatest" % "3.1.1" % Test
 )
 

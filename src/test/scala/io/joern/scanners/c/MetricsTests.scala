@@ -1,9 +1,10 @@
 package io.joern.scanners.c
 
+import io.joern.suites.CQueryTestSuite
 import io.shiftleft.codepropertygraph.generated.nodes
 import io.shiftleft.console.scan._
 
-class MetricsTests extends QueryTestSuite {
+class MetricsTests extends CQueryTestSuite {
 
   override def queryBundle = Metrics
 

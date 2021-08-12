@@ -1,13 +1,12 @@
-package io.joern.scanners.c
+package io.joern.suites
 
 import io.shiftleft.codepropertygraph.generated.nodes
-import io.shiftleft.codepropertygraph.generated.nodes.Expression
-import io.shiftleft.console.{DefaultArgumentProvider, Query, QueryBundle, QueryDatabase}
 import io.shiftleft.console.scan._
-import io.shiftleft.semanticcpg.language._
+import io.shiftleft.console.{DefaultArgumentProvider, Query, QueryBundle, QueryDatabase}
 import io.shiftleft.dataflowengineoss.queryengine.EngineContext
 import io.shiftleft.dataflowengineoss.semanticsloader.{Parser, Semantics}
-import overflowdb.{Node, NodeRef}
+import io.shiftleft.fuzzyc2cpg.testfixtures.DataFlowCodeToCpgSuite
+import io.shiftleft.semanticcpg.language._
 
 import scala.reflect.runtime.universe._
 
@@ -28,7 +27,7 @@ class QDBArgumentProvider(maxCallDepth: Int)  extends DefaultArgumentProvider {
   }
 }
 
-class QueryTestSuite extends Suite {
+class CQueryTestSuite extends DataFlowCodeToCpgSuite {
   val argumentProvider = new QDBArgumentProvider(3)
 
   override def beforeAll(): Unit = {

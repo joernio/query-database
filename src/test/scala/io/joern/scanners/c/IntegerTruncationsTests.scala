@@ -1,12 +1,13 @@
 package io.joern.scanners.c
 
+import io.joern.suites.CQueryTestSuite
 import io.shiftleft.codepropertygraph.generated.nodes
 import io.shiftleft.semanticcpg.language._
 import io.shiftleft.console.scan._
 
 import scala.collection.immutable.AbstractSeq
 
-class IntegerTruncationsTests extends QueryTestSuite {
+class IntegerTruncationsTests extends CQueryTestSuite {
 
   override def queryBundle = IntegerTruncations
 
