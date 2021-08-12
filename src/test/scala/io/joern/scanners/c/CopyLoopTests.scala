@@ -9,7 +9,7 @@ class CopyLoopTests extends QueryTestSuite {
 
   "find indexed buffer assignment targets in loops where index is incremented" in {
     queryBundle.isCopyLoop()(cpg).map(_.evidence) match {
-      case List(List(expr: nodes.Expression)) =>
+      case List(IndexedSeq(expr: nodes.Expression)) =>
         expr.method.name shouldBe "index_into_dst_array"
       case _ => fail()
     }
