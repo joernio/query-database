@@ -3,7 +3,8 @@ ThisBuild/organization := "io.joern"
 ThisBuild/scalaVersion := "2.13.5" 
 // don't upgrade to 2.13.6 until https://github.com/com-lihaoyi/Ammonite/issues/1182 is resolved
 
-val cpgVersion = "1.3.271"
+val cpgVersion = "1.3.271+1-485ce548+20210812-1712"
+val ghidra2cpgVersion = "18b479b6b225625f46a7a8c1b7914fec6ca4f540-SNAPSHOT"
 
 enablePlugins(JavaAppPackaging)
 enablePlugins(GitVersioning)
@@ -14,6 +15,7 @@ libraryDependencies ++= Seq(
   "com.github.pathikrit" %% "better-files"             % "3.8.0",
   "com.github.scopt" %% "scopt" % "3.7.1",
   "org.apache.logging.log4j" % "log4j-slf4j-impl" % "2.13.3" % Runtime,
+  "io.joern" %% "ghidra2cpg" % ghidra2cpgVersion,
   "io.shiftleft" %% "semanticcpg" % cpgVersion,
   "io.shiftleft" %% "console" % cpgVersion,
   "io.shiftleft" %% "dataflowengineoss" % cpgVersion,
@@ -22,7 +24,8 @@ libraryDependencies ++= Seq(
   "io.shiftleft" %% "semanticcpg-tests" % cpgVersion % Test classifier "tests",
   "io.shiftleft" %% "fuzzyc2cpg" % cpgVersion % Test,
   "io.shiftleft" %% "c2cpg" % cpgVersion % Test,
-  "org.scalatest" %% "scalatest" % "3.1.1" % Test
+  "org.scalatest" %% "scalatest" % "3.1.1" % Test,
+  "io.joern" %% "ghidra2cpg-tests" % ghidra2cpgVersion % Test classifier "tests"
 )
 
 Compile/doc/sources := Seq.empty
