@@ -6,6 +6,7 @@ two purposes:
 
 * It provides the batteries required to turn Joern into a ready-to-run code scanning tool.
 * Its queries serve as examples useful for those looking to write their own queries.
+* [built on JDK11](https://github.com/ShiftLeftSecurity/overflowdb/blob/master/.github/workflows/release.yml) but runs on JRE > 1.8
 
 The query database is distributed as a standalone library that
 includes Joern as a dependency. This means that it is not necessary to
