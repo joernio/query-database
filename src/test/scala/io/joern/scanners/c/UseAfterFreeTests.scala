@@ -1,10 +1,11 @@
 package io.joern.scanners.c
 
+import io.joern.suites.CQueryTestSuite
 import io.shiftleft.codepropertygraph.generated.nodes
 import io.shiftleft.console.scan._
 import io.shiftleft.semanticcpg.language._
 
-class UseAfterFreeTests extends QueryTestSuite {
+class UseAfterFreeTests extends CQueryTestSuite {
   override def queryBundle = UseAfterFree
 
    override val code =
