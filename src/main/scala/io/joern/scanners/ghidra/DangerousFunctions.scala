@@ -12,7 +12,7 @@ object DangerousFunctions extends QueryBundle {
   @q
   def strcpyUsed(): Query =
     Query.make(
-      name = "call-to-strcpy",
+      name = "call-to-strcpy-ghidra",
       author = Crew.suchakra,
       title = "Dangerous functions `strcpy` or `strncpy` used",
       description =
