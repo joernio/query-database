@@ -4,7 +4,7 @@ ThisBuild/scalaVersion := "2.13.5"
 // don't upgrade to 2.13.6 until https://github.com/com-lihaoyi/Ammonite/issues/1182 is resolved
 
 val cpgVersion = "1.3.317"
-val ghidra2cpgVersion = "0.0.28"
+val ghidra2cpgVersion = "0.0.29"
 
 enablePlugins(JavaAppPackaging)
 enablePlugins(GitVersioning)
