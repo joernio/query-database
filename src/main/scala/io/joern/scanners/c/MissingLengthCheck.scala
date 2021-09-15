@@ -78,7 +78,7 @@ object MissingLengthCheck extends QueryBundle {
     * literal
     * */
   def checked(arrayAccess: opnodes.ArrayAccess, lens: List[String]): Boolean = {
-    val arrayIndex = arrayAccess.argument(2).ast.isLiteral.toInt.head
+    val arrayIndex = arrayAccess.argument(2).ast.isLiteral.toInt.headOption.getOrElse(-1)
     val lowerBounds = arrayAccess.method.controlStructure.condition
       .where(_.ast.isIdentifier.name.filter { n =>
         lens.contains(n)
