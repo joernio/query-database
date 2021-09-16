@@ -15,11 +15,21 @@ class GhidraQueryTestSuite extends DataFlowBinToCpgSuite {
 
   override def beforeAll(): Unit = {
     semanticsFilename = argumentProvider.testSemanticsFilename
+    super.beforeAll()
   }
 
   def queryBundle: QueryBundle = QueryUtil.EmptyBundle
 
   def allQueries = QueryUtil.allQueries(queryBundle, argumentProvider)
+
+  def findMatchingMethodParam(query: Query): Set[String] = {
+    query(cpg)
+      .flatMap(_.evidence)
+      .collect { case methodParam: nodes.MethodParameterIn => methodParam }
+      .method
+      .name
+      .toSetImmutable
+  }
 
   def findMatchingCalls(query: Query): Set[String] = {
     query(cpg)
