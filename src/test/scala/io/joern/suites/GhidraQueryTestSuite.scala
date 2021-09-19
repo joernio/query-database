@@ -8,6 +8,7 @@ import io.shiftleft.codepropertygraph.generated.nodes
 import io.shiftleft.console.{Query, QueryBundle}
 import io.shiftleft.utils.ProjectRoot
 import io.shiftleft.semanticcpg.language._
+import overflowdb.traversal.iterableToTraversal
 
 class GhidraQueryTestSuite extends DataFlowBinToCpgSuite {
   val argumentProvider = new QDBArgumentProvider(3)
@@ -22,21 +23,22 @@ class GhidraQueryTestSuite extends DataFlowBinToCpgSuite {
 
   def allQueries = QueryUtil.allQueries(queryBundle, argumentProvider)
 
-  def findMatchingMethodParam(query: Query): Set[String] = {
-    query(cpg)
-      .flatMap(_.evidence)
-      .collect { case methodParam: nodes.MethodParameterIn => methodParam }
-      .method
-      .name
-      .toSetImmutable
-  }
-
   def findMatchingCalls(query: Query): Set[String] = {
     query(cpg)
       .flatMap(_.evidence)
       .collect { case call: nodes.Call => call }
       .method
       .name
+      .toSetImmutable
+  }
+
+  def methodNamesForMatchedPoints(query: Query): Set[String] = {
+    nodes.MethodParameterIn
+    query(cpg)
+      .flatMap(_.evidence)
+      .collect {
+        case cfgNode: nodes.CfgNode => cfgNode.method.name
+      }
       .toSetImmutable
   }
 }
