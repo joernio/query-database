@@ -1,7 +1,9 @@
 package io.joern.scanners.ghidra
 
 import io.joern.suites.GhidraQueryTestSuite
+import org.scalatest.Ignore
 
+@Ignore
 class UserInputIntoDangerousFunctionsTests  extends GhidraQueryTestSuite {
   override def queryBundle = UserInputIntoDangerousFunctions
 
