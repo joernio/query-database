@@ -7,7 +7,6 @@ val cpgVersion = "1.3.317"
 val ghidra2cpgVersion = "0.0.29"
 
 enablePlugins(JavaAppPackaging)
-enablePlugins(GitVersioning)
 
 libraryDependencies ++= Seq(
   "com.lihaoyi" %% "sourcecode" % "0.1.9",
