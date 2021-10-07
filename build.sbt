@@ -50,7 +50,7 @@ createDistribution := {
         name.contains("com.google.guava") ||
         name.contains("org.apache.logging") ||
         name.contains("com.google.protobuf") ||
-        name.contains("com.lihaoyi.u") ||
+        name.contains("com.lihaoyi") ||
         name.contains("io.shiftleft") ||
         name.contains("org.typelevel") ||
         name.contains("io.undertow") ||
@@ -60,7 +60,9 @@ createDistribution := {
         name.contains("net.java.dev") ||
         name.contains("com.github.javaparser") ||
         name.contains("org.javassist") ||
-        name.contains("com.lihaoyi.ammonite")
+        name.contains("com.lihaoyi.ammonite") ||
+        name.contains("io.joern.ghidra2cpg") ||
+        name.contains("net.oneandone")
     }.foreach(x => x.delete())
     dir.zipTo(f)
     better.files.File(tmpDstArchive).delete()
