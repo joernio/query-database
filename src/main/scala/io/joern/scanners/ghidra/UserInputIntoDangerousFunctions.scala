@@ -12,25 +12,6 @@ object UserInputIntoDangerousFunctions extends QueryBundle {
   implicit val resolver: ICallResolver = NoResolve
 
   @q
-  def mainArgsToStrcpy()(implicit context: EngineContext): Query =
-    Query.make(
-      name = "main-args-to-strcpy",
-      author = Crew.claudiu,
-      title = "`main` fn arguments used in strcpy source buffer",
-      description =
-        """
-        |User-input ends up in source buffer argument of strcpy, which might overflow the destination buffer.
-        |""".stripMargin,
-      score = 4,
-      withStrRep({ cpg =>
-        def source = cpg.method.fullName("main").parameter
-        def sink = cpg.method.fullName("strcpy").parameter.index(2)
-        sink.reachableBy(source).l
-      }),
-      tags = List(QueryTags.badfn)
-    )
-
-  @q
   def getenvToStrcpy()(implicit context: EngineContext): Query =
     Query.make(
       name = "getenv-to-strcpy",
