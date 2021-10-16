@@ -3,20 +3,8 @@ package io.joern.scanners.ghidra
 import io.joern.suites.GhidraQueryTestSuite
 import org.scalatest.Ignore
 
-@Ignore
 class UserInputIntoDangerousFunctionsTests  extends GhidraQueryTestSuite {
   override def queryBundle = UserInputIntoDangerousFunctions
-
-  "mainArgsToStrcpy query" when {
-    def query = queryBundle.mainArgsToStrcpy()
-    "executed on CPG for binary with dataflow between `main` fn args and `strcpy` source argument" should {
-      "find the `main` function among the tracking points returned" in {
-        buildCpgForBin("buf1.exe")
-        val results = methodNamesForMatchedPoints(query)
-        results shouldBe Set("main")
-      }
-    }
-  }
 
   "getenvToStrcpy query" when {
     def query = queryBundle.getenvToStrcpy()
